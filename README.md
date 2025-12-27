@@ -1,4 +1,4 @@
-# Notebook Navigator Ex
+# Note Lenses
 
 This repo contains an experimental Excalidraw and PDF featured image support that does not exist in the original project (as well as some other improvements).
 
@@ -55,7 +55,7 @@ For the full changelog (including available features in the fork), see [releases
 
 ## License
 
-"Notebook Navigator Ex" is a custom fork of the original "Notebook Navigator" project.
+"Note Lenses" is a custom fork of the original "Notebook Navigator" project.
 
 It's based on source code of `Copiright (c)` Johan Sanneblad and contributors; and licensed under the GNU General Public License v3.0 (GPL-3.0).
 Modifications by Pavel Sapehin. See the [LICENSE](https://github.com/psxvoid/notebook-navigator/blob/main/LICENSE) file for details.

@@ -362,9 +362,9 @@ export class IndexedDBStorage {
         if (navigator.storage && navigator.storage.persist) {
             const persistent = await navigator.storage.persist();
             if (persistent) {
-                console.log("Notebook Navigator Ex: Storage will not be cleared except by explicit user action.");
+                console.log("Note Lenses: Storage will not be cleared except by explicit user action.");
             } else {
-                console.warn("Notebook Navigator Ex: Storage may be cleared by the UA under storage pressure.");
+                console.warn("Note Lenses: Storage may be cleared by the UA under storage pressure.");
             }
         }
 

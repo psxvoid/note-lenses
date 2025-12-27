@@ -17,7 +17,7 @@
  */
 
 /*
- * Notebook Navigator Ex - Plugin for Obsidian
+ * Note Lenses - Plugin for Obsidian
  */
 
 import { TFile, TFolder, type WorkspaceLeaf } from 'obsidian';
