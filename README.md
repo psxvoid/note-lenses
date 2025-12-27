@@ -1,5 +1,9 @@
 # Note Lenses
 
+Important: "Note Lenses" is an independent fork of the original "Notebook Navigator" project and not affiliated with or endorsed by it.
+
+## Overview
+
 This repo contains an experimental Excalidraw and PDF featured image support that does not exist in the original project (as well as some other improvements).
 
 Another notable difference is that resized featured images/previews (including for regular images) are not stored on a file system as files, instead they are stored in indexeddb.
@@ -55,7 +59,7 @@ For the full changelog (including available features in the fork), see [releases
 
 ## License
 
-"Note Lenses" is a custom fork of the original "Notebook Navigator" project.
+"Note Lenses" is an independent fork of Notebook Navigator.
 
 It's based on source code of `Copiright (c)` Johan Sanneblad and contributors; and licensed under the GNU General Public License v3.0 (GPL-3.0).
 Modifications by Pavel Sapehin. See the [LICENSE](https://github.com/psxvoid/note-lenses/blob/main/LICENSE) file for details.
