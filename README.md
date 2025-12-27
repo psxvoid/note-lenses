@@ -55,7 +55,7 @@ For the full changelog (including available features in the fork), see [releases
 >
 > To migrate settings from the original plugin, go to your vault, then into
 > `.obsidian/plugins` folder, then find `notebook-navigator`. Inside that folder
-> find and copy `data.json` into `.obsidian/plugins/notebook-navigator-ex`.
+> find and copy `data.json` into `.obsidian/plugins/note-lenses`.
 
 ## License
 
