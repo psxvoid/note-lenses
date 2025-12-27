@@ -1,5 +1,5 @@
 /*
- * Notebook Navigator Ex - Plugin for Obsidian
+ * Note Lenses - Plugin for Obsidian
  * Copyright (c) 2025 Pavel Sapehin
  *
  * This program is free software: you can redistribute it and/or modify
