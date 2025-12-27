@@ -18,7 +18,7 @@ But after the initial indexing is done, the benefits are far more exciting:
 4. No need to have separate plugins for resizing featured images
 5. A note list is more responsive due to all previews being resized to the requested size
 
-For the full changelog (including available features in the fork), see [releases](https://github.com/psxvoid/notebook-navigator/releases).
+For the full changelog (including available features in the fork), see [releases](https://github.com/psxvoid/note-lenses/releases).
 
 ![Excalidraw File Preview Sample](./images/nn-fork-excalidraw-preview.png)
 
@@ -33,7 +33,7 @@ For the full changelog (including available features in the fork), see [releases
 1. Install [BRAT](https://obsidian.md/plugins?search=brat) obsidian plugin.
 2. Go to obsidian settings > community plugins, find BRAT plugin and press a cog icon to go to it's settings.
 3. Hit "Add beta plugin" button.
-4. In the opened popup paste `https://github.com/psxvoid/notebook-navigator.git`.
+4. In the opened popup paste `https://github.com/psxvoid/note-lenses.git`.
 5. Select the version you want to install (stable or pre-release).
 6. Ensure "Enable after installing the plugin" checkbox is set.
 7. Hit "Add plugin" button.
@@ -58,7 +58,7 @@ For the full changelog (including available features in the fork), see [releases
 "Note Lenses" is a custom fork of the original "Notebook Navigator" project.
 
 It's based on source code of `Copiright (c)` Johan Sanneblad and contributors; and licensed under the GNU General Public License v3.0 (GPL-3.0).
-Modifications by Pavel Sapehin. See the [LICENSE](https://github.com/psxvoid/notebook-navigator/blob/main/LICENSE) file for details.
+Modifications by Pavel Sapehin. See the [LICENSE](https://github.com/psxvoid/note-lenses/blob/main/LICENSE) file for details.
 
 ##
 
