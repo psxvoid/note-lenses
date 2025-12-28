@@ -48,6 +48,7 @@ import { getNavigationPaneSizing } from '../utils/paneSizing';
 import { getAndroidFontScale } from '../utils/androidFontScale';
 import { getBackgroundClasses } from '../utils/paneLayout';
 import { confirmRemoveAllTagsFromFiles, openAddTagToFilesModal, removeTagFromFilesWithPrompt } from '../utils/tagModalHelpers';
+import { getTemplaterCreateNewNoteFromTemplate } from '../utils/templaterIntegration';
 import { useNavigatorScale } from '../hooks/useNavigatorScale';
 import { ListPane } from './ListPane';
 import type { ListPaneHandle } from './ListPane';
@@ -85,6 +86,7 @@ export interface NotebookNavigatorHandle {
     focusNavigationPane: () => void;
     deleteActiveFile: () => void;
     createNoteInSelectedFolder: () => Promise<void>;
+    createNoteFromTemplateInSelectedFolder: () => Promise<void>;
     moveSelectedFiles: () => Promise<void>;
     addShortcutForCurrentSelection: () => Promise<void>;
     navigateToFolder: (folder: TFolder, options?: NavigateToFolderOptions) => void;
@@ -101,6 +103,7 @@ export interface NotebookNavigatorHandle {
     rebuildCacheFast: () => Promise<void>;
     selectNextFile: () => Promise<boolean>;
     selectPreviousFile: () => Promise<boolean>;
+    openShortcutByNumber: (shortcutNumber: number) => Promise<boolean>;
     paneJumpTop: () => void;
     paneJumpBottom: () => void;
     paneJumpParent: () => void;
@@ -133,9 +136,8 @@ export const NotebookNavigatorComponent = React.memo(
         }, [uxPreferences]);
         // Get active orientation from settings
         const orientation: DualPaneOrientation = settings.dualPaneOrientation;
-        // Get background modes for desktop and mobile layouts
+        // Get background mode for desktop layout
         const desktopBackground: BackgroundMode = settings.desktopBackground ?? 'separate';
-        const mobileBackground: BackgroundMode = settings.mobileBackground ?? 'primary';
         const {
             scale: uiScale,
             style: scaleWrapperStyle,
@@ -531,6 +533,13 @@ export const NotebookNavigatorComponent = React.memo(
                 // Select adjacent files via command palette actions
                 selectNextFile: async () => navigateToAdjacentFile('next'),
                 selectPreviousFile: async () => navigateToAdjacentFile('previous'),
+                openShortcutByNumber: (shortcutNumber: number) => {
+                    const navHandle = navigationPaneRef.current;
+                    if (!navHandle) {
+                        return Promise.resolve(false);
+                    }
+                    return navHandle.openShortcutByNumber(shortcutNumber);
+                },
                 paneJumpTop: () => {
                     paneJump(JumpTarget.top)
                 },
@@ -599,6 +608,19 @@ export const NotebookNavigatorComponent = React.memo(
 
                     // Use the same logic as the context menu
                     await fileSystemOps.createNewFile(selectionState.selectedFolder);
+                },
+                createNoteFromTemplateInSelectedFolder: async () => {
+                    if (!selectionState.selectedFolder) {
+                        showNotice(strings.fileSystem.errors.noFolderSelected, { variant: 'warning' });
+                        return;
+                    }
+
+                    const createNewNoteFromTemplate = getTemplaterCreateNewNoteFromTemplate(app);
+                    if (!createNewNoteFromTemplate) {
+                        return;
+                    }
+
+                    await createNewNoteFromTemplate(selectionState.selectedFolder);
                 },
                 moveSelectedFiles: async () => {
                     // Get selected files
@@ -798,8 +820,6 @@ export const NotebookNavigatorComponent = React.memo(
         // Add platform class and background mode classes
         if (isMobile) {
             containerClasses.push('nn-mobile');
-            // Apply mobile background mode (separate, primary, or secondary)
-            containerClasses.push(...getBackgroundClasses(mobileBackground));
         } else {
             containerClasses.push('nn-desktop');
             // Apply desktop background mode (separate, primary, or secondary)

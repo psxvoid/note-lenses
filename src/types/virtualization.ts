@@ -89,6 +89,10 @@ export interface VirtualFolderItem {
     isSelectable?: boolean;
     isSelected?: boolean;
     tagCollectionId?: string;
+    // Pre-computed child presence flag used for rendering the expander chevron and for keyboard expand/collapse decisions.
+    // Some virtual folders are backed by dynamic data (e.g. recent notes, shortcuts), where the source list can contain
+    // entries that do not render (deleted/missing items). This flag reflects whether expansion would render any children.
+    hasChildren?: boolean;
     showFileCount?: boolean;
     noteCount?: NoteCountInfo;
 }

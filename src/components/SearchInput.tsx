@@ -17,7 +17,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { ObsidianIcon } from './ObsidianIcon';
+import { ServiceIcon } from './ServiceIcon';
 import { useUIDispatch, useUIState } from '../context/UIStateContext';
 import { useSettingsState } from '../context/SettingsContext';
 import { useServices } from '../context/ServicesContext';
@@ -26,6 +26,7 @@ import { matchesShortcut, KeyboardShortcutAction } from '../utils/keyboardShortc
 import { runAsyncAction, type MaybePromise } from '../utils/async';
 import { SearchTagInputSuggest } from '../suggest/SearchTagInputSuggest';
 import type { SearchProvider } from '../types/search';
+import { resolveUXIcon } from '../utils/uxIcons';
 
 interface SearchInputProps {
     searchQuery: string;
@@ -63,6 +64,8 @@ export function SearchInput({
     const settings = useSettingsState();
     const uiState = useUIState();
     const uiDispatch = useUIDispatch();
+    const searchIconId = useMemo(() => resolveUXIcon(settings.interfaceIcons, 'list-search'), [settings.interfaceIcons]);
+    const shortcutIconId = useMemo(() => resolveUXIcon(settings.interfaceIcons, 'nav-shortcuts'), [settings.interfaceIcons]);
 
     const placeholderText = useMemo(() => {
         const activeProvider = searchProvider ?? settings.searchProvider ?? 'internal';
@@ -203,7 +206,7 @@ export function SearchInput({
     return (
         <div className="nn-search-input-wrapper">
             <div className="nn-search-input-container">
-                <ObsidianIcon name="lucide-search" className="nn-search-input-icon" />
+                <ServiceIcon iconId={searchIconId} className="nn-search-input-icon" />
                 <input
                     ref={inputRef}
                     type="search"
@@ -245,7 +248,7 @@ export function SearchInput({
                             }
                         }}
                     >
-                        <ObsidianIcon name="lucide-bookmark" />
+                        <ServiceIcon iconId={shortcutIconId} aria-hidden={true} />
                     </div>
                 )}
                 {hasQuery && (
@@ -266,7 +269,7 @@ export function SearchInput({
                             }
                         }}
                     >
-                        <ObsidianIcon name="lucide-circle-x" />
+                        <ServiceIcon iconId="circle-x" aria-hidden={true} />
                     </div>
                 )}
             </div>

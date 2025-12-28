@@ -25,11 +25,12 @@ import { useUXPreferences } from '../context/UXPreferencesContext';
 import { useUIState, useUIDispatch } from '../context/UIStateContext';
 import { strings } from '../i18n';
 import { getIconService, useIconServiceVersion } from '../services/icons';
-import { ObsidianIcon } from './ObsidianIcon';
+import { ServiceIcon } from './ServiceIcon';
 import { useListActions } from '../hooks/useListActions';
 import { useListPaneTitle } from '../hooks/useListPaneTitle';
 import { normalizeTagPath } from '../utils/tagUtils';
 import { runAsyncAction } from '../utils/async';
+import { resolveUXIcon } from '../utils/uxIcons';
 
 interface ListPaneHeaderProps {
     onHeaderClick?: () => void;
@@ -52,8 +53,15 @@ export function ListPaneHeader({ onHeaderClick, isSearchActive, onSearchToggle }
     const iconVersion = useIconServiceVersion();
 
     // Use the shared actions hook
-    const { handleNewFile, handleAppearanceMenu, handleSortMenu, handleToggleDescendants, getSortIcon, isCustomSort, hasCustomAppearance } =
-        useListActions();
+    const {
+        handleNewFile,
+        handleAppearanceMenu,
+        handleSortMenu,
+        handleToggleDescendants,
+        getCurrentSortOption,
+        isCustomSort,
+        hasCustomAppearance
+    } = useListActions();
     const listToolbarVisibility = settings.toolbarVisibility.list;
     const showSearchButton = listToolbarVisibility.search;
     const showDescendantsButton = listToolbarVisibility.descendants;
@@ -64,6 +72,15 @@ export function ListPaneHeader({ onHeaderClick, isSearchActive, onSearchToggle }
     const shouldRenderBreadcrumbSegments = isMobile;
     const shouldShowHeaderTitle = !isMobile && listPaneTitlePreference === 'header';
     const shouldShowHeaderIcon = shouldShowHeaderTitle && showIcon;
+
+    const backIconId = useMemo(() => {
+        return Platform.isAndroidApp ? 'arrow-left' : 'chevron-left';
+    }, []);
+
+    const sortIconId = useMemo(() => {
+        const sortOption = getCurrentSortOption();
+        return resolveUXIcon(settings.interfaceIcons, sortOption.endsWith('-desc') ? 'list-sort-descending' : 'list-sort-ascending');
+    }, [getCurrentSortOption, settings.interfaceIcons]);
 
     const breadcrumbContent = useMemo((): React.ReactNode => {
         if (!shouldRenderBreadcrumbSegments) {
@@ -173,7 +190,7 @@ export function ListPaneHeader({ onHeaderClick, isSearchActive, onSearchToggle }
                         }}
                         tabIndex={-1}
                     >
-                        <ObsidianIcon name={Platform.isAndroidApp ? 'lucide-arrow-left' : 'lucide-chevron-left'} />
+                        <ServiceIcon iconId={backIconId} aria-hidden={true} />
                     </button>
                     {showFade && <div className="nn-breadcrumb-fade" />}
                     <div ref={scrollContainerRef} className="nn-breadcrumb-scroll" onScroll={handleScroll}>
@@ -198,7 +215,7 @@ export function ListPaneHeader({ onHeaderClick, isSearchActive, onSearchToggle }
                         aria-label={strings.paneHeader.showFolders}
                         tabIndex={-1}
                     >
-                        <ObsidianIcon name="lucide-chevron-left" />
+                        <ServiceIcon iconId={backIconId} aria-hidden={true} />
                     </button>
                 )}
                 <span className="nn-pane-header-title">
@@ -214,7 +231,7 @@ export function ListPaneHeader({ onHeaderClick, isSearchActive, onSearchToggle }
                             disabled={!selectionState.selectedFolder && !selectionState.selectedTag}
                             tabIndex={-1}
                         >
-                            <ObsidianIcon name="lucide-search" />
+                            <ServiceIcon iconId={resolveUXIcon(settings.interfaceIcons, 'list-search')} />
                         </button>
                     ) : null}
                     {showDescendantsButton ? (
@@ -225,7 +242,7 @@ export function ListPaneHeader({ onHeaderClick, isSearchActive, onSearchToggle }
                             disabled={!selectionState.selectedFolder && !selectionState.selectedTag}
                             tabIndex={-1}
                         >
-                            <ObsidianIcon name="lucide-layers" />
+                            <ServiceIcon iconId={resolveUXIcon(settings.interfaceIcons, 'list-descendants')} />
                         </button>
                     ) : null}
                     {showSortButton ? (
@@ -236,7 +253,7 @@ export function ListPaneHeader({ onHeaderClick, isSearchActive, onSearchToggle }
                             disabled={!selectionState.selectedFolder && !selectionState.selectedTag}
                             tabIndex={-1}
                         >
-                            <ObsidianIcon name={getSortIcon()} />
+                            <ServiceIcon iconId={sortIconId} />
                         </button>
                     ) : null}
                     {showAppearanceButton ? (
@@ -247,7 +264,7 @@ export function ListPaneHeader({ onHeaderClick, isSearchActive, onSearchToggle }
                             disabled={!selectionState.selectedFolder && !selectionState.selectedTag}
                             tabIndex={-1}
                         >
-                            <ObsidianIcon name="lucide-palette" />
+                            <ServiceIcon iconId={resolveUXIcon(settings.interfaceIcons, 'list-appearance')} />
                         </button>
                     ) : null}
                     {showNewNoteButton ? (
@@ -260,7 +277,7 @@ export function ListPaneHeader({ onHeaderClick, isSearchActive, onSearchToggle }
                             disabled={!selectionState.selectedFolder}
                             tabIndex={-1}
                         >
-                            <ObsidianIcon name="lucide-pen-box" />
+                            <ServiceIcon iconId={resolveUXIcon(settings.interfaceIcons, 'list-new-note')} />
                         </button>
                     ) : null}
                 </div>

@@ -21,3 +21,6 @@ export const EXCALIDRAW_PLUGIN_ID = 'obsidian-excalidraw-plugin';
 
 /** Tldraw plugin identifier */
 export const TLDRAW_PLUGIN_ID = 'tldraw';
+
+/** Templater plugin identifier */
+export const TEMPLATER_PLUGIN_ID = 'templater-obsidian';

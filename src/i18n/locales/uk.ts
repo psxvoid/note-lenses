@@ -176,6 +176,7 @@ export const STRINGS_UK = {
         },
         folder: {
             newNote: 'Нова нотатка',
+            newNoteFromTemplate: 'Нова нотатка з шаблону',
             newFolder: 'Нова папка',
             newCanvas: 'Нове полотно',
             newBase: 'Нова база даних',
@@ -247,6 +248,36 @@ export const STRINGS_UK = {
             emojiInstructions: 'Введіть або вставте будь-який емодзі для використання як іконки',
             removeIcon: 'Вилучити іконку',
             allTabLabel: 'Всі'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Додати правило'
+        },
+        interfaceIcons: {
+            title: 'Іконки інтерфейсу',
+            items: {
+                'nav-shortcuts': 'Ярлики',
+                'nav-recent-files': 'Нещодавні файли',
+                'nav-expand-all': 'Розгорнути все',
+                'nav-collapse-all': 'Згорнути все',
+                'nav-tree-expand': 'Стрілка дерева: розгорнути',
+                'nav-tree-collapse': 'Стрілка дерева: згорнути',
+                'nav-hidden-items': 'Приховані елементи',
+                'nav-root-reorder': 'Змінити порядок кореневих папок',
+                'nav-new-folder': 'Нова папка',
+                'nav-show-single-pane': 'Показати одну панель',
+                'nav-show-dual-pane': 'Показати подвійну панель',
+                'nav-profile-chevron': 'Стрілка меню профілю',
+                'list-search': 'Пошук',
+                'list-descendants': 'Нотатки з підпапок',
+                'list-sort-ascending': 'Порядок сортування: за зростанням',
+                'list-sort-descending': 'Порядок сортування: за спаданням',
+                'list-appearance': 'Змінити вигляд',
+                'list-new-note': 'Нова нотатка',
+                'nav-folder-open': 'Папка відкрита',
+                'nav-folder-closed': 'Папка закрита',
+                'nav-tag': 'Тег',
+                'list-pinned': 'Закріплені елементи'
+            }
         },
         colorPicker: {
             currentColor: 'Поточний',
@@ -516,6 +547,7 @@ export const STRINGS_UK = {
         selectVaultProfile3: 'Вибрати профіль сховища 3', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: 'Видалити файли', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: 'Створити нову нотатку', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'Нова нотатка з шаблону', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: 'Перемістити файли', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: 'Вибрати наступний файл', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: 'Вибрати попередній файл', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -526,6 +558,7 @@ export const STRINGS_UK = {
         navigateToFolder: 'Перейти до папки', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: 'Перейти до тегу', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: 'Додати до ярликів', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: 'Відкрити ярлик {number}',
         toggleDescendants: 'Перемкнути нащадків', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: 'Перемкнути приховані папки, теги та нотатки', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: 'Перемкнути порядок сортування тегів', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -582,12 +615,11 @@ export const STRINGS_UK = {
                 filtering: 'Фільтрація',
                 behavior: 'Поведінка',
                 view: 'Вигляд',
+                icons: 'Іконки',
                 desktopAppearance: "Вигляд на комп'ютері",
-                mobileAppearance: 'Вигляд на мобільному',
                 formatting: 'Форматування'
             },
             navigation: {
-                behavior: 'Поведінка',
                 appearance: 'Вигляд',
                 shortcutsAndRecent: 'Ярлики та нещодавні елементи'
             },
@@ -716,8 +748,8 @@ export const STRINGS_UK = {
             fileNameIconMap: {
                 name: 'Зіставлення назв та іконок',
                 desc: 'Файли, що містять текст, отримують вказану іконку. Одне зіставлення на рядок: текст=іконка',
-                placeholder: '# текст=іконка\nзустріч=calendar\nрахунок=receipt',
-                resetTooltip: 'Відновити значення за замовчуванням'
+                placeholder: '# текст=іконка\nзустріч=LiCalendar\nрахунок=PhReceipt',
+                editTooltip: 'Редагувати зіставлення'
             },
             showCategoryIcons: {
                 name: 'Іконки за типом файлу',
@@ -726,8 +758,8 @@ export const STRINGS_UK = {
             fileTypeIconMap: {
                 name: 'Зіставлення типів та іконок',
                 desc: 'Файли з розширенням отримують вказану іконку. Одне зіставлення на рядок: розширення=іконка',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Відновити значення за замовчуванням'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Редагувати зіставлення'
             },
             optimizeNoteHeight: {
                 name: 'Оптимізувати висоту нотаток',
@@ -839,6 +871,15 @@ export const STRINGS_UK = {
                 name: 'Показувати ярлики',
                 desc: 'Відображати розділ ярликів у панелі навігації.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Значок ярлика',
+                desc: "Що відображати біля ярликів. Використовуйте команди 'Відкрити ярлик 1-9' для прямого відкриття ярликів.",
+                options: {
+                    index: 'Позиція (1-9)',
+                    count: 'Кількість елементів',
+                    none: 'Немає'
+                }
+            },
             showRecentNotes: {
                 name: 'Показувати останні нотатки',
                 desc: 'Відображати розділ останніх нотаток у панелі навігації.'
@@ -866,7 +907,7 @@ export const STRINGS_UK = {
                 notice: 'Позицію роздільника скинуто. Перезапустіть Obsidian або відкрийте Notebook Navigator знову для застосування.'
             },
             multiSelectModifier: {
-                name: 'Модифікатор множинного вибору',
+                name: "Модифікатор множинного вибору (лише комп'ютер)",
                 desc: 'Виберіть, яка клавіша-модифікатор перемикає множинний вибір. При виборі Option/Alt натискання Cmd/Ctrl відкриває нотатки в новій вкладці.',
                 options: {
                     cmdCtrl: 'Натискання Cmd/Ctrl',
@@ -1104,6 +1145,11 @@ export const STRINGS_UK = {
             showSectionIcons: {
                 name: 'Показувати іконки для ярликів та останніх елементів',
                 desc: 'Відображати іконки для розділів навігації, таких як Ярлики та Останні файли.'
+            },
+            interfaceIcons: {
+                name: 'Іконки інтерфейсу',
+                desc: 'Редагувати іконки панелі інструментів, папок, тегів, закріплених, пошуку та сортування.',
+                buttonText: 'Редагувати іконки'
             },
             showIconsColorOnly: {
                 name: 'Застосовувати колір лише до іконок',

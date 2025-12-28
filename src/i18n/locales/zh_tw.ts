@@ -176,6 +176,7 @@ export const STRINGS_ZH_TW = {
         },
         folder: {
             newNote: '新筆記',
+            newNoteFromTemplate: '從範本建立新筆記',
             newFolder: '新資料夾',
             newCanvas: '新畫布',
             newBase: '新 Base',
@@ -247,6 +248,36 @@ export const STRINGS_ZH_TW = {
             emojiInstructions: '輸入或貼上任何表情符號以作為圖示',
             removeIcon: '移除圖示',
             allTabLabel: '全部'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: '新增規則'
+        },
+        interfaceIcons: {
+            title: '介面圖示',
+            items: {
+                'nav-shortcuts': '捷徑',
+                'nav-recent-files': '最近檔案',
+                'nav-expand-all': '全部展開',
+                'nav-collapse-all': '全部摺疊',
+                'nav-tree-expand': '樹狀箭頭: 展開',
+                'nav-tree-collapse': '樹狀箭頭: 摺疊',
+                'nav-hidden-items': '隱藏項目',
+                'nav-root-reorder': '重新排列根資料夾',
+                'nav-new-folder': '新建資料夾',
+                'nav-show-single-pane': '顯示單一窗格',
+                'nav-show-dual-pane': '顯示雙窗格',
+                'nav-profile-chevron': '設定檔選單箭頭',
+                'list-search': '搜尋',
+                'list-descendants': '子資料夾中的筆記',
+                'list-sort-ascending': '排序: 升冪',
+                'list-sort-descending': '排序: 降冪',
+                'list-appearance': '變更外觀',
+                'list-new-note': '新建筆記',
+                'nav-folder-open': '資料夾開啟',
+                'nav-folder-closed': '資料夾關閉',
+                'nav-tag': '標籤',
+                'list-pinned': '釘選項目'
+            }
         },
         colorPicker: {
             currentColor: '目前',
@@ -516,6 +547,7 @@ export const STRINGS_ZH_TW = {
         selectVaultProfile3: '切換到倉庫設定檔 3', // 指令面板：不開對話框直接啟用第三個倉庫設定檔 (英文: Select vault profile 3)
         deleteFile: '刪除檔案', // 指令面板：刪除目前活動的檔案 (英文: Delete file)
         createNewNote: '建立新筆記', // 指令面板：在目前選取的資料夾中建立新筆記 (英文: Create new note)
+        createNewNoteFromTemplate: '從範本建立新筆記', // 指令面板：在目前選取的資料夾中從範本建立新筆記 (英文: Create new note from template)
         moveFiles: '移動檔案', // 指令面板：將選取的檔案移動至另一個資料夾 (英文: Move files)
         selectNextFile: '選擇下一個檔案', // 指令面板：選取目前檢視中的下一個檔案 (英文: Select next file)
         selectPreviousFile: '選擇上一個檔案', // 指令面板：選取目前檢視中的上一個檔案 (英文: Select previous file)
@@ -526,6 +558,7 @@ export const STRINGS_ZH_TW = {
         navigateToFolder: '導覽至資料夾', // 指令面板：使用模糊搜尋導覽至資料夾 (英文: Navigate to folder)
         navigateToTag: '導覽至標籤', // 指令面板：使用模糊搜尋導覽至標籤 (英文: Navigate to tag)
         addShortcut: '新增至捷徑', // 指令面板：將目前的檔案、資料夾或標籤加入捷徑 (英文: Add to shortcuts)
+        openShortcut: '開啟捷徑 {number}',
         toggleDescendants: '切換後代項目', // 指令面板：切換顯示後代中的筆記 (英文: Toggle descendants)
         toggleHidden: '切換隱藏的資料夾、標籤和筆記', // 指令面板：切換顯示隱藏項目 (英文: Toggle hidden items)
         toggleTagSort: '切換標籤排序', // 指令面板：在字母和頻率標籤排序之間切換 (英文: Toggle tag sort order)
@@ -582,12 +615,11 @@ export const STRINGS_ZH_TW = {
                 filtering: '篩選',
                 behavior: '行為',
                 view: '外觀',
+                icons: '圖示',
                 desktopAppearance: '桌面外觀',
-                mobileAppearance: '行動裝置外觀',
                 formatting: '格式'
             },
             navigation: {
-                behavior: '行為',
                 appearance: '外觀',
                 shortcutsAndRecent: '捷徑和最近項目'
             },
@@ -715,8 +747,8 @@ export const STRINGS_ZH_TW = {
             fileNameIconMap: {
                 name: '檔案名稱圖示對應',
                 desc: '包含指定文字的檔案將獲得指定圖示。每行一個對應：文字=圖示',
-                placeholder: '# 文字=圖示\n會議=calendar\n發票=receipt',
-                resetTooltip: '恢復預設值'
+                placeholder: '# 文字=圖示\n會議=LiCalendar\n發票=PhReceipt',
+                editTooltip: '編輯對應'
             },
             showCategoryIcons: {
                 name: '依檔案類型設定圖示',
@@ -725,8 +757,8 @@ export const STRINGS_ZH_TW = {
             fileTypeIconMap: {
                 name: '檔案類型圖示對應',
                 desc: '具有指定副檔名的檔案將獲得指定圖示。每行一個對應：副檔名=圖示',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: '恢復預設值'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: '編輯對應'
             },
             optimizeNoteHeight: {
                 name: '最佳化筆記高度',
@@ -838,6 +870,15 @@ export const STRINGS_ZH_TW = {
                 name: '顯示捷徑',
                 desc: '在導覽窗格中顯示捷徑區段。'
             },
+            shortcutBadgeDisplay: {
+                name: '捷徑徽章',
+                desc: '在捷徑旁邊顯示的內容。使用「開啟捷徑1-9」命令可直接開啟捷徑。',
+                options: {
+                    index: '位置 (1-9)',
+                    count: '項目計數',
+                    none: '無'
+                }
+            },
             showRecentNotes: {
                 name: '顯示最近筆記',
                 desc: '在導覽窗格中顯示最近筆記區段。'
@@ -865,7 +906,7 @@ export const STRINGS_ZH_TW = {
                 notice: '分隔符位置已重置。重新啟動 Obsidian 或重新開啟 Notebook Navigator 以套用。'
             },
             multiSelectModifier: {
-                name: '多重選取修飾鍵',
+                name: '多重選取修飾鍵 (僅限桌面版)',
                 desc: '選擇哪個修飾鍵切換多重選取。選擇 Option/Alt 時，Cmd/Ctrl 點擊會在一個新分頁中開啟筆記。',
                 options: {
                     cmdCtrl: 'Cmd/Ctrl 點擊',
@@ -1102,6 +1143,11 @@ export const STRINGS_ZH_TW = {
             showSectionIcons: {
                 name: '顯示捷徑和最近項目的圖示',
                 desc: '顯示導覽區段（如捷徑和最近檔案）的圖示。'
+            },
+            interfaceIcons: {
+                name: '介面圖示',
+                desc: '編輯工具列、資料夾、標籤、釘選、搜尋和排序圖示。',
+                buttonText: '編輯圖示'
             },
             showIconsColorOnly: {
                 name: '僅對圖示套用顏色',

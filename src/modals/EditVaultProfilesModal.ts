@@ -139,7 +139,7 @@ export class EditVaultProfilesModal extends Modal {
             const actions = row.createDiv({ cls: 'nn-edit-profiles-actions' });
 
             const upBtn = actions.createEl('button', {
-                cls: 'nn-edit-profiles-action-btn',
+                cls: 'nn-action-btn',
                 attr: {
                     type: 'button',
                     'aria-label': strings.settings.items.vaultProfiles.moveUp
@@ -154,7 +154,7 @@ export class EditVaultProfilesModal extends Modal {
             );
 
             const downBtn = actions.createEl('button', {
-                cls: 'nn-edit-profiles-action-btn',
+                cls: 'nn-action-btn',
                 attr: {
                     type: 'button',
                     'aria-label': strings.settings.items.vaultProfiles.moveDown
@@ -169,7 +169,7 @@ export class EditVaultProfilesModal extends Modal {
             );
 
             const deleteBtn = actions.createEl('button', {
-                cls: 'nn-edit-profiles-action-btn mod-warning',
+                cls: 'nn-action-btn mod-warning',
                 attr: {
                     type: 'button',
                     'aria-label': strings.settings.items.vaultProfiles.deleteButton

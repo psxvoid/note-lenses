@@ -39,6 +39,8 @@ interface ShortcutItemProps {
     isMissing?: boolean;
     type: 'folder' | 'note' | 'search' | 'tag';
     countInfo?: NoteCountInfo;
+    badge?: string;
+    forceShowCount?: boolean;
     isExcluded?: boolean;
     onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
     onMouseDown?: (event: React.MouseEvent<HTMLDivElement>) => void;
@@ -72,6 +74,8 @@ export const ShortcutItem = React.memo(function ShortcutItem({
     isMissing,
     type,
     countInfo,
+    badge,
+    forceShowCount,
     isExcluded,
     onClick,
     onMouseDown,
@@ -96,9 +100,11 @@ export const ShortcutItem = React.memo(function ShortcutItem({
     const countDisplay = buildNoteCountDisplay(countInfo, includeDescendantNotes, includeDescendantNotes && settings.separateNoteCounts);
     // Check if this item type supports displaying note counts
     const supportsCount = type === 'folder' || type === 'tag';
-    // Determines whether to display count based on settings and item type
-    // Only shows counts for folder and tag types when showNoteCount is enabled
-    const shouldShowCount = settings.showNoteCount && supportsCount && countDisplay.shouldDisplay;
+    const hasBadge = typeof badge === 'string' && badge.length > 0;
+    // Determines whether to display the badge/count bubble
+    // Shows a numeric badge when provided, otherwise shows note counts for folder/tag types when enabled
+    const shouldShowCount =
+        hasBadge || (supportsCount && countDisplay.shouldDisplay && (Boolean(forceShowCount) || settings.showNoteCount));
     // Row is disabled when item exists but is disabled (missing items are handled separately)
     const shouldDisableRow = Boolean(isDisabled) && !isMissing;
     // Builds CSS class names for the shortcut item with conditional missing state
@@ -176,7 +182,7 @@ export const ShortcutItem = React.memo(function ShortcutItem({
             dragHandlers={dragHandlers}
             isDragSource={isDragSource}
             showCount={shouldShowCount}
-            count={countDisplay.label}
+            count={hasBadge ? badge : countDisplay.label}
             className={classNames}
             tabIndex={-1}
             ariaDisabled={shouldDisableRow || isMissing}

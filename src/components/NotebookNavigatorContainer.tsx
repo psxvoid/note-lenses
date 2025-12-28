@@ -42,9 +42,8 @@ export const NotebookNavigatorContainer = React.memo(
         const uxPreferences = useUXPreferences();
         const { isMobile } = useServices();
         const orientation = settings.dualPaneOrientation;
-        // Get background mode for desktop and mobile layouts
+        // Get background mode for desktop layout
         const desktopBackground = settings.desktopBackground ?? 'separate';
-        const mobileBackground = settings.mobileBackground ?? 'primary';
         const { style: scaleWrapperStyle, dataAttr: scaleWrapperDataAttr } = useNavigatorScale({
             isMobile,
             desktopScale: settings.desktopScale,
@@ -78,7 +77,6 @@ export const NotebookNavigatorContainer = React.memo(
             // Apply platform-specific classes and background mode
             if (isMobile) {
                 containerClasses.push('nn-mobile');
-                containerClasses.push(...getBackgroundClasses(mobileBackground));
             } else {
                 containerClasses.push('nn-desktop');
                 containerClasses.push(...getBackgroundClasses(desktopBackground));

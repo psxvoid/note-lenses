@@ -176,6 +176,7 @@ export const STRINGS_ZH_CN = {
         },
         folder: {
             newNote: '新笔记',
+            newNoteFromTemplate: '从模板新建笔记',
             newFolder: '新建文件夹',
             newCanvas: '新建画布',
             newBase: '新建数据库',
@@ -247,6 +248,36 @@ export const STRINGS_ZH_CN = {
             emojiInstructions: '输入或粘贴任何表情符号作为图标使用',
             removeIcon: '移除图标',
             allTabLabel: '全部'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: '添加规则'
+        },
+        interfaceIcons: {
+            title: '界面图标',
+            items: {
+                'nav-shortcuts': '快捷方式',
+                'nav-recent-files': '最近文件',
+                'nav-expand-all': '全部展开',
+                'nav-collapse-all': '全部折叠',
+                'nav-tree-expand': '树形箭头: 展开',
+                'nav-tree-collapse': '树形箭头: 折叠',
+                'nav-hidden-items': '隐藏项目',
+                'nav-root-reorder': '重新排列根文件夹',
+                'nav-new-folder': '新建文件夹',
+                'nav-show-single-pane': '显示单窗格',
+                'nav-show-dual-pane': '显示双窗格',
+                'nav-profile-chevron': '配置菜单箭头',
+                'list-search': '搜索',
+                'list-descendants': '子文件夹中的笔记',
+                'list-sort-ascending': '排序: 升序',
+                'list-sort-descending': '排序: 降序',
+                'list-appearance': '更改外观',
+                'list-new-note': '新建笔记',
+                'nav-folder-open': '文件夹打开',
+                'nav-folder-closed': '文件夹关闭',
+                'nav-tag': '标签',
+                'list-pinned': '固定项目'
+            }
         },
         colorPicker: {
             currentColor: '当前',
@@ -517,6 +548,7 @@ export const STRINGS_ZH_CN = {
         selectVaultProfile3: '切换到仓库配置文件 3', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: '删除文件', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: '创建新笔记', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: '从模板新建笔记', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: '移动文件', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: '选择下一个文件', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: '选择上一个文件', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -527,6 +559,7 @@ export const STRINGS_ZH_CN = {
         navigateToFolder: '导航到文件夹', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: '导航到标签', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: '添加到快捷方式', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: '打开快捷方式 {number}',
         toggleDescendants: '切换后代', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: '切换隐藏的文件夹、标签和笔记', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: '切换标签排序', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -583,12 +616,11 @@ export const STRINGS_ZH_CN = {
                 filtering: '过滤',
                 behavior: '行为',
                 view: '外观',
+                icons: '图标',
                 desktopAppearance: '桌面外观',
-                mobileAppearance: '移动端外观',
                 formatting: '格式'
             },
             navigation: {
-                behavior: '行为',
                 appearance: '外观',
                 shortcutsAndRecent: '快捷方式和最近项目'
             },
@@ -716,8 +748,8 @@ export const STRINGS_ZH_CN = {
             fileNameIconMap: {
                 name: '文件名图标映射',
                 desc: '包含指定文本的文件将获得指定图标。每行一个映射：文本=图标',
-                placeholder: '# 文本=图标\n会议=calendar\n发票=receipt',
-                resetTooltip: '恢复默认值'
+                placeholder: '# 文本=图标\n会议=LiCalendar\n发票=PhReceipt',
+                editTooltip: '编辑映射'
             },
             showCategoryIcons: {
                 name: '按文件类型设置图标',
@@ -726,8 +758,8 @@ export const STRINGS_ZH_CN = {
             fileTypeIconMap: {
                 name: '文件类型图标映射',
                 desc: '具有指定扩展名的文件将获得指定图标。每行一个映射：扩展名=图标',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: '恢复默认值'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: '编辑映射'
             },
             optimizeNoteHeight: {
                 name: '优化笔记高度',
@@ -839,6 +871,15 @@ export const STRINGS_ZH_CN = {
                 name: '显示快捷方式',
                 desc: '在导航窗格中显示快捷方式部分。'
             },
+            shortcutBadgeDisplay: {
+                name: '快捷方式徽章',
+                desc: '在快捷方式旁边显示的内容。使用"打开快捷方式1-9"命令可直接打开快捷方式。',
+                options: {
+                    index: '位置 (1-9)',
+                    count: '项目计数',
+                    none: '无'
+                }
+            },
             showRecentNotes: {
                 name: '显示最近笔记',
                 desc: '在导航窗格中显示最近笔记部分。'
@@ -866,7 +907,7 @@ export const STRINGS_ZH_CN = {
                 notice: '分隔符位置已重置。重启 Obsidian 或重新打开 Notebook Navigator 以应用。'
             },
             multiSelectModifier: {
-                name: '多选修饰键',
+                name: '多选修饰键（仅桌面端）',
                 desc: '选择哪个修饰键切换多选模式。选择 Option/Alt 时，Cmd/Ctrl 点击会在新标签页中打开笔记。',
                 options: {
                     cmdCtrl: 'Cmd/Ctrl 点击',
@@ -1104,6 +1145,11 @@ export const STRINGS_ZH_CN = {
             showSectionIcons: {
                 name: '显示快捷方式和最近项目的图标',
                 desc: '显示导航分区（如快捷方式和最近文件）的图标。'
+            },
+            interfaceIcons: {
+                name: '界面图标',
+                desc: '编辑工具栏、文件夹、标签、固定、搜索和排序图标。',
+                buttonText: '编辑图标'
             },
             showIconsColorOnly: {
                 name: '仅对图标应用颜色',

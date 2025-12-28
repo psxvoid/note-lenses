@@ -176,6 +176,7 @@ export const STRINGS_AR = {
         },
         folder: {
             newNote: 'ملاحظة جديدة',
+            newNoteFromTemplate: 'ملاحظة جديدة من قالب',
             newFolder: 'مجلد جديد',
             newCanvas: 'لوحة جديدة',
             newBase: 'قاعدة جديدة',
@@ -247,6 +248,36 @@ export const STRINGS_AR = {
             emojiInstructions: 'اكتب أو الصق أي رمز تعبيري لاستخدامه كأيقونة',
             removeIcon: 'إزالة الأيقونة',
             allTabLabel: 'الكل'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'إضافة قاعدة'
+        },
+        interfaceIcons: {
+            title: 'أيقونات الواجهة',
+            items: {
+                'nav-shortcuts': 'الاختصارات',
+                'nav-recent-files': 'الملفات الأخيرة',
+                'nav-expand-all': 'توسيع الكل',
+                'nav-collapse-all': 'طي الكل',
+                'nav-tree-expand': 'سهم الشجرة: توسيع',
+                'nav-tree-collapse': 'سهم الشجرة: طي',
+                'nav-hidden-items': 'العناصر المخفية',
+                'nav-root-reorder': 'إعادة ترتيب المجلدات الجذرية',
+                'nav-new-folder': 'مجلد جديد',
+                'nav-show-single-pane': 'إظهار لوحة واحدة',
+                'nav-show-dual-pane': 'إظهار لوحتين',
+                'nav-profile-chevron': 'سهم قائمة الملف الشخصي',
+                'list-search': 'بحث',
+                'list-descendants': 'ملاحظات من المجلدات الفرعية',
+                'list-sort-ascending': 'ترتيب الفرز: تصاعدي',
+                'list-sort-descending': 'ترتيب الفرز: تنازلي',
+                'list-appearance': 'تغيير المظهر',
+                'list-new-note': 'ملاحظة جديدة',
+                'nav-folder-open': 'مجلد مفتوح',
+                'nav-folder-closed': 'مجلد مغلق',
+                'nav-tag': 'وسم',
+                'list-pinned': 'العناصر المثبتة'
+            }
         },
         colorPicker: {
             currentColor: 'الحالي',
@@ -516,6 +547,7 @@ export const STRINGS_AR = {
         selectVaultProfile3: 'اختيار ملف الخزنة 3', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: 'حذف الملفات', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: 'إنشاء ملاحظة جديدة', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'ملاحظة جديدة من قالب', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: 'نقل الملفات', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: 'تحديد الملف التالي', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: 'تحديد الملف السابق', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -526,6 +558,7 @@ export const STRINGS_AR = {
         navigateToFolder: 'الانتقال إلى مجلد', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: 'الانتقال إلى وسم', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: 'إضافة إلى الاختصارات', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: 'فتح الاختصار {number}',
         toggleDescendants: 'تبديل الفروع', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: 'تبديل المجلدات والوسوم والملاحظات المخفية', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: 'تبديل ترتيب فرز الوسوم', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -582,12 +615,11 @@ export const STRINGS_AR = {
                 filtering: 'التصفية',
                 behavior: 'السلوك',
                 view: 'المظهر',
+                icons: 'الأيقونات',
                 desktopAppearance: 'مظهر سطح المكتب',
-                mobileAppearance: 'مظهر الجوال',
                 formatting: 'التنسيق'
             },
             navigation: {
-                behavior: 'السلوك',
                 appearance: 'المظهر',
                 shortcutsAndRecent: 'الاختصارات والعناصر الأخيرة'
             },
@@ -716,8 +748,8 @@ export const STRINGS_AR = {
             fileNameIconMap: {
                 name: 'خريطة أيقونات اسم الملف',
                 desc: 'الملفات التي تحتوي على النص تحصل على الأيقونة المحددة. تعيين واحد لكل سطر: نص=أيقونة',
-                placeholder: '# نص=أيقونة\nاجتماع=calendar\nفاتورة=receipt',
-                resetTooltip: 'استعادة الإعدادات الافتراضية'
+                placeholder: '# نص=أيقونة\nاجتماع=LiCalendar\nفاتورة=PhReceipt',
+                editTooltip: 'تعديل التعيينات'
             },
             showCategoryIcons: {
                 name: 'أيقونات حسب نوع الملف',
@@ -726,8 +758,8 @@ export const STRINGS_AR = {
             fileTypeIconMap: {
                 name: 'خريطة أيقونات نوع الملف',
                 desc: 'الملفات ذات الامتداد تحصل على الأيقونة المحددة. تعيين واحد لكل سطر: امتداد=أيقونة',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'استعادة الإعدادات الافتراضية'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'تعديل التعيينات'
             },
             optimizeNoteHeight: {
                 name: 'تحسين ارتفاع الملاحظة',
@@ -839,6 +871,15 @@ export const STRINGS_AR = {
                 name: 'إظهار الاختصارات',
                 desc: 'عرض قسم الاختصارات في لوحة التنقل.'
             },
+            shortcutBadgeDisplay: {
+                name: 'شارة الاختصار',
+                desc: "ما يتم عرضه بجانب الاختصارات. استخدم أوامر 'فتح الاختصار 1-9' لفتح الاختصارات مباشرة.",
+                options: {
+                    index: 'الموضع (1-9)',
+                    count: 'عدد العناصر',
+                    none: 'لا شيء'
+                }
+            },
             showRecentNotes: {
                 name: 'إظهار الملاحظات الحديثة',
                 desc: 'عرض قسم الملاحظات الحديثة في لوحة التنقل.'
@@ -866,7 +907,7 @@ export const STRINGS_AR = {
                 notice: 'تم إعادة تعيين موضع الفاصل. أعد تشغيل Obsidian أو أعد فتح متصفح الدفتر للتطبيق.'
             },
             multiSelectModifier: {
-                name: 'معدل التحديد المتعدد',
+                name: 'معدل التحديد المتعدد (سطح المكتب فقط)',
                 desc: 'اختر مفتاح التعديل الذي يبدل التحديد المتعدد. عند اختيار Option/Alt، النقر مع Cmd/Ctrl يفتح الملاحظات في علامة تبويب جديدة.',
                 options: {
                     cmdCtrl: 'النقر مع Cmd/Ctrl',
@@ -1103,6 +1144,11 @@ export const STRINGS_AR = {
             showSectionIcons: {
                 name: 'إظهار أيقونات للاختصارات والعناصر الحديثة',
                 desc: 'عرض أيقونات لأقسام التنقل مثل الاختصارات والملفات الحديثة.'
+            },
+            interfaceIcons: {
+                name: 'أيقونات الواجهة',
+                desc: 'تحرير أيقونات شريط الأدوات والمجلدات والوسوم والعناصر المثبتة والبحث والفرز.',
+                buttonText: 'تحرير الأيقونات'
             },
             showIconsColorOnly: {
                 name: 'تطبيق اللون على الأيقونات فقط',

@@ -50,7 +50,6 @@
  */
 
 import React, { forwardRef, useMemo, useCallback } from 'react';
-import { setIcon } from 'obsidian';
 import { useSettingsState } from '../context/SettingsContext';
 import { useUXPreferences } from '../context/UXPreferencesContext';
 import { useContextMenu } from '../hooks/useContextMenu';
@@ -61,6 +60,7 @@ import type { NoteCountInfo } from '../types/noteCounts';
 import { buildNoteCountDisplay } from '../utils/noteCountFormatting';
 import { buildSearchMatchContentClass } from '../utils/searchHighlight';
 import { getTotalNoteCount } from '../utils/tagTree';
+import { resolveUXIcon } from '../utils/uxIcons';
 
 /**
  * Props for the TagTreeItem component
@@ -164,7 +164,7 @@ export const TagTreeItem = React.memo(
         // Determine whether to apply color to the tag name instead of the icon
         const applyColorToName = Boolean(tagColor) && !settings.colorIconOnly;
         // Use custom icon or default to tags icon for drag ghost
-        const dragIconId = tagIcon || 'lucide-tags';
+        const dragIconId = tagIcon || resolveUXIcon(settings.interfaceIcons, 'nav-tag');
 
         // Memoize className to avoid string concatenation on every render
         const className = useMemo(() => {
@@ -218,16 +218,19 @@ export const TagTreeItem = React.memo(
         // Update chevron icon based on expanded state
         React.useEffect(() => {
             if (chevronRef.current && hasChildren) {
-                setIcon(chevronRef.current, isExpanded ? 'lucide-chevron-down' : 'lucide-chevron-right');
+                getIconService().renderIcon(
+                    chevronRef.current,
+                    resolveUXIcon(settings.interfaceIcons, isExpanded ? 'nav-tree-collapse' : 'nav-tree-expand')
+                );
             }
-        }, [isExpanded, hasChildren]);
+        }, [hasChildren, iconVersion, isExpanded, settings.interfaceIcons]);
 
         // Update tag icon
         React.useEffect(() => {
             if (iconRef.current && settings.showTagIcons) {
-                getIconService().renderIcon(iconRef.current, tagIcon || 'lucide-tags');
+                getIconService().renderIcon(iconRef.current, tagIcon || resolveUXIcon(settings.interfaceIcons, 'nav-tag'));
             }
-        }, [tagIcon, settings.showTagIcons, iconVersion]);
+        }, [tagIcon, settings.showTagIcons, iconVersion, settings.interfaceIcons]);
 
         // Set up forwarded ref
         React.useImperativeHandle(ref, () => itemRef.current as HTMLDivElement);

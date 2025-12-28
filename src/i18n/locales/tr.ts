@@ -176,6 +176,7 @@ export const STRINGS_TR = {
         },
         folder: {
             newNote: 'Yeni not',
+            newNoteFromTemplate: 'Şablondan yeni not',
             newFolder: 'Yeni klasör',
             newCanvas: 'Yeni tuval',
             newBase: 'Yeni veritabanı',
@@ -247,6 +248,36 @@ export const STRINGS_TR = {
             emojiInstructions: 'Simge olarak kullanmak için herhangi bir emoji yazın veya yapıştırın',
             removeIcon: 'Simgeyi kaldır',
             allTabLabel: 'Tümü'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Kural ekle'
+        },
+        interfaceIcons: {
+            title: 'Arayüz simgeleri',
+            items: {
+                'nav-shortcuts': 'Kısayollar',
+                'nav-recent-files': 'Son dosyalar',
+                'nav-expand-all': 'Tümünü genişlet',
+                'nav-collapse-all': 'Tümünü daralt',
+                'nav-tree-expand': 'Ağaç oku: genişlet',
+                'nav-tree-collapse': 'Ağaç oku: daralt',
+                'nav-hidden-items': 'Gizli öğeler',
+                'nav-root-reorder': 'Kök klasörleri yeniden sırala',
+                'nav-new-folder': 'Yeni klasör',
+                'nav-show-single-pane': 'Tek bölme göster',
+                'nav-show-dual-pane': 'Çift bölme göster',
+                'nav-profile-chevron': 'Profil menüsü oku',
+                'list-search': 'Ara',
+                'list-descendants': 'Alt klasörlerden notlar',
+                'list-sort-ascending': 'Sıralama: artan',
+                'list-sort-descending': 'Sıralama: azalan',
+                'list-appearance': 'Görünümü değiştir',
+                'list-new-note': 'Yeni not',
+                'nav-folder-open': 'Klasör açık',
+                'nav-folder-closed': 'Klasör kapalı',
+                'nav-tag': 'Etiket',
+                'list-pinned': 'Sabitlenmiş öğeler'
+            }
         },
         colorPicker: {
             currentColor: 'Mevcut',
@@ -516,6 +547,7 @@ export const STRINGS_TR = {
         selectVaultProfile3: 'Kasa profili 3 seç', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: 'Dosyaları sil', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: 'Yeni not oluştur', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'Şablondan yeni not', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: 'Dosyaları taşı', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: 'Sonraki dosyayı seç', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: 'Önceki dosyayı seç', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -526,6 +558,7 @@ export const STRINGS_TR = {
         navigateToFolder: 'Klasöre git', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: 'Etikete git', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: 'Kısayollara ekle', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: 'Kısayol {number} aç',
         toggleDescendants: 'Alt öğeleri aç/kapat', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: 'Gizli klasörleri, etiketleri ve notları aç/kapat', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: 'Etiket sıralama düzenini aç/kapat', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -582,12 +615,11 @@ export const STRINGS_TR = {
                 filtering: 'Filtreleme',
                 behavior: 'Davranış',
                 view: 'Görünüm',
+                icons: 'Simgeler',
                 desktopAppearance: 'Masaüstü görünümü',
-                mobileAppearance: 'Mobil görünümü',
                 formatting: 'Biçimlendirme'
             },
             navigation: {
-                behavior: 'Davranış',
                 appearance: 'Görünüm',
                 shortcutsAndRecent: 'Kısayollar ve son öğeler'
             },
@@ -716,8 +748,8 @@ export const STRINGS_TR = {
             fileNameIconMap: {
                 name: 'Dosya adı simge eşlemesi',
                 desc: 'Metni içeren dosyalar belirtilen simgeyi alır. Satır başına bir eşleme: metin=simge',
-                placeholder: '# metin=simge\ntoplantı=calendar\nfatura=receipt',
-                resetTooltip: 'Varsayılanları geri yükle'
+                placeholder: '# metin=simge\ntoplantı=LiCalendar\nfatura=PhReceipt',
+                editTooltip: 'Eşlemeleri düzenle'
             },
             showCategoryIcons: {
                 name: 'Dosya türüne göre simgeler',
@@ -726,8 +758,8 @@ export const STRINGS_TR = {
             fileTypeIconMap: {
                 name: 'Dosya türü simge eşlemesi',
                 desc: 'Uzantıya sahip dosyalar belirtilen simgeyi alır. Satır başına bir eşleme: uzantı=simge',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Varsayılanları geri yükle'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Eşlemeleri düzenle'
             },
             optimizeNoteHeight: {
                 name: 'Not yüksekliğini optimize et',
@@ -839,6 +871,15 @@ export const STRINGS_TR = {
                 name: 'Kısayolları göster',
                 desc: 'Gezinme bölmesinde kısayollar bölümünü görüntüle.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Kısayol rozeti',
+                desc: "Kısayolların yanında ne görüntüleneceği. Kısayolları doğrudan açmak için 'Kısayol 1-9 aç' komutlarını kullanın.",
+                options: {
+                    index: 'Konum (1-9)',
+                    count: 'Öğe sayısı',
+                    none: 'Yok'
+                }
+            },
             showRecentNotes: {
                 name: 'Son notları göster',
                 desc: 'Gezinme bölmesinde son notlar bölümünü görüntüle.'
@@ -866,7 +907,7 @@ export const STRINGS_TR = {
                 notice: "Ayırıcı konumu sıfırlandı. Uygulamak için Obsidian'ı yeniden başlatın veya Notebook Navigator'ı yeniden açın."
             },
             multiSelectModifier: {
-                name: 'Çoklu seçim değiştirici',
+                name: 'Çoklu seçim değiştirici (yalnızca masaüstü)',
                 desc: 'Hangi değiştirici tuşun çoklu seçimi değiştireceğini seçin. Option/Alt seçildiğinde, Cmd/Ctrl tıklaması notları yeni sekmede açar.',
                 options: {
                     cmdCtrl: 'Cmd/Ctrl tıkla',
@@ -1103,6 +1144,11 @@ export const STRINGS_TR = {
             showSectionIcons: {
                 name: 'Kısayollar ve son öğeler için simgeleri göster',
                 desc: 'Kısayollar ve Son dosyalar gibi gezinme bölümleri için simgeleri görüntüle.'
+            },
+            interfaceIcons: {
+                name: 'Arayüz simgeleri',
+                desc: 'Araç çubuğu, klasör, etiket, sabitlenmiş, arama ve sıralama simgelerini düzenleyin.',
+                buttonText: 'Simgeleri düzenle'
             },
             showIconsColorOnly: {
                 name: 'Rengi yalnızca simgelere uygula',

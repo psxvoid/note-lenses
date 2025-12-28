@@ -45,7 +45,6 @@
 
 import React, { useRef, useEffect, useCallback, useMemo } from 'react';
 import type { DragEvent } from 'react';
-import { setIcon } from 'obsidian';
 import { useSettingsState } from '../context/SettingsContext';
 import { getIconService, useIconServiceVersion } from '../services/icons';
 import { VirtualFolder } from '../types';
@@ -53,6 +52,7 @@ import { useUXPreferences } from '../context/UXPreferencesContext';
 import type { NoteCountInfo } from '../types/noteCounts';
 import { buildNoteCountDisplay } from '../utils/noteCountFormatting';
 import { buildSearchMatchContentClass } from '../utils/searchHighlight';
+import { resolveUXIcon } from '../utils/uxIcons';
 
 interface VirtualFolderItemProps {
     virtualFolder: VirtualFolder; // Static data structure from NavigationPane
@@ -186,10 +186,21 @@ export const VirtualFolderComponent = React.memo(function VirtualFolderComponent
     );
 
     useEffect(() => {
-        if (chevronRef.current) {
-            setIcon(chevronRef.current, isExpanded ? 'lucide-chevron-down' : 'lucide-chevron-right');
+        const chevronEl = chevronRef.current;
+        if (!chevronEl) {
+            return;
         }
-    }, [isExpanded]);
+
+        if (!hasChildren) {
+            chevronEl.replaceChildren();
+            return;
+        }
+
+        getIconService().renderIcon(
+            chevronEl,
+            resolveUXIcon(settings.interfaceIcons, isExpanded ? 'nav-tree-collapse' : 'nav-tree-expand')
+        );
+    }, [hasChildren, iconVersion, isExpanded, settings.interfaceIcons]);
 
     // Renders icon for virtual folders based on folder type and icon visibility settings
     useEffect(() => {

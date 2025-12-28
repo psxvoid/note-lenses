@@ -37,13 +37,15 @@ import { useServices, useFileSystemOps } from '../context/ServicesContext';
 import { useSettingsState } from '../context/SettingsContext';
 import { useUXPreferences } from '../context/UXPreferencesContext';
 import { useUIState, useUIDispatch } from '../context/UIStateContext';
-import { NavigationPaneItemType, ItemType } from '../types';
-import type { CombinedNavigationItem } from '../types/virtualization';
+import { NavigationPaneItemType, ItemType, TAGGED_TAG_ID } from '../types';
+import type { CombinedNavigationItem, VirtualFolderItem } from '../types/virtualization';
 import { deleteSelectedFolder } from '../utils/deleteOperations';
 import { useKeyboardNavigation, KeyboardNavigationHelpers } from './useKeyboardNavigation';
 import { matchesShortcut, KeyboardShortcutAction } from '../utils/keyboardShortcuts';
 import { runAsyncAction } from '../utils/async';
 import { getNavigationIndex } from '../utils/navigationIndex';
+
+type VirtualTagCollectionItem = VirtualFolderItem & { tagCollectionId: string };
 
 /**
  * Check if a navigation item is selectable
@@ -53,9 +55,15 @@ const isSelectableNavigationItem = (item: CombinedNavigationItem): boolean => {
         item.type === NavigationPaneItemType.FOLDER ||
         item.type === NavigationPaneItemType.TAG ||
         item.type === NavigationPaneItemType.UNTAGGED ||
-        (item.type === NavigationPaneItemType.VIRTUAL_FOLDER && Boolean(item.isSelectable && item.tagCollectionId))
+        (isVirtualTagCollection(item) && Boolean(item.isSelectable))
     );
 };
+
+function isVirtualTagCollection(item: CombinedNavigationItem): item is VirtualTagCollectionItem {
+    return (
+        item.type === NavigationPaneItemType.VIRTUAL_FOLDER && typeof item.tagCollectionId === 'string' && item.tagCollectionId.length > 0
+    );
+}
 
 interface UseNavigationPaneKeyboardProps {
     /** Navigation items to navigate through */
@@ -158,9 +166,10 @@ export function useNavigationPaneKeyboard({ items, virtualizer, containerRef, pa
                         expansionDispatch({ type: 'TOGGLE_TAG_EXPANDED', tagPath: tagNode.path });
                     }
                 }
-            } else if (item.type === NavigationPaneItemType.VIRTUAL_FOLDER && item.tagCollectionId) {
+            } else if (isVirtualTagCollection(item)) {
                 // Select virtual tag collection as a tag
-                selectionDispatch({ type: 'SET_SELECTED_TAG', tag: item.tagCollectionId });
+                const tagCollectionId = item.tagCollectionId;
+                selectionDispatch({ type: 'SET_SELECTED_TAG', tag: tagCollectionId });
             }
         },
         [selectionDispatch, settings, expansionState, expansionDispatch]
@@ -188,7 +197,7 @@ export function useNavigationPaneKeyboard({ items, virtualizer, containerRef, pa
                 } else if (!expand && isExpanded) {
                     expansionDispatch({ type: 'TOGGLE_TAG_EXPANDED', tagPath: tag.path });
                 }
-            } else if (item.type === NavigationPaneItemType.VIRTUAL_FOLDER && item.tagCollectionId) {
+            } else if (isVirtualTagCollection(item)) {
                 // Handle expansion for virtual folders that act as tag collections
                 const folderId = item.data.id;
                 const isExpanded = expansionState.expandedVirtualFolders.has(folderId);
@@ -328,6 +337,17 @@ export function useNavigationPaneKeyboard({ items, virtualizer, containerRef, pa
                         } else {
                             shouldSwitchPane = true;
                         }
+                    } else if (isVirtualTagCollection(item)) {
+                        const folderId = item.data.id;
+                        const isExpanded = expansionState.expandedVirtualFolders.has(folderId);
+                        const hasChildren = item.hasChildren ?? false;
+
+                        if (hasChildren && !isExpanded) {
+                            handleExpandCollapse(item, true);
+                            expandedInThisAction = true;
+                        } else {
+                            shouldSwitchPane = true;
+                        }
                     } else {
                         shouldSwitchPane = true;
                     }
@@ -356,6 +376,20 @@ export function useNavigationPaneKeyboard({ items, virtualizer, containerRef, pa
                     if (!item) {
                         return;
                     }
+
+                    const selectTaggedRootParent = () => {
+                        if (!settings.showAllTagsFolder) {
+                            return;
+                        }
+                        const parentIndex = resolveIndex(TAGGED_TAG_ID, ItemType.TAG);
+                        if (parentIndex >= 0) {
+                            const parentItem = helpers.getItemAt(parentIndex);
+                            if (parentItem) {
+                                selectItemAtIndex(parentItem);
+                                helpers.scrollToIndex(parentIndex);
+                            }
+                        }
+                    };
 
                     if (item.type === NavigationPaneItemType.FOLDER) {
                         if (!(item.data instanceof TFolder)) {
@@ -393,7 +427,17 @@ export function useNavigationPaneKeyboard({ items, virtualizer, containerRef, pa
                                         helpers.scrollToIndex(parentIndex);
                                     }
                                 }
+                            } else {
+                                selectTaggedRootParent();
                             }
+                        }
+                    } else if (item.type === NavigationPaneItemType.UNTAGGED) {
+                        selectTaggedRootParent();
+                    } else if (isVirtualTagCollection(item)) {
+                        const folderId = item.data.id;
+                        const isExpanded = expansionState.expandedVirtualFolders.has(folderId);
+                        if (isExpanded) {
+                            handleExpandCollapse(item, false);
                         }
                     }
                 }

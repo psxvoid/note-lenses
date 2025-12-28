@@ -176,6 +176,7 @@ export const STRINGS_TH = {
         },
         folder: {
             newNote: 'โน้ตใหม่',
+            newNoteFromTemplate: 'โน้ตใหม่จากเทมเพลต',
             newFolder: 'โฟลเดอร์ใหม่',
             newCanvas: 'Canvas ใหม่',
             newBase: 'Base ใหม่',
@@ -247,6 +248,36 @@ export const STRINGS_TH = {
             emojiInstructions: 'พิมพ์หรือวางอีโมจิเพื่อใช้เป็นไอคอน',
             removeIcon: 'นำไอคอนออก',
             allTabLabel: 'ทั้งหมด'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'เพิ่มกฎ'
+        },
+        interfaceIcons: {
+            title: 'ไอคอนอินเทอร์เฟซ',
+            items: {
+                'nav-shortcuts': 'ทางลัด',
+                'nav-recent-files': 'ไฟล์ล่าสุด',
+                'nav-expand-all': 'ขยายทั้งหมด',
+                'nav-collapse-all': 'ยุบทั้งหมด',
+                'nav-tree-expand': 'ลูกศรต้นไม้: ขยาย',
+                'nav-tree-collapse': 'ลูกศรต้นไม้: ยุบ',
+                'nav-hidden-items': 'รายการที่ซ่อน',
+                'nav-root-reorder': 'จัดเรียงโฟลเดอร์รากใหม่',
+                'nav-new-folder': 'โฟลเดอร์ใหม่',
+                'nav-show-single-pane': 'แสดงแผงเดียว',
+                'nav-show-dual-pane': 'แสดงแผงคู่',
+                'nav-profile-chevron': 'ลูกศรเมนูโปรไฟล์',
+                'list-search': 'ค้นหา',
+                'list-descendants': 'โน้ตจากโฟลเดอร์ย่อย',
+                'list-sort-ascending': 'ลำดับ: น้อยไปมาก',
+                'list-sort-descending': 'ลำดับ: มากไปน้อย',
+                'list-appearance': 'เปลี่ยนรูปลักษณ์',
+                'list-new-note': 'โน้ตใหม่',
+                'nav-folder-open': 'โฟลเดอร์เปิด',
+                'nav-folder-closed': 'โฟลเดอร์ปิด',
+                'nav-tag': 'แท็ก',
+                'list-pinned': 'รายการที่ปักหมุด'
+            }
         },
         colorPicker: {
             currentColor: 'ปัจจุบัน',
@@ -516,6 +547,7 @@ export const STRINGS_TH = {
         selectVaultProfile3: 'เลือกโปรไฟล์ห้องนิรภัย 3',
         deleteFile: 'ลบไฟล์',
         createNewNote: 'สร้างโน้ตใหม่',
+        createNewNoteFromTemplate: 'โน้ตใหม่จากเทมเพลต',
         moveFiles: 'ย้ายไฟล์',
         selectNextFile: 'เลือกไฟล์ถัดไป',
         selectPreviousFile: 'เลือกไฟล์ก่อนหน้า',
@@ -526,6 +558,7 @@ export const STRINGS_TH = {
         navigateToFolder: 'นำทางไปยังโฟลเดอร์',
         navigateToTag: 'นำทางไปยังแท็ก',
         addShortcut: 'เพิ่มในทางลัด',
+        openShortcut: 'เปิดทางลัด {number}',
         toggleDescendants: 'สลับลูกหลาน',
         toggleHidden: 'สลับโฟลเดอร์ แท็ก และโน้ตที่ซ่อน',
         toggleTagSort: 'สลับลำดับการเรียงแท็ก',
@@ -582,12 +615,11 @@ export const STRINGS_TH = {
                 filtering: 'การกรอง',
                 behavior: 'พฤติกรรม',
                 view: 'ลักษณะ',
+                icons: 'ไอคอน',
                 desktopAppearance: 'ลักษณะเดสก์ท็อป',
-                mobileAppearance: 'ลักษณะมือถือ',
                 formatting: 'การจัดรูปแบบ'
             },
             navigation: {
-                behavior: 'พฤติกรรม',
                 appearance: 'ลักษณะ',
                 shortcutsAndRecent: 'ทางลัดและรายการล่าสุด'
             },
@@ -716,8 +748,8 @@ export const STRINGS_TH = {
             fileNameIconMap: {
                 name: 'แผนที่ไอคอนชื่อไฟล์',
                 desc: 'ไฟล์ที่มีข้อความจะได้รับไอคอนที่กำหนด หนึ่งการแมปต่อบรรทัด: ข้อความ=ไอคอน',
-                placeholder: '# ข้อความ=ไอคอน\nประชุม=calendar\nใบแจ้งหนี้=receipt',
-                resetTooltip: 'คืนค่าเริ่มต้น'
+                placeholder: '# ข้อความ=ไอคอน\nประชุม=LiCalendar\nใบแจ้งหนี้=PhReceipt',
+                editTooltip: 'แก้ไขการแมป'
             },
             showCategoryIcons: {
                 name: 'ไอคอนตามประเภทไฟล์',
@@ -726,8 +758,8 @@ export const STRINGS_TH = {
             fileTypeIconMap: {
                 name: 'แผนที่ไอคอนประเภทไฟล์',
                 desc: 'ไฟล์ที่มีนามสกุลจะได้รับไอคอนที่กำหนด หนึ่งการแมปต่อบรรทัด: นามสกุล=ไอคอน',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'คืนค่าเริ่มต้น'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'แก้ไขการแมป'
             },
             optimizeNoteHeight: {
                 name: 'ปรับความสูงโน้ตให้เหมาะสม',
@@ -839,6 +871,15 @@ export const STRINGS_TH = {
                 name: 'แสดงทางลัด',
                 desc: 'แสดงส่วนทางลัดในแผงนำทาง'
             },
+            shortcutBadgeDisplay: {
+                name: 'ป้ายทางลัด',
+                desc: "สิ่งที่จะแสดงถัดจากทางลัด ใช้คำสั่ง 'เปิดทางลัด 1-9' เพื่อเปิดทางลัดโดยตรง",
+                options: {
+                    index: 'ตำแหน่ง (1-9)',
+                    count: 'จำนวนรายการ',
+                    none: 'ไม่มี'
+                }
+            },
             showRecentNotes: {
                 name: 'แสดงโน้ตล่าสุด',
                 desc: 'แสดงส่วนโน้ตล่าสุดในแผงนำทาง'
@@ -866,7 +907,7 @@ export const STRINGS_TH = {
                 notice: 'รีเซ็ตตำแหน่งตัวคั่นแล้ว รีสตาร์ท Obsidian หรือเปิด Notebook Navigator ใหม่เพื่อใช้งาน'
             },
             multiSelectModifier: {
-                name: 'ตัวปรับแต่งเลือกหลายรายการ',
+                name: 'ตัวปรับแต่งเลือกหลายรายการ (เดสก์ท็อปเท่านั้น)',
                 desc: 'เลือกปุ่มตัวปรับแต่งที่จะสลับการเลือกหลายรายการ เมื่อเลือก Option/Alt การคลิก Cmd/Ctrl จะเปิดโน้ตในแท็บใหม่',
                 options: {
                     cmdCtrl: 'คลิก Cmd/Ctrl',
@@ -1103,6 +1144,11 @@ export const STRINGS_TH = {
             showSectionIcons: {
                 name: 'แสดงไอคอนสำหรับทางลัดและรายการล่าสุด',
                 desc: 'แสดงไอคอนสำหรับส่วนนำทางเช่น ทางลัดและไฟล์ล่าสุด'
+            },
+            interfaceIcons: {
+                name: 'ไอคอนอินเทอร์เฟซ',
+                desc: 'แก้ไขไอคอนแถบเครื่องมือ โฟลเดอร์ แท็ก ปักหมุด ค้นหา และเรียงลำดับ',
+                buttonText: 'แก้ไขไอคอน'
             },
             showIconsColorOnly: {
                 name: 'ใช้สีกับไอคอนเท่านั้น',

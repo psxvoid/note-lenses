@@ -73,6 +73,36 @@ export interface ReleaseNote {
  */
 const RELEASE_NOTES: ReleaseNote[] = [
     {
+        version: '1.9.4',
+        date: '2025-12-29',
+        showOnUpdate: true,
+        info: '==Templater support!== You can now create new notes from templates directly in the navigation pane or in current folder/tag using the new command! Also lots of other improvements in this release like a new ==visual editor for file icons== and the possibility to ==change all user interface icons==! Happy new year! 🎉',
+        new: [
+            'New setting: ==General > Icons > Interface icons==. You can now customize all icons used in the Notebook Navigator interface, like pinned section icon, shortcuts icon, recent notes icon, folder expand/collapse icons, all toolbar buttons, and more.',
+            '==File name icons and file type icons can now be edited with a new visual editor==. Just click the new **edit button** next to each text field in Settings > Notes > Icons.',
+            '==You can now use icons from icon packs for file name icons and file type icons==.',
+            'New menu command: ==New file from template==. If you have the plugin **Templater** installed you can now create new notes with templates directly from the navigation pane!',
+            'New command: ==Create new note from template==. If you have the plugin **Templater** installed you can now create a new note with template in the current folder or tag.',
+            'New commands: ==Open shortcut 1-9==. Use this to quickly open your shortcut files, navigate to folders/tags, or load a custom search filter.',
+            'New setting: Navigation pane > Shortcuts & recent items > ==Shortcut badge==. You can now choose to show index number (1-9) to help with shortcut commands, show item count or show no badge next to shortcuts. Default is index (1-9).',
+            'New theme variable: ==--nn-theme-mobile-bg== to change mobile background color. Set it in Style settings or through themes / CSS.'
+        ],
+        improved: [
+            "You can now use spaces in file icon mappings, e.g. 'ai ' to prevent matching titles like 'mail'.",
+            'Improved toolbar button layout on all Android devices and iOS devices running Obsidian 1.10 and earlier.'
+        ],
+        changed: [
+            'Removed the "Reset" button next to the file name and file icon mapping text fields to avoid removing mappings by accident.',
+            'Removed the theming variable --nn-theme-mobile-toolbar-border-color since it is no longer used.',
+            'Removed the theming variable --nn-style-pinned-section-icon. Use General > Icons > Interface icons to change the pinned icon.'
+        ],
+        fixed: [
+            'Fixed vertical text alignment in tag pills for certain fonts by adding explicit line-height.',
+            'Fixed "New Tldraw drawing" failing after a Tldraw plugin update.',
+            'You can now collapse and expand the Tags virtual folder with the keyboard.'
+        ]
+    },
+    {
         version: '1.9.3',
         date: '2025-12-23',
         showOnUpdate: true,

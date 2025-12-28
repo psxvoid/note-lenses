@@ -96,7 +96,7 @@ Priority order: folder note styles override custom color styles, which override 
 
 | Variable                                  | Default                             | Description                                                                        |
 | ----------------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------- |
-| `--nn-theme-list-bg`                      | `var(--background-primary)`         | Background color of the list pane                                                  |
+| `--nn-theme-list-bg`                      | `var(--background-primary)`         | Background color of the list pane (desktop only, see mobile styles)                |
 | `--nn-theme-list-header-icon-color`       | `var(--text-muted)`                 | Folder/tag icon color shown beside the breadcrumb in the desktop header            |
 | `--nn-theme-list-header-breadcrumb-color` | `var(--text-muted)`                 | Text color for the breadcrumb path in the desktop header                           |
 | `--nn-theme-list-search-active-bg`        | `var(--text-highlight-bg)`          | Background color for the search field when a search query is active (desktop only) |
@@ -175,18 +175,17 @@ Color-only tag pills use the navigation pane background and follow the backgroun
 
 | Variable                                               | Default                                                          | Description                                                                                                      |
 | ------------------------------------------------------ | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `--nn-theme-mobile-bg`                                 | `var(--mobile-sidebar-background)`                               | Navigation and list pane background on mobile                                                                    |
 | `--nn-theme-mobile-list-header-link-color`             | `var(--link-color)`                                              | Color for back button and clickable breadcrumb segments on mobile                                                |
 | `--nn-theme-mobile-list-header-breadcrumb-color`       | `var(--text-normal)`                                             | Color for current folder and separators in breadcrumb on mobile                                                  |
 | `--nn-theme-mobile-list-header-breadcrumb-font-weight` | `600`                                                            | Font weight for mobile breadcrumb                                                                                |
 | `--nn-theme-mobile-toolbar-bg`                         | `var(--background-secondary)`                                    | Background color of the mobile toolbar                                                                           |
-| `--nn-theme-mobile-toolbar-border-color`               | `var(--background-modifier-border)`                              | Border color of the mobile toolbar                                                                               |
 | `--nn-theme-mobile-toolbar-button-icon-color`          | `var(--link-color)`                                              | Icon color for toolbar buttons                                                                                   |
 | `--nn-theme-mobile-toolbar-button-active-bg`           | `var(--background-modifier-hover)`                               | Background color for active toolbar button                                                                       |
 | `--nn-theme-mobile-toolbar-button-active-icon-color`   | `var(--link-color)`                                              | Icon color for active toolbar button                                                                             |
 | `--nn-theme-mobile-toolbar-glass-bg`                   | `color-mix(in srgb, var(--background-primary) 72%, transparent)` | Background color of the Obsidian 1.11+ iOS glass toolbar (used for border and background, supports transparency) |
 
-Mobile navigation backgrounds follow the Mobile appearance > Background color setting inside Notebook Navigator. The
-same Separate backgrounds, Use list background, and Use navigation background options apply on mobile and desktop.
+Mobile navigation and list pane backgrounds follow `--nn-theme-mobile-bg`.
 
 ## Complete Theme Example
 
@@ -327,7 +326,6 @@ body {
   --nn-theme-mobile-list-header-breadcrumb-color: #a9b7c6; /* Soft blue-gray - current folder and separators */
   --nn-theme-mobile-list-header-breadcrumb-font-weight: 600; /* Bold weight - mobile breadcrumb */
   --nn-theme-mobile-toolbar-bg: #3c3f41; /* Dark gray sidebar - mobile toolbar background */
-  --nn-theme-mobile-toolbar-border-color: #555555; /* Subtle gray - mobile toolbar border */
   --nn-theme-mobile-toolbar-button-icon-color: #a9b7c6; /* Soft blue-gray - mobile toolbar icons */
   --nn-theme-mobile-toolbar-button-active-bg: #4a78c8; /* Blue accent - active mobile button background */
   --nn-theme-mobile-toolbar-button-active-icon-color: #ffffff; /* White - active mobile button icons */

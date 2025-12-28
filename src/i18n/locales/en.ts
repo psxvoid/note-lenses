@@ -176,6 +176,7 @@ export const STRINGS_EN = {
         },
         folder: {
             newNote: 'New note',
+            newNoteFromTemplate: 'New note from template',
             newFolder: 'New folder',
             newCanvas: 'New canvas',
             newBase: 'New base',
@@ -247,6 +248,36 @@ export const STRINGS_EN = {
             emojiInstructions: 'Type or paste any emoji to use it as an icon',
             removeIcon: 'Remove icon',
             allTabLabel: 'All'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Add rule'
+        },
+        interfaceIcons: {
+            title: 'Interface icons',
+            items: {
+                'nav-shortcuts': 'Shortcuts',
+                'nav-recent-files': 'Recent files',
+                'nav-expand-all': 'Expand all',
+                'nav-collapse-all': 'Collapse all',
+                'nav-tree-expand': 'Tree chevron: expand',
+                'nav-tree-collapse': 'Tree chevron: collapse',
+                'nav-hidden-items': 'Hidden items',
+                'nav-root-reorder': 'Reorder root folders',
+                'nav-new-folder': 'New folder',
+                'nav-show-single-pane': 'Show single pane',
+                'nav-show-dual-pane': 'Show dual panes',
+                'nav-profile-chevron': 'Profile menu chevron',
+                'list-search': 'Search',
+                'list-descendants': 'Notes from subfolders',
+                'list-sort-ascending': 'Sort order: ascending',
+                'list-sort-descending': 'Sort order: descending',
+                'list-appearance': 'Change appearance',
+                'list-new-note': 'New note',
+                'nav-folder-open': 'Folder open',
+                'nav-folder-closed': 'Folder closed',
+                'nav-tag': 'Tag',
+                'list-pinned': 'Pinned items'
+            }
         },
         colorPicker: {
             currentColor: 'Current',
@@ -516,6 +547,7 @@ export const STRINGS_EN = {
         selectVaultProfile3: 'Select vault profile 3', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: 'Delete files', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: 'Create new note', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'Create new note from template', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: 'Move files', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: 'Select next file', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: 'Select previous file', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -526,6 +558,7 @@ export const STRINGS_EN = {
         navigateToFolder: 'Navigate to folder', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: 'Navigate to tag', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: 'Add to shortcuts', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: 'Open shortcut {number}', // Command palette: Opens a shortcut by its position (English: Open shortcut {number})
         toggleDescendants: 'Toggle descendants', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: 'Toggle hidden folders, tags, and notes', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: 'Toggle tag sort order', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -582,12 +615,11 @@ export const STRINGS_EN = {
                 filtering: 'Filtering',
                 behavior: 'Behavior',
                 view: 'Appearance',
+                icons: 'Icons',
                 desktopAppearance: 'Desktop appearance',
-                mobileAppearance: 'Mobile appearance',
                 formatting: 'Formatting'
             },
             navigation: {
-                behavior: 'Behavior',
                 appearance: 'Appearance',
                 shortcutsAndRecent: 'Shortcuts & recent items'
             },
@@ -716,8 +748,8 @@ export const STRINGS_EN = {
             fileNameIconMap: {
                 name: 'File name icon map',
                 desc: 'Files containing the text get the specified icon. One mapping per line: text=icon',
-                placeholder: '# Text=icon\nmeeting=calendar\ninvoice=receipt',
-                resetTooltip: 'Restore defaults'
+                placeholder: '# Text=icon\nmeeting=LiCalendar\ninvoice=PhReceipt',
+                editTooltip: 'Edit mappings'
             },
             showCategoryIcons: {
                 name: 'Icons by file type',
@@ -726,8 +758,8 @@ export const STRINGS_EN = {
             fileTypeIconMap: {
                 name: 'File type icon map',
                 desc: 'Files with the extension get the specified icon. One mapping per line: extension=icon',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Restore defaults'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Edit mappings'
             },
             optimizeNoteHeight: {
                 name: 'Optimize note height',
@@ -839,6 +871,15 @@ export const STRINGS_EN = {
                 name: 'Show shortcuts',
                 desc: 'Display the shortcuts section in the navigation pane.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Shortcut badge',
+                desc: "What to display next to shortcuts. Use 'Open shortcut 1-9' commands to open shortcuts directly.",
+                options: {
+                    index: 'Position (1-9)',
+                    count: 'Item counts',
+                    none: 'None'
+                }
+            },
             showRecentNotes: {
                 name: 'Show recent notes',
                 desc: 'Display the recent notes section in the navigation pane.'
@@ -866,7 +907,7 @@ export const STRINGS_EN = {
                 notice: 'Separator position reset. Restart Obsidian or reopen Notebook Navigator to apply.'
             },
             multiSelectModifier: {
-                name: 'Multi-select modifier',
+                name: 'Multi-select modifier (desktop only)',
                 desc: 'Choose which modifier key toggles multi-selection. When Option/Alt is selected, Cmd/Ctrl click opens notes in a new tab.',
                 options: {
                     cmdCtrl: 'Cmd/Ctrl click',
@@ -1102,6 +1143,11 @@ export const STRINGS_EN = {
             showSectionIcons: {
                 name: 'Show icons for shortcuts and recent items',
                 desc: 'Display icons for navigation sections like Shortcuts and Recent files.'
+            },
+            interfaceIcons: {
+                name: 'Interface icons',
+                desc: 'Edit toolbar, folder, tag, pinned, search, and sort icons.',
+                buttonText: 'Edit icons'
             },
             showIconsColorOnly: {
                 name: 'Apply color to icons only',

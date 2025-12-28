@@ -25,7 +25,6 @@ import type { SettingsTabContext } from './SettingsTabContext';
 import { runAsyncAction } from '../../utils/async';
 import { createSettingGroupFactory } from '../settingGroups';
 import { setElementVisible, wireToggleSettingWithSubSettings } from '../subSettings';
-import { DEFAULT_SETTINGS } from '../defaultSettings';
 import {
     normalizeFileNameIconMapKey,
     normalizeFileTypeIconMapKey,
@@ -329,6 +328,55 @@ export function renderNotesTab(context: SettingsTabContext): void {
     let updateFileNameIconMapVisibility: (() => void) | null = null;
     let updateFileTypeIconMapVisibility: (() => void) | null = null;
 
+    /**
+     * Adds an edit button to an icon map setting that opens the visual rule editor modal
+     */
+    const addIconMapEditorButton = (options: {
+        setting: Setting;
+        tooltip: string;
+        title: string;
+        mode: 'fileName' | 'fileType';
+        getMap: () => Record<string, string>;
+        setMap: (nextMap: Record<string, string>) => void;
+        normalizeKey: (input: string) => string;
+    }): void => {
+        options.setting.addExtraButton(button =>
+            button
+                .setIcon('lucide-pencil')
+                .setTooltip(options.tooltip)
+                .onClick(() => {
+                    runAsyncAction(async () => {
+                        const metadataService = plugin.metadataService;
+                        if (!metadataService) {
+                            showNotice(strings.common.unknownError, { variant: 'warning' });
+                            return;
+                        }
+
+                        const { FileIconRuleEditorModal } = await import('../../modals/FileIconRuleEditorModal');
+                        const modal = new FileIconRuleEditorModal(app, {
+                            title: options.title,
+                            mode: options.mode,
+                            initialMap: options.getMap(),
+                            fallbackIconId: 'file',
+                            metadataService,
+                            normalizeKey: options.normalizeKey,
+                            onSave: async nextMap => {
+                                options.setMap(nextMap);
+
+                                const textarea = options.setting.controlEl.querySelector('textarea');
+                                if (textarea instanceof HTMLTextAreaElement) {
+                                    textarea.value = serializeIconMapRecord(nextMap);
+                                }
+
+                                await plugin.saveSettingsAndUpdate();
+                            }
+                        });
+                        modal.open();
+                    });
+                })
+        );
+    };
+
     new Setting(fileIconSubSettingsEl)
         .setName(strings.settings.items.showFilenameMatchIcons.name)
         .setDesc(strings.settings.items.showFilenameMatchIcons.desc)
@@ -356,21 +404,17 @@ export function renderNotesTab(context: SettingsTabContext): void {
         }
     );
 
-    fileNameIconMapSetting.addExtraButton(button =>
-        button
-            .setIcon('lucide-rotate-ccw')
-            .setTooltip(strings.settings.items.fileNameIconMap.resetTooltip)
-            .onClick(async () => {
-                plugin.settings.fileNameIconMap = { ...DEFAULT_SETTINGS.fileNameIconMap };
-
-                const textarea = fileNameIconMapSetting.controlEl.querySelector('textarea');
-                if (textarea instanceof HTMLTextAreaElement) {
-                    textarea.value = serializeIconMapRecord(plugin.settings.fileNameIconMap);
-                }
-
-                await plugin.saveSettingsAndUpdate();
-            })
-    );
+    addIconMapEditorButton({
+        setting: fileNameIconMapSetting,
+        tooltip: strings.settings.items.fileNameIconMap.editTooltip,
+        title: strings.settings.items.fileNameIconMap.name,
+        mode: 'fileName',
+        getMap: () => plugin.settings.fileNameIconMap,
+        setMap: nextMap => {
+            plugin.settings.fileNameIconMap = nextMap;
+        },
+        normalizeKey: normalizeFileNameIconMapKey
+    });
     fileNameIconMapSetting.controlEl.addClass('nn-setting-wide-input');
     updateFileNameIconMapVisibility = () => {
         setElementVisible(fileNameIconMapSetting.settingEl, plugin.settings.showFilenameMatchIcons);
@@ -404,21 +448,17 @@ export function renderNotesTab(context: SettingsTabContext): void {
         }
     );
 
-    fileTypeIconMapSetting.addExtraButton(button =>
-        button
-            .setIcon('lucide-rotate-ccw')
-            .setTooltip(strings.settings.items.fileTypeIconMap.resetTooltip)
-            .onClick(async () => {
-                plugin.settings.fileTypeIconMap = { ...DEFAULT_SETTINGS.fileTypeIconMap };
-
-                const textarea = fileTypeIconMapSetting.controlEl.querySelector('textarea');
-                if (textarea instanceof HTMLTextAreaElement) {
-                    textarea.value = serializeIconMapRecord(plugin.settings.fileTypeIconMap);
-                }
-
-                await plugin.saveSettingsAndUpdate();
-            })
-    );
+    addIconMapEditorButton({
+        setting: fileTypeIconMapSetting,
+        tooltip: strings.settings.items.fileTypeIconMap.editTooltip,
+        title: strings.settings.items.fileTypeIconMap.name,
+        mode: 'fileType',
+        getMap: () => plugin.settings.fileTypeIconMap,
+        setMap: nextMap => {
+            plugin.settings.fileTypeIconMap = nextMap;
+        },
+        normalizeKey: normalizeFileTypeIconMapKey
+    });
     fileTypeIconMapSetting.controlEl.addClass('nn-setting-wide-input');
     updateFileTypeIconMapVisibility = () => {
         setElementVisible(fileTypeIconMapSetting.settingEl, plugin.settings.showCategoryIcons);
