@@ -30,6 +30,7 @@ import { setAsyncOnClick } from './menuAsyncHelpers';
 import { getActiveVaultProfile, getHiddenFolderPatternMatch, normalizeHiddenFolderPath } from '../../utils/vaultProfiles';
 import { EXCALIDRAW_PLUGIN_ID, TLDRAW_PLUGIN_ID } from '../../constants/pluginIds';
 import { addStyleMenu } from './styleMenuBuilder';
+import { getTemplaterCreateNewNoteFromTemplate } from '../templaterIntegration';
 
 /**
  * Adds folder creation commands (new note/folder/canvas/base/drawing) to a menu.
@@ -72,6 +73,16 @@ export function buildFolderCreationMenu(params: FolderMenuBuilderParams): void {
             handleFileCreation(createdFile);
         });
     });
+
+    const createNewNoteFromTemplate = getTemplaterCreateNewNoteFromTemplate(app);
+    if (createNewNoteFromTemplate) {
+        menu.addItem((item: MenuItem) => {
+            setAsyncOnClick(item.setTitle(strings.contextMenu.folder.newNoteFromTemplate).setIcon('templater-icon'), () => {
+                ensureFolderSelected();
+                return createNewNoteFromTemplate(folder);
+            });
+        });
+    }
 
     menu.addItem((item: MenuItem) => {
         setAsyncOnClick(item.setTitle(strings.contextMenu.folder.newFolder).setIcon('lucide-folder-plus'), async () => {

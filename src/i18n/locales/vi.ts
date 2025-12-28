@@ -176,6 +176,7 @@ export const STRINGS_VI = {
         },
         folder: {
             newNote: 'Ghi chú mới',
+            newNoteFromTemplate: 'Ghi chú mới từ mẫu',
             newFolder: 'Thư mục mới',
             newCanvas: 'Canvas mới',
             newBase: 'Cơ sở dữ liệu mới',
@@ -247,6 +248,36 @@ export const STRINGS_VI = {
             emojiInstructions: 'Nhập hoặc dán bất kỳ emoji nào để dùng làm biểu tượng',
             removeIcon: 'Gỡ biểu tượng',
             allTabLabel: 'Tất cả'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Thêm quy tắc'
+        },
+        interfaceIcons: {
+            title: 'Biểu tượng giao diện',
+            items: {
+                'nav-shortcuts': 'Phím tắt',
+                'nav-recent-files': 'Tệp gần đây',
+                'nav-expand-all': 'Mở rộng tất cả',
+                'nav-collapse-all': 'Thu gọn tất cả',
+                'nav-tree-expand': 'Mũi tên cây: mở rộng',
+                'nav-tree-collapse': 'Mũi tên cây: thu gọn',
+                'nav-hidden-items': 'Mục ẩn',
+                'nav-root-reorder': 'Sắp xếp lại thư mục gốc',
+                'nav-new-folder': 'Thư mục mới',
+                'nav-show-single-pane': 'Hiện một ngăn',
+                'nav-show-dual-pane': 'Hiện hai ngăn',
+                'nav-profile-chevron': 'Mũi tên menu hồ sơ',
+                'list-search': 'Tìm kiếm',
+                'list-descendants': 'Ghi chú từ thư mục con',
+                'list-sort-ascending': 'Thứ tự: tăng dần',
+                'list-sort-descending': 'Thứ tự: giảm dần',
+                'list-appearance': 'Thay đổi giao diện',
+                'list-new-note': 'Ghi chú mới',
+                'nav-folder-open': 'Thư mục mở',
+                'nav-folder-closed': 'Thư mục đóng',
+                'nav-tag': 'Thẻ',
+                'list-pinned': 'Mục đã ghim'
+            }
         },
         colorPicker: {
             currentColor: 'Hiện tại',
@@ -516,6 +547,7 @@ export const STRINGS_VI = {
         selectVaultProfile3: 'Chọn hồ sơ vault 3', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: 'Xóa tệp', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: 'Tạo ghi chú mới', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'Ghi chú mới từ mẫu', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: 'Di chuyển tệp', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: 'Chọn tệp tiếp theo', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: 'Chọn tệp trước', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -526,6 +558,7 @@ export const STRINGS_VI = {
         navigateToFolder: 'Chuyển đến thư mục', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: 'Chuyển đến thẻ', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: 'Thêm vào lối tắt', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: 'Mở lối tắt {number}',
         toggleDescendants: 'Bật/tắt phần tử con', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: 'Bật/tắt thư mục, thẻ và ghi chú ẩn', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: 'Bật/tắt sắp xếp thẻ', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -582,12 +615,11 @@ export const STRINGS_VI = {
                 filtering: 'Lọc',
                 behavior: 'Hành vi',
                 view: 'Giao diện',
+                icons: 'Biểu tượng',
                 desktopAppearance: 'Giao diện máy tính',
-                mobileAppearance: 'Giao diện di động',
                 formatting: 'Định dạng'
             },
             navigation: {
-                behavior: 'Hành vi',
                 appearance: 'Giao diện',
                 shortcutsAndRecent: 'Phím tắt và mục gần đây'
             },
@@ -716,8 +748,8 @@ export const STRINGS_VI = {
             fileNameIconMap: {
                 name: 'Bản đồ biểu tượng tên tệp',
                 desc: 'Tệp chứa văn bản sẽ nhận biểu tượng được chỉ định. Một ánh xạ mỗi dòng: văn bản=biểu tượng',
-                placeholder: '# văn bản=biểu tượng\nhọp=calendar\nhóa đơn=receipt',
-                resetTooltip: 'Khôi phục mặc định'
+                placeholder: '# văn bản=biểu tượng\nhọp=LiCalendar\nhóa đơn=PhReceipt',
+                editTooltip: 'Chỉnh sửa ánh xạ'
             },
             showCategoryIcons: {
                 name: 'Biểu tượng theo loại tệp',
@@ -726,8 +758,8 @@ export const STRINGS_VI = {
             fileTypeIconMap: {
                 name: 'Bản đồ biểu tượng loại tệp',
                 desc: 'Tệp có phần mở rộng sẽ nhận biểu tượng được chỉ định. Một ánh xạ mỗi dòng: phần mở rộng=biểu tượng',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Khôi phục mặc định'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Chỉnh sửa ánh xạ'
             },
             optimizeNoteHeight: {
                 name: 'Tối ưu chiều cao ghi chú',
@@ -839,6 +871,15 @@ export const STRINGS_VI = {
                 name: 'Hiện lối tắt',
                 desc: 'Hiển thị phần lối tắt trong ngăn điều hướng.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Huy hiệu lối tắt',
+                desc: "Nội dung hiển thị bên cạnh lối tắt. Sử dụng lệnh 'Mở lối tắt 1-9' để mở lối tắt trực tiếp.",
+                options: {
+                    index: 'Vị trí (1-9)',
+                    count: 'Số lượng mục',
+                    none: 'Không có'
+                }
+            },
             showRecentNotes: {
                 name: 'Hiện ghi chú gần đây',
                 desc: 'Hiển thị phần ghi chú gần đây trong ngăn điều hướng.'
@@ -866,7 +907,7 @@ export const STRINGS_VI = {
                 notice: 'Đã đặt lại vị trí thanh phân cách. Khởi động lại Obsidian hoặc mở lại Notebook Navigator để áp dụng.'
             },
             multiSelectModifier: {
-                name: 'Phím bổ trợ chọn nhiều',
+                name: 'Phím bổ trợ chọn nhiều (chỉ máy tính)',
                 desc: 'Chọn phím bổ trợ để bật/tắt chọn nhiều. Khi chọn Option/Alt, nhấn Cmd/Ctrl mở ghi chú trong tab mới.',
                 options: {
                     cmdCtrl: 'Nhấn Cmd/Ctrl',
@@ -1103,6 +1144,11 @@ export const STRINGS_VI = {
             showSectionIcons: {
                 name: 'Hiện biểu tượng cho lối tắt và mục gần đây',
                 desc: 'Hiển thị biểu tượng cho các phần điều hướng như Lối tắt và Tệp gần đây.'
+            },
+            interfaceIcons: {
+                name: 'Biểu tượng giao diện',
+                desc: 'Chỉnh sửa biểu tượng thanh công cụ, thư mục, thẻ, đã ghim, tìm kiếm và sắp xếp.',
+                buttonText: 'Chỉnh sửa biểu tượng'
             },
             showIconsColorOnly: {
                 name: 'Chỉ áp dụng màu cho biểu tượng',

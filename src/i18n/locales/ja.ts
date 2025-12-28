@@ -176,6 +176,7 @@ export const STRINGS_JA = {
         },
         folder: {
             newNote: '新規ノート',
+            newNoteFromTemplate: 'テンプレートから新規ノート',
             newFolder: '新規フォルダ',
             newCanvas: '新規キャンバス',
             newBase: '新規データベース',
@@ -247,6 +248,36 @@ export const STRINGS_JA = {
             emojiInstructions: '絵文字を入力または貼り付けてアイコンとして使用',
             removeIcon: 'アイコンを削除',
             allTabLabel: 'すべて'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'ルールを追加'
+        },
+        interfaceIcons: {
+            title: 'インターフェースアイコン',
+            items: {
+                'nav-shortcuts': 'ショートカット',
+                'nav-recent-files': '最近のファイル',
+                'nav-expand-all': 'すべて展開',
+                'nav-collapse-all': 'すべて折りたたむ',
+                'nav-tree-expand': 'ツリー矢印: 展開',
+                'nav-tree-collapse': 'ツリー矢印: 折りたたみ',
+                'nav-hidden-items': '非表示項目',
+                'nav-root-reorder': 'ルートフォルダの並べ替え',
+                'nav-new-folder': '新規フォルダ',
+                'nav-show-single-pane': 'シングルペインを表示',
+                'nav-show-dual-pane': 'デュアルペインを表示',
+                'nav-profile-chevron': 'プロファイルメニュー矢印',
+                'list-search': '検索',
+                'list-descendants': 'サブフォルダからのノート',
+                'list-sort-ascending': '並べ替え: 昇順',
+                'list-sort-descending': '並べ替え: 降順',
+                'list-appearance': '外観を変更',
+                'list-new-note': '新規ノート',
+                'nav-folder-open': 'フォルダ（開）',
+                'nav-folder-closed': 'フォルダ（閉）',
+                'nav-tag': 'タグ',
+                'list-pinned': 'ピン留め項目'
+            }
         },
         colorPicker: {
             currentColor: '現在',
@@ -517,6 +548,7 @@ export const STRINGS_JA = {
         selectVaultProfile3: '保管庫プロファイル3を選択', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: 'ファイルを削除', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: '新規ノートを作成', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'テンプレートから新規ノート', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: 'ファイルを移動', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: '次のファイルを選択', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: '前のファイルを選択', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -527,6 +559,7 @@ export const STRINGS_JA = {
         navigateToFolder: 'フォルダにナビゲート', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: 'タグにナビゲート', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: 'ショートカットに追加', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: 'ショートカット {number} を開く',
         toggleDescendants: '子孫切り替え', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: '非表示のフォルダ・タグ・ノートを切り替え', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: 'タグの並び順を切り替え', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -583,12 +616,11 @@ export const STRINGS_JA = {
                 filtering: 'フィルター',
                 behavior: '動作',
                 view: '外観',
+                icons: 'アイコン',
                 desktopAppearance: 'デスクトップの外観',
-                mobileAppearance: 'モバイルの外観',
                 formatting: '書式'
             },
             navigation: {
-                behavior: '動作',
                 appearance: '外観',
                 shortcutsAndRecent: 'ショートカットと最近の項目'
             },
@@ -717,8 +749,8 @@ export const STRINGS_JA = {
             fileNameIconMap: {
                 name: 'ファイル名アイコンマップ',
                 desc: 'テキストを含むファイルに指定したアイコンが適用されます。1行に1つのマッピング: テキスト=アイコン',
-                placeholder: '# テキスト=アイコン\n会議=calendar\n請求書=receipt',
-                resetTooltip: 'デフォルトに戻す'
+                placeholder: '# テキスト=アイコン\n会議=LiCalendar\n請求書=PhReceipt',
+                editTooltip: 'マッピングを編集'
             },
             showCategoryIcons: {
                 name: 'ファイルタイプでアイコン設定',
@@ -727,8 +759,8 @@ export const STRINGS_JA = {
             fileTypeIconMap: {
                 name: 'ファイルタイプアイコンマップ',
                 desc: '拡張子を持つファイルに指定したアイコンが適用されます。1行に1つのマッピング: 拡張子=アイコン',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'デフォルトに戻す'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'マッピングを編集'
             },
             optimizeNoteHeight: {
                 name: 'ノートの高さを最適化',
@@ -840,6 +872,15 @@ export const STRINGS_JA = {
                 name: 'ショートカットを表示',
                 desc: 'ナビゲーションペインにショートカットセクションを表示します。'
             },
+            shortcutBadgeDisplay: {
+                name: 'ショートカットバッジ',
+                desc: 'ショートカットの横に表示する内容。「ショートカット1-9を開く」コマンドでショートカットを直接開けます。',
+                options: {
+                    index: '位置 (1-9)',
+                    count: 'アイテム数',
+                    none: 'なし'
+                }
+            },
             showRecentNotes: {
                 name: '最近のノートを表示',
                 desc: 'ナビゲーションペインに最近のノートセクションを表示します。'
@@ -867,7 +908,7 @@ export const STRINGS_JA = {
                 notice: 'セパレーターの位置がリセットされました。Obsidianを再起動するか、Notebook Navigatorを開き直して適用してください。'
             },
             multiSelectModifier: {
-                name: '複数選択モディファイア',
+                name: '複数選択モディファイア (デスクトップのみ)',
                 desc: '複数選択を切り替えるモディファイアキーを選択します。Option/Altが選択されている場合、Cmd/Ctrlクリックでノートを新しいタブで開きます。',
                 options: {
                     cmdCtrl: 'Cmd/Ctrl クリック',
@@ -1106,6 +1147,11 @@ export const STRINGS_JA = {
             showSectionIcons: {
                 name: 'ショートカットと最近の項目のアイコンを表示',
                 desc: 'ショートカットや最近使用したファイルなどのナビゲーションセクションのアイコンを表示します。'
+            },
+            interfaceIcons: {
+                name: 'インターフェースアイコン',
+                desc: 'ツールバー、フォルダ、タグ、ピン留め、検索、並べ替えのアイコンを編集します。',
+                buttonText: 'アイコンを編集'
             },
             showIconsColorOnly: {
                 name: 'アイコンのみに色を適用',

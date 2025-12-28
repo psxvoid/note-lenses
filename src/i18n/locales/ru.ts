@@ -176,6 +176,7 @@ export const STRINGS_RU = {
         },
         folder: {
             newNote: 'Новая заметка',
+            newNoteFromTemplate: 'Новая заметка из шаблона',
             newFolder: 'Новая папка',
             newCanvas: 'Новый холст',
             newBase: 'Новая база',
@@ -247,6 +248,36 @@ export const STRINGS_RU = {
             emojiInstructions: 'Введите или вставьте любой эмодзи, чтобы использовать его как иконку',
             removeIcon: 'Удалить иконку',
             allTabLabel: 'Все'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Добавить правило'
+        },
+        interfaceIcons: {
+            title: 'Иконки интерфейса',
+            items: {
+                'nav-shortcuts': 'Ярлыки',
+                'nav-recent-files': 'Недавние файлы',
+                'nav-expand-all': 'Развернуть все',
+                'nav-collapse-all': 'Свернуть все',
+                'nav-tree-expand': 'Стрелка дерева: развернуть',
+                'nav-tree-collapse': 'Стрелка дерева: свернуть',
+                'nav-hidden-items': 'Скрытые элементы',
+                'nav-root-reorder': 'Изменить порядок корневых папок',
+                'nav-new-folder': 'Новая папка',
+                'nav-show-single-pane': 'Показать одну панель',
+                'nav-show-dual-pane': 'Показать двойную панель',
+                'nav-profile-chevron': 'Стрелка меню профиля',
+                'list-search': 'Поиск',
+                'list-descendants': 'Заметки из подпапок',
+                'list-sort-ascending': 'Порядок сортировки: по возрастанию',
+                'list-sort-descending': 'Порядок сортировки: по убыванию',
+                'list-appearance': 'Изменить вид',
+                'list-new-note': 'Новая заметка',
+                'nav-folder-open': 'Папка открыта',
+                'nav-folder-closed': 'Папка закрыта',
+                'nav-tag': 'Тег',
+                'list-pinned': 'Закреплённые элементы'
+            }
         },
         colorPicker: {
             currentColor: 'Текущий',
@@ -516,6 +547,7 @@ export const STRINGS_RU = {
         selectVaultProfile3: 'Выбрать профиль хранилища 3', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: 'Удалить файлы', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: 'Создать новую заметку', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'Новая заметка из шаблона', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: 'Переместить файлы', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: 'Выбрать следующий файл', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: 'Выбрать предыдущий файл', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -526,6 +558,7 @@ export const STRINGS_RU = {
         navigateToFolder: 'Перейти к папке', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: 'Перейти к тегу', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: 'Добавить в ярлыки', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: 'Открыть ярлык {number}',
         toggleDescendants: 'Переключить потомков', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: 'Переключить скрытые папки, теги и заметки', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: 'Переключить сортировку тегов', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -582,12 +615,11 @@ export const STRINGS_RU = {
                 filtering: 'Фильтрация',
                 behavior: 'Поведение',
                 view: 'Внешний вид',
+                icons: 'Иконки',
                 desktopAppearance: 'Внешний вид на компьютере',
-                mobileAppearance: 'Внешний вид на мобильном',
                 formatting: 'Форматирование'
             },
             navigation: {
-                behavior: 'Поведение',
                 appearance: 'Внешний вид',
                 shortcutsAndRecent: 'Ярлыки и недавние элементы'
             },
@@ -717,8 +749,8 @@ export const STRINGS_RU = {
             fileNameIconMap: {
                 name: 'Сопоставление имён и иконок',
                 desc: 'Файлы, содержащие текст, получают указанную иконку. Одно сопоставление на строку: текст=иконка',
-                placeholder: '# текст=иконка\nвстреча=calendar\nсчёт=receipt',
-                resetTooltip: 'Восстановить значения по умолчанию'
+                placeholder: '# текст=иконка\nвстреча=LiCalendar\nсчёт=PhReceipt',
+                editTooltip: 'Редактировать сопоставления'
             },
             showCategoryIcons: {
                 name: 'Иконки по типу файла',
@@ -727,8 +759,8 @@ export const STRINGS_RU = {
             fileTypeIconMap: {
                 name: 'Сопоставление типов и иконок',
                 desc: 'Файлы с расширением получают указанную иконку. Одно сопоставление на строку: расширение=иконка',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Восстановить значения по умолчанию'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Редактировать сопоставления'
             },
             optimizeNoteHeight: {
                 name: 'Оптимизировать высоту заметок',
@@ -840,6 +872,15 @@ export const STRINGS_RU = {
                 name: 'Показывать ярлыки',
                 desc: 'Отображать раздел ярлыков в панели навигации.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Значок ярлыка',
+                desc: "Что отображать рядом с ярлыками. Используйте команды 'Открыть ярлык 1-9' для прямого открытия ярлыков.",
+                options: {
+                    index: 'Позиция (1-9)',
+                    count: 'Количество элементов',
+                    none: 'Нет'
+                }
+            },
             showRecentNotes: {
                 name: 'Показывать недавние заметки',
                 desc: 'Отображать раздел недавних заметок в панели навигации.'
@@ -867,7 +908,7 @@ export const STRINGS_RU = {
                 notice: 'Положение разделителя сброшено. Перезапустите Obsidian или переоткройте Notebook Navigator для применения.'
             },
             multiSelectModifier: {
-                name: 'Модификатор множественного выбора',
+                name: 'Модификатор множественного выбора (только компьютер)',
                 desc: 'Выберите, какая клавиша-модификатор переключает множественный выбор. При выборе Option/Alt, клик с Cmd/Ctrl открывает заметки в новой вкладке.',
                 options: {
                     cmdCtrl: 'Клик с Cmd/Ctrl',
@@ -1105,6 +1146,11 @@ export const STRINGS_RU = {
             showSectionIcons: {
                 name: 'Показывать иконки для ярлыков и недавних',
                 desc: 'Отображать иконки для разделов навигации, таких как Ярлыки и Недавние файлы.'
+            },
+            interfaceIcons: {
+                name: 'Иконки интерфейса',
+                desc: 'Редактировать иконки панели инструментов, папок, тегов, закреплённых, поиска и сортировки.',
+                buttonText: 'Редактировать иконки'
             },
             showIconsColorOnly: {
                 name: 'Применять цвет только к иконкам',

@@ -175,6 +175,7 @@ export const STRINGS_PL = {
         },
         folder: {
             newNote: 'Nowa notatka',
+            newNoteFromTemplate: 'Nowa notatka z szablonu',
             newFolder: 'Nowy folder',
             newCanvas: 'Nowa tablica',
             newBase: 'Nowa baza',
@@ -248,6 +249,36 @@ export const STRINGS_PL = {
             emojiInstructions: 'Wpisz lub wklej dowolną emotkę aby użyć jej jako ikony',
             removeIcon: 'Usuń ikonę',
             allTabLabel: 'Wszystkie'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Dodaj regułę'
+        },
+        interfaceIcons: {
+            title: 'Ikony interfejsu',
+            items: {
+                'nav-shortcuts': 'Skróty',
+                'nav-recent-files': 'Ostatnie pliki',
+                'nav-expand-all': 'Rozwiń wszystkie',
+                'nav-collapse-all': 'Zwiń wszystkie',
+                'nav-tree-expand': 'Strzałka drzewa: rozwiń',
+                'nav-tree-collapse': 'Strzałka drzewa: zwiń',
+                'nav-hidden-items': 'Ukryte elementy',
+                'nav-root-reorder': 'Zmień kolejność folderów głównych',
+                'nav-new-folder': 'Nowy folder',
+                'nav-show-single-pane': 'Pokaż pojedynczy panel',
+                'nav-show-dual-pane': 'Pokaż podwójne panele',
+                'nav-profile-chevron': 'Strzałka menu profilu',
+                'list-search': 'Szukaj',
+                'list-descendants': 'Notatki z podfolderów',
+                'list-sort-ascending': 'Kolejność: rosnąco',
+                'list-sort-descending': 'Kolejność: malejąco',
+                'list-appearance': 'Zmień wygląd',
+                'list-new-note': 'Nowa notatka',
+                'nav-folder-open': 'Folder otwarty',
+                'nav-folder-closed': 'Folder zamknięty',
+                'nav-tag': 'Tag',
+                'list-pinned': 'Przypięte elementy'
+            }
         },
         colorPicker: {
             currentColor: 'Obecny',
@@ -518,6 +549,7 @@ export const STRINGS_PL = {
         selectVaultProfile3: 'Zmień na profil sejfu 3', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: 'Usuń pliki', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: 'Utwórz nową notatkę', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'Nowa notatka z szablonu', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: 'Przenieś pliki', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: 'Wybierz następny plik', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: 'Wybierz poprzedni plik', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -528,6 +560,7 @@ export const STRINGS_PL = {
         navigateToFolder: 'Przejdź do folderu', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: 'Przejdź do tagu', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: 'Dodaj do skrótów', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: 'Otwórz skrót {number}',
         toggleDescendants: 'Przełącz podfoldery', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: 'Przełącz ukryte foldery, tagi i notatki', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: 'Przełącz sortowanie tagów', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -584,12 +617,11 @@ export const STRINGS_PL = {
                 filtering: 'Filtrowanie',
                 behavior: 'Zachowanie',
                 view: 'Wygląd',
+                icons: 'Ikony',
                 desktopAppearance: 'Wygląd na komputerze',
-                mobileAppearance: 'Wygląd na telefonie',
                 formatting: 'Formatowanie'
             },
             navigation: {
-                behavior: 'Zachowanie',
                 appearance: 'Wygląd',
                 shortcutsAndRecent: 'Skróty i ostatnie elementy'
             },
@@ -718,8 +750,8 @@ export const STRINGS_PL = {
             fileNameIconMap: {
                 name: 'Mapowanie ikon nazwy pliku',
                 desc: 'Pliki zawierające tekst otrzymują określoną ikonę. Jedno mapowanie na linię: tekst=ikona',
-                placeholder: '# tekst=ikona\nspotkanie=calendar\nfaktura=receipt',
-                resetTooltip: 'Przywróć wartości domyślne'
+                placeholder: '# tekst=ikona\nspotkanie=LiCalendar\nfaktura=PhReceipt',
+                editTooltip: 'Edytuj mapowania'
             },
             showCategoryIcons: {
                 name: 'Ikony według typu pliku',
@@ -728,8 +760,8 @@ export const STRINGS_PL = {
             fileTypeIconMap: {
                 name: 'Mapowanie ikon typu pliku',
                 desc: 'Pliki z rozszerzeniem otrzymują określoną ikonę. Jedno mapowanie na linię: rozszerzenie=ikona',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Przywróć wartości domyślne'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Edytuj mapowania'
             },
             optimizeNoteHeight: {
                 name: 'Optymalizuj wysokość notatek',
@@ -841,6 +873,15 @@ export const STRINGS_PL = {
                 name: 'Pokaż skróty',
                 desc: 'Wyświetl sekcję skrótów w panelu nawigacji.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Plakietka skrótu',
+                desc: "Co wyświetlić obok skrótów. Użyj poleceń 'Otwórz skrót 1-9', aby otwierać skróty bezpośrednio.",
+                options: {
+                    index: 'Pozycja (1-9)',
+                    count: 'Liczba elementów',
+                    none: 'Brak'
+                }
+            },
             showRecentNotes: {
                 name: 'Pokaż ostatnie notatki',
                 desc: 'Wyświetl sekcję ostatnich notatek w panelu nawigacji.'
@@ -868,7 +909,7 @@ export const STRINGS_PL = {
                 notice: 'Pozycja separatora została zresetowana. Uruchom ponownie Obsidian lub otwórz ponownie Notebook Navigator, aby zastosować.'
             },
             multiSelectModifier: {
-                name: 'Modyfikator wielokrotnego wyboru',
+                name: 'Modyfikator wielokrotnego wyboru (tylko desktop)',
                 desc: 'Wybierz, który klawisz modyfikatora przełącza wielokrotny wybór. Gdy wybrano Option/Alt, Cmd/Ctrl klik otwiera notatki w nowej karcie.',
                 options: {
                     cmdCtrl: 'Cmd/Ctrl klik',
@@ -1106,6 +1147,11 @@ export const STRINGS_PL = {
             showSectionIcons: {
                 name: 'Pokaż ikony skrótów i ostatnich elementów',
                 desc: 'Wyświetl ikony dla sekcji nawigacji takich jak Skróty i Ostatnie pliki.'
+            },
+            interfaceIcons: {
+                name: 'Ikony interfejsu',
+                desc: 'Edytuj ikony paska narzędzi, folderów, tagów, przypiętych elementów, wyszukiwania i sortowania.',
+                buttonText: 'Edytuj ikony'
             },
             showIconsColorOnly: {
                 name: 'Zastosuj kolor tylko do ikon',

@@ -176,6 +176,7 @@ export const STRINGS_FR = {
         },
         folder: {
             newNote: 'Nouvelle note',
+            newNoteFromTemplate: 'Nouvelle note depuis un modèle',
             newFolder: 'Nouveau dossier',
             newCanvas: 'Nouveau canevas',
             newBase: 'Nouvelle base de données',
@@ -247,6 +248,36 @@ export const STRINGS_FR = {
             emojiInstructions: "Tapez ou collez n'importe quel emoji pour l'utiliser comme icône",
             removeIcon: "Supprimer l'icône",
             allTabLabel: 'Tous'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Ajouter une règle'
+        },
+        interfaceIcons: {
+            title: "Icônes de l'interface",
+            items: {
+                'nav-shortcuts': 'Raccourcis',
+                'nav-recent-files': 'Fichiers récents',
+                'nav-expand-all': 'Tout déplier',
+                'nav-collapse-all': 'Tout replier',
+                'nav-tree-expand': "Chevron d'arbre : déplier",
+                'nav-tree-collapse': "Chevron d'arbre : replier",
+                'nav-hidden-items': 'Éléments cachés',
+                'nav-root-reorder': 'Réorganiser les dossiers racine',
+                'nav-new-folder': 'Nouveau dossier',
+                'nav-show-single-pane': 'Afficher panneau unique',
+                'nav-show-dual-pane': 'Afficher les panneaux doubles',
+                'nav-profile-chevron': 'Chevron du menu profil',
+                'list-search': 'Recherche',
+                'list-descendants': 'Notes des sous-dossiers',
+                'list-sort-ascending': 'Ordre de tri : croissant',
+                'list-sort-descending': 'Ordre de tri : décroissant',
+                'list-appearance': "Modifier l'apparence",
+                'list-new-note': 'Nouvelle note',
+                'nav-folder-open': 'Dossier ouvert',
+                'nav-folder-closed': 'Dossier fermé',
+                'nav-tag': 'Étiquette',
+                'list-pinned': 'Éléments épinglés'
+            }
         },
         colorPicker: {
             currentColor: 'Actuelle',
@@ -517,6 +548,7 @@ export const STRINGS_FR = {
         selectVaultProfile3: 'Changer vers le profil du coffre 3', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: 'Supprimer les fichiers', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: 'Créer une nouvelle note', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'Nouvelle note depuis un modèle', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: 'Déplacer les fichiers', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: 'Sélectionner le fichier suivant', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: 'Sélectionner le fichier précédent', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -527,6 +559,7 @@ export const STRINGS_FR = {
         navigateToFolder: 'Naviguer vers le dossier', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: "Naviguer vers l'étiquette", // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: 'Ajouter aux raccourcis', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: 'Ouvrir le raccourci {number}',
         toggleDescendants: 'Basculer descendants', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: 'Basculer les dossiers, étiquettes et notes masqués', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: 'Basculer le tri des étiquettes', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -583,12 +616,11 @@ export const STRINGS_FR = {
                 filtering: 'Filtrage',
                 behavior: 'Comportement',
                 view: 'Apparence',
+                icons: 'Icônes',
                 desktopAppearance: 'Apparence sur ordinateur',
-                mobileAppearance: 'Apparence mobile',
                 formatting: 'Formatage'
             },
             navigation: {
-                behavior: 'Comportement',
                 appearance: 'Apparence',
                 shortcutsAndRecent: 'Raccourcis et éléments récents'
             },
@@ -718,8 +750,8 @@ export const STRINGS_FR = {
             fileNameIconMap: {
                 name: 'Correspondance nom-icône',
                 desc: "Les fichiers contenant le texte obtiennent l'icône spécifiée. Une correspondance par ligne : texte=icône",
-                placeholder: '# texte=icône\nréunion=calendar\nfacture=receipt',
-                resetTooltip: 'Restaurer les valeurs par défaut'
+                placeholder: '# texte=icône\nréunion=LiCalendar\nfacture=PhReceipt',
+                editTooltip: 'Modifier les correspondances'
             },
             showCategoryIcons: {
                 name: 'Icônes par type de fichier',
@@ -728,8 +760,8 @@ export const STRINGS_FR = {
             fileTypeIconMap: {
                 name: 'Correspondance type-icône',
                 desc: "Les fichiers avec l'extension obtiennent l'icône spécifiée. Une correspondance par ligne : extension=icône",
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Restaurer les valeurs par défaut'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Modifier les correspondances'
             },
             optimizeNoteHeight: {
                 name: 'Optimiser la hauteur des notes',
@@ -841,6 +873,15 @@ export const STRINGS_FR = {
                 name: 'Afficher les raccourcis',
                 desc: 'Afficher la section des raccourcis dans le panneau de navigation.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Badge de raccourci',
+                desc: "Contenu affiché à côté des raccourcis. Utilisez les commandes 'Ouvrir le raccourci 1-9' pour ouvrir les raccourcis directement.",
+                options: {
+                    index: 'Position (1-9)',
+                    count: "Nombre d'éléments",
+                    none: 'Aucun'
+                }
+            },
             showRecentNotes: {
                 name: 'Afficher les notes récentes',
                 desc: 'Afficher la section des notes récentes dans le panneau de navigation.'
@@ -868,7 +909,7 @@ export const STRINGS_FR = {
                 notice: 'Position du séparateur réinitialisée. Redémarrez Obsidian ou rouvrez Notebook Navigator pour appliquer.'
             },
             multiSelectModifier: {
-                name: 'Modificateur de sélection multiple',
+                name: 'Modificateur de sélection multiple (ordinateur uniquement)',
                 desc: 'Choisissez quelle touche modificatrice active la sélection multiple. Quand Option/Alt est sélectionné, Cmd/Ctrl clic ouvre les notes dans un nouvel onglet.',
                 options: {
                     cmdCtrl: 'Cmd/Ctrl clic',
@@ -1107,6 +1148,11 @@ export const STRINGS_FR = {
             showSectionIcons: {
                 name: 'Afficher les icônes pour les raccourcis et les éléments récents',
                 desc: 'Afficher les icônes pour les sections de navigation comme Raccourcis et Fichiers récents.'
+            },
+            interfaceIcons: {
+                name: "Icônes de l'interface",
+                desc: "Modifier les icônes de barre d'outils, dossiers, étiquettes, éléments épinglés, recherche et tri.",
+                buttonText: 'Modifier les icônes'
             },
             showIconsColorOnly: {
                 name: 'Appliquer la couleur uniquement aux icônes',

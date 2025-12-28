@@ -177,6 +177,7 @@ export const STRINGS_NL = {
         },
         folder: {
             newNote: 'Nieuwe notitie',
+            newNoteFromTemplate: 'Nieuwe notitie uit sjabloon',
             newFolder: 'Nieuwe map',
             newCanvas: 'Nieuw canvas',
             newBase: 'Nieuwe base',
@@ -248,6 +249,36 @@ export const STRINGS_NL = {
             emojiInstructions: 'Typ of plak een emoji om deze als pictogram te gebruiken',
             removeIcon: 'Pictogram verwijderen',
             allTabLabel: 'Alle'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Regel toevoegen'
+        },
+        interfaceIcons: {
+            title: 'Interface-iconen',
+            items: {
+                'nav-shortcuts': 'Snelkoppelingen',
+                'nav-recent-files': 'Recente bestanden',
+                'nav-expand-all': 'Alles uitvouwen',
+                'nav-collapse-all': 'Alles invouwen',
+                'nav-tree-expand': 'Boompijl: uitvouwen',
+                'nav-tree-collapse': 'Boompijl: invouwen',
+                'nav-hidden-items': 'Verborgen items',
+                'nav-root-reorder': 'Hoofdmappen herschikken',
+                'nav-new-folder': 'Nieuwe map',
+                'nav-show-single-pane': 'Enkel paneel tonen',
+                'nav-show-dual-pane': 'Dubbel paneel tonen',
+                'nav-profile-chevron': 'Profielmenu-pijl',
+                'list-search': 'Zoeken',
+                'list-descendants': 'Notities uit submappen',
+                'list-sort-ascending': 'Sorteervolgorde: oplopend',
+                'list-sort-descending': 'Sorteervolgorde: aflopend',
+                'list-appearance': 'Uiterlijk wijzigen',
+                'list-new-note': 'Nieuwe notitie',
+                'nav-folder-open': 'Map open',
+                'nav-folder-closed': 'Map gesloten',
+                'nav-tag': 'Tag',
+                'list-pinned': 'Vastgezette items'
+            }
         },
         colorPicker: {
             currentColor: 'Huidig',
@@ -518,6 +549,7 @@ export const STRINGS_NL = {
         selectVaultProfile3: 'Kluisprofiel 3 selecteren',
         deleteFile: 'Bestanden verwijderen',
         createNewNote: 'Nieuwe notitie maken',
+        createNewNoteFromTemplate: 'Nieuwe notitie uit sjabloon',
         moveFiles: 'Bestanden verplaatsen',
         selectNextFile: 'Volgend bestand selecteren',
         selectPreviousFile: 'Vorig bestand selecteren',
@@ -528,6 +560,7 @@ export const STRINGS_NL = {
         navigateToFolder: 'Navigeren naar map',
         navigateToTag: 'Navigeren naar tag',
         addShortcut: 'Toevoegen aan snelkoppelingen',
+        openShortcut: 'Snelkoppeling {number} openen',
         toggleDescendants: 'Afstammelingen in-/uitschakelen',
         toggleHidden: 'Verborgen mappen, tags en notities in-/uitschakelen',
         toggleTagSort: 'Tag sorteervolgorde in-/uitschakelen',
@@ -584,12 +617,11 @@ export const STRINGS_NL = {
                 filtering: 'Filteren',
                 behavior: 'Gedrag',
                 view: 'Uiterlijk',
+                icons: 'Iconen',
                 desktopAppearance: 'Desktop-uiterlijk',
-                mobileAppearance: 'Mobiel uiterlijk',
                 formatting: 'Opmaak'
             },
             navigation: {
-                behavior: 'Gedrag',
                 appearance: 'Uiterlijk',
                 shortcutsAndRecent: 'Snelkoppelingen en recente items'
             },
@@ -718,8 +750,8 @@ export const STRINGS_NL = {
             fileNameIconMap: {
                 name: 'Bestandsnaam-pictogram toewijzing',
                 desc: 'Bestanden met de tekst krijgen het opgegeven pictogram. Eén toewijzing per regel: tekst=pictogram',
-                placeholder: '# tekst=pictogram\nvergadering=calendar\nfactuur=receipt',
-                resetTooltip: 'Standaardwaarden herstellen'
+                placeholder: '# tekst=pictogram\nvergadering=LiCalendar\nfactuur=PhReceipt',
+                editTooltip: 'Toewijzingen bewerken'
             },
             showCategoryIcons: {
                 name: 'Pictogrammen op bestandstype',
@@ -728,8 +760,8 @@ export const STRINGS_NL = {
             fileTypeIconMap: {
                 name: 'Bestandstype-pictogram toewijzing',
                 desc: 'Bestanden met de extensie krijgen het opgegeven pictogram. Eén toewijzing per regel: extensie=pictogram',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Standaardwaarden herstellen'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Toewijzingen bewerken'
             },
             optimizeNoteHeight: {
                 name: 'Notitiehoogte optimaliseren',
@@ -841,6 +873,15 @@ export const STRINGS_NL = {
                 name: 'Snelkoppelingen tonen',
                 desc: 'De sectie snelkoppelingen weergeven in het navigatiepaneel.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Snelkoppeling badge',
+                desc: "Wat naast snelkoppelingen weergeven. Gebruik de commando's 'Snelkoppeling 1-9 openen' om snelkoppelingen direct te openen.",
+                options: {
+                    index: 'Positie (1-9)',
+                    count: 'Aantal items',
+                    none: 'Geen'
+                }
+            },
             showRecentNotes: {
                 name: 'Recente notities tonen',
                 desc: 'De sectie recente notities weergeven in het navigatiepaneel.'
@@ -868,7 +909,7 @@ export const STRINGS_NL = {
                 notice: 'Scheidingspositie gereset. Herstart Obsidian of heropen Notebook Navigator om toe te passen.'
             },
             multiSelectModifier: {
-                name: 'Meervoudige selectie modifier',
+                name: 'Meervoudige selectie modifier (alleen desktop)',
                 desc: 'Kies welke modificatortoets meervoudige selectie in-/uitschakelt. Wanneer Option/Alt is geselecteerd, opent Cmd/Ctrl klik notities in een nieuw tabblad.',
                 options: {
                     cmdCtrl: 'Cmd/Ctrl klik',
@@ -1106,6 +1147,11 @@ export const STRINGS_NL = {
             showSectionIcons: {
                 name: 'Pictogrammen tonen voor snelkoppelingen en recente items',
                 desc: 'Pictogrammen voor navigatiesecties zoals Snelkoppelingen en Recente bestanden weergeven.'
+            },
+            interfaceIcons: {
+                name: 'Interface-iconen',
+                desc: 'Bewerk werkbalk-, map-, tag-, vastgezette, zoek- en sorteerichtogrammen.',
+                buttonText: 'Iconen bewerken'
             },
             showIconsColorOnly: {
                 name: 'Kleur alleen op pictogrammen toepassen',

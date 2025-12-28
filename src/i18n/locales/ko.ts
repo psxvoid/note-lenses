@@ -175,6 +175,7 @@ export const STRINGS_KO = {
         },
         folder: {
             newNote: '새 노트',
+            newNoteFromTemplate: '템플릿으로 새 노트',
             newFolder: '새 폴더',
             newCanvas: '새 캔버스',
             newBase: '새 베이스',
@@ -246,6 +247,36 @@ export const STRINGS_KO = {
             emojiInstructions: '이모지를 입력하거나 붙여넣어 아이콘으로 사용하세요',
             removeIcon: '아이콘 제거',
             allTabLabel: '모두'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: '규칙 추가'
+        },
+        interfaceIcons: {
+            title: '인터페이스 아이콘',
+            items: {
+                'nav-shortcuts': '바로가기',
+                'nav-recent-files': '최근 파일',
+                'nav-expand-all': '모두 펼치기',
+                'nav-collapse-all': '모두 접기',
+                'nav-tree-expand': '트리 화살표: 펼치기',
+                'nav-tree-collapse': '트리 화살표: 접기',
+                'nav-hidden-items': '숨겨진 항목',
+                'nav-root-reorder': '루트 폴더 재정렬',
+                'nav-new-folder': '새 폴더',
+                'nav-show-single-pane': '단일 창 표시',
+                'nav-show-dual-pane': '이중 창 표시',
+                'nav-profile-chevron': '프로필 메뉴 화살표',
+                'list-search': '검색',
+                'list-descendants': '하위 폴더의 노트',
+                'list-sort-ascending': '정렬 순서: 오름차순',
+                'list-sort-descending': '정렬 순서: 내림차순',
+                'list-appearance': '모양 변경',
+                'list-new-note': '새 노트',
+                'nav-folder-open': '열린 폴더',
+                'nav-folder-closed': '닫힌 폴더',
+                'nav-tag': '태그',
+                'list-pinned': '고정 항목'
+            }
         },
         colorPicker: {
             currentColor: '현재',
@@ -516,6 +547,7 @@ export const STRINGS_KO = {
         selectVaultProfile3: '보관소 프로필 3 선택', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: '파일 삭제', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: '새 노트 만들기', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: '템플릿으로 새 노트', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: '파일 이동', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: '다음 파일 선택', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: '이전 파일 선택', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -526,6 +558,7 @@ export const STRINGS_KO = {
         navigateToFolder: '폴더로 이동', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: '태그로 이동', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: '바로가기에 추가', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: '바로가기 {number} 열기',
         toggleDescendants: '하위 항목 전환', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: '숨긴 폴더, 태그, 노트 전환', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: '태그 정렬 전환', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -582,12 +615,11 @@ export const STRINGS_KO = {
                 filtering: '필터링',
                 behavior: '동작',
                 view: '모양',
+                icons: '아이콘',
                 desktopAppearance: '데스크톱 모양새',
-                mobileAppearance: '모바일 모양새',
                 formatting: '서식'
             },
             navigation: {
-                behavior: '동작',
                 appearance: '모양',
                 shortcutsAndRecent: '바로가기 및 최근 항목'
             },
@@ -716,8 +748,8 @@ export const STRINGS_KO = {
             fileNameIconMap: {
                 name: '파일 이름 아이콘 맵',
                 desc: '텍스트를 포함하는 파일에 지정된 아이콘이 적용됩니다. 줄당 하나의 매핑: 텍스트=아이콘',
-                placeholder: '# 텍스트=아이콘\n회의=calendar\n청구서=receipt',
-                resetTooltip: '기본값 복원'
+                placeholder: '# 텍스트=아이콘\n회의=LiCalendar\n청구서=PhReceipt',
+                editTooltip: '매핑 편집'
             },
             showCategoryIcons: {
                 name: '파일 유형으로 아이콘 설정',
@@ -726,8 +758,8 @@ export const STRINGS_KO = {
             fileTypeIconMap: {
                 name: '파일 유형 아이콘 맵',
                 desc: '확장자가 있는 파일에 지정된 아이콘이 적용됩니다. 줄당 하나의 매핑: 확장자=아이콘',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: '기본값 복원'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: '매핑 편집'
             },
             optimizeNoteHeight: {
                 name: '노트 높이 최적화',
@@ -839,6 +871,15 @@ export const STRINGS_KO = {
                 name: '바로가기 표시',
                 desc: '탐색 창에 바로가기 섹션을 표시합니다.'
             },
+            shortcutBadgeDisplay: {
+                name: '바로가기 배지',
+                desc: "바로가기 옆에 표시할 내용. '바로가기 1-9 열기' 명령으로 바로가기를 직접 열 수 있습니다.",
+                options: {
+                    index: '위치 (1-9)',
+                    count: '항목 수',
+                    none: '없음'
+                }
+            },
             showRecentNotes: {
                 name: '최근 노트 표시',
                 desc: '탐색 창에 최근 노트 섹션을 표시합니다.'
@@ -866,7 +907,7 @@ export const STRINGS_KO = {
                 notice: '구분선 위치가 초기화되었습니다. Obsidian을 재시작하거나 Notebook Navigator를 다시 열어 적용하세요.'
             },
             multiSelectModifier: {
-                name: '다중 선택 수정자',
+                name: '다중 선택 수정자 (데스크톱 전용)',
                 desc: '다중 선택을 전환하는 수정자 키를 선택하세요. Option/Alt를 선택하면 Cmd/Ctrl 클릭이 새 탭에서 노트를 엽니다.',
                 options: {
                     cmdCtrl: 'Cmd/Ctrl 클릭',
@@ -1103,6 +1144,11 @@ export const STRINGS_KO = {
             showSectionIcons: {
                 name: '바로 가기 및 최근 항목 아이콘 표시',
                 desc: '바로 가기 및 최근 파일과 같은 탐색 섹션의 아이콘을 표시합니다.'
+            },
+            interfaceIcons: {
+                name: '인터페이스 아이콘',
+                desc: '도구 모음, 폴더, 태그, 고정 항목, 검색, 정렬 아이콘을 편집합니다.',
+                buttonText: '아이콘 편집'
             },
             showIconsColorOnly: {
                 name: '아이콘에만 색상 적용',

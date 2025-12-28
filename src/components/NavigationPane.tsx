@@ -73,7 +73,6 @@ import { CSS } from '@dnd-kit/utilities';
 import { useExpansionState, useExpansionDispatch } from '../context/ExpansionContext';
 import { useSelectionState, useSelectionDispatch } from '../context/SelectionContext';
 import { useServices, useCommandQueue, useFileSystemOps, useMetadataService, useTagOperations } from '../context/ServicesContext';
-import { useRecentData } from '../context/RecentDataContext';
 import { useSettingsState, useSettingsUpdate, useActiveProfile } from '../context/SettingsContext';
 import { useUXPreferences } from '../context/UXPreferencesContext';
 import { showNotice } from '../utils/noticeUtils';
@@ -120,6 +119,7 @@ import {
     SHORTCUT_DRAG_MIME,
     isFolderShortcut,
     isNoteShortcut,
+    isSearchShortcut,
     isTagShortcut
 } from '../types/shortcuts';
 import { strings } from '../i18n';
@@ -154,6 +154,7 @@ export interface NavigationPaneHandle {
     virtualizer: Virtualizer<HTMLDivElement, Element> | null;
     scrollContainerRef: HTMLDivElement | null;
     requestScroll: (path: string, options: { align?: 'auto' | 'center' | 'start' | 'end'; itemType: ItemType }) => void;
+    openShortcutByNumber: (shortcutNumber: number) => Promise<boolean>;
 }
 
 interface NavigationPaneProps {
@@ -210,7 +211,6 @@ function SortableShortcutItem({ sortableId, canReorder, dragHandlers, ...rest }:
 export const NavigationPane = React.memo(
     forwardRef<NavigationPaneHandle, NavigationPaneProps>(function NavigationPane(props, ref) {
         const { app, isMobile, plugin, tagTreeService } = useServices();
-        const { recentNotes } = useRecentData();
         const {
             onExecuteSearchShortcut,
             rootContainerRef,
@@ -257,6 +257,19 @@ export const NavigationPane = React.memo(
             hasFolderShortcut,
             hasNoteShortcut
         } = shortcuts;
+        const effectiveShortcutBadgeDisplay = settings.shortcutBadgeDisplay;
+        const shouldShowShortcutCounts = effectiveShortcutBadgeDisplay === 'count';
+        const shortcutNumberBadgesByKey = useMemo(() => {
+            if (effectiveShortcutBadgeDisplay !== 'index') {
+                return new Map<string, string>();
+            }
+
+            const badgeMap = new Map<string, string>();
+            hydratedShortcuts.slice(0, 9).forEach((shortcut, index) => {
+                badgeMap.set(shortcut.key, String(index + 1));
+            });
+            return badgeMap;
+        }, [effectiveShortcutBadgeDisplay, hydratedShortcuts]);
         const { fileData, getFileDisplayName } = useFileCache();
         // Detect Android platform for toolbar placement
         const isAndroid = Platform.isAndroidApp;
@@ -861,7 +874,6 @@ export const NavigationPane = React.memo(
             shouldPinRecentNotes,
             tagsVirtualFolderHasChildren,
             pathToIndex,
-            shortcutIndex,
             tagCounts,
             folderCounts,
             rootLevelFolders,
@@ -1358,25 +1370,6 @@ export const NavigationPane = React.memo(
             uiDispatch({ type: 'SET_PIN_SHORTCUTS', value: !uiState.pinShortcuts });
         }, [uiDispatch, uiState.pinShortcuts]);
 
-        // Scrolls shortcut into view - scrolls to top for pinned shortcuts or to item index for inline
-        const scrollShortcutIntoView = useCallback(
-            (shortcutKey: string) => {
-                // When shortcuts are pinned, scroll to top to show pinned area
-                if (shouldPinShortcuts) {
-                    const container = scrollContainerRef.current;
-                    if (container) {
-                        container.scrollTo({ top: 0, behavior: 'auto' });
-                    }
-                    return;
-                }
-                const index = shortcutIndex.get(shortcutKey);
-                if (index !== undefined) {
-                    rowVirtualizer.scrollToIndex(index, { align: 'auto' });
-                }
-            },
-            [shortcutIndex, rowVirtualizer, shouldPinShortcuts, scrollContainerRef]
-        );
-
         // Clears active shortcut after two animation frames to allow visual feedback
         const scheduleShortcutRelease = useCallback(() => {
             const release = () => setActiveShortcut(null);
@@ -1498,13 +1491,12 @@ export const NavigationPane = React.memo(
         const handleShortcutSearchActivate = useCallback(
             (shortcutKey: string, searchShortcut: SearchShortcut) => {
                 setActiveShortcut(shortcutKey);
-                scrollShortcutIntoView(shortcutKey);
                 if (onExecuteSearchShortcut) {
                     runAsyncAction(() => onExecuteSearchShortcut(shortcutKey, searchShortcut));
                 }
                 scheduleShortcutRelease();
             },
-            [setActiveShortcut, scrollShortcutIntoView, onExecuteSearchShortcut, scheduleShortcutRelease]
+            [setActiveShortcut, onExecuteSearchShortcut, scheduleShortcutRelease]
         );
 
         // Handles tag shortcut activation - navigates to tag and shows its files
@@ -1963,7 +1955,8 @@ export const NavigationPane = React.memo(
                             }
                             return getPathBaseName(folderPath);
                         })();
-                        const folderCountInfo = canInteract && folder ? getFolderShortcutCount(folder) : ZERO_NOTE_COUNT;
+                        const folderCountInfo =
+                            canInteract && folder && shouldShowShortcutCounts ? getFolderShortcutCount(folder) : ZERO_NOTE_COUNT;
                         const folderNote = canInteract && folder && settings.enableFolderNotes ? getFolderNote(folder, settings) : null;
 
                         const dragHandlers = buildShortcutExternalHandlers(item.key);
@@ -1983,7 +1976,9 @@ export const NavigationPane = React.memo(
                             description: undefined,
                             level: item.level,
                             type: 'folder' as const,
-                            countInfo: !isMissing ? folderCountInfo : undefined,
+                            countInfo: !isMissing && shouldShowShortcutCounts ? folderCountInfo : undefined,
+                            badge: shortcutNumberBadgesByKey.get(item.key),
+                            forceShowCount: shouldShowShortcutCounts,
                             isExcluded: !isMissing ? item.isExcluded : undefined,
                             isDisabled: isMissing,
                             isMissing,
@@ -2053,6 +2048,8 @@ export const NavigationPane = React.memo(
                             description: undefined,
                             level: item.level,
                             type: 'note' as const,
+                            badge: shortcutNumberBadgesByKey.get(item.key),
+                            forceShowCount: shouldShowShortcutCounts,
                             isDisabled: isMissing,
                             isMissing,
                             onClick: () => {
@@ -2098,6 +2095,8 @@ export const NavigationPane = React.memo(
                             label: searchShortcut.name,
                             level: item.level,
                             type: 'search' as const,
+                            badge: shortcutNumberBadgesByKey.get(item.key),
+                            forceShowCount: shouldShowShortcutCounts,
                             onClick: () => handleShortcutSearchActivate(item.key, searchShortcut),
                             onContextMenu: (event: React.MouseEvent<HTMLDivElement>) =>
                                 handleShortcutContextMenu(event, {
@@ -2125,7 +2124,7 @@ export const NavigationPane = React.memo(
                     case NavigationPaneItemType.SHORTCUT_TAG: {
                         const isMissing = Boolean(item.isMissing);
                         const tagPath = isTagShortcut(item.shortcut) ? item.shortcut.tagPath : item.tagPath;
-                        const tagCountInfo = !isMissing ? getTagShortcutCount(tagPath) : ZERO_NOTE_COUNT;
+                        const tagCountInfo = !isMissing && shouldShowShortcutCounts ? getTagShortcutCount(tagPath) : ZERO_NOTE_COUNT;
 
                         const dragHandlers = buildShortcutExternalHandlers(item.key);
                         const isDragSource = shouldUseShortcutDnd && activeShortcutId === item.key;
@@ -2143,7 +2142,9 @@ export const NavigationPane = React.memo(
                             description: undefined,
                             level: item.level,
                             type: 'tag' as const,
-                            countInfo: !isMissing ? tagCountInfo : undefined,
+                            countInfo: !isMissing && shouldShowShortcutCounts ? tagCountInfo : undefined,
+                            badge: shortcutNumberBadgesByKey.get(item.key),
+                            forceShowCount: shouldShowShortcutCounts,
                             isDisabled: isMissing,
                             isMissing,
                             onClick: () => {
@@ -2226,14 +2227,9 @@ export const NavigationPane = React.memo(
                         const virtualFolder = item.data;
                         const isShortcutsGroup = virtualFolder.id === SHORTCUTS_VIRTUAL_FOLDER_ID;
                         const isRecentNotesGroup = virtualFolder.id === RECENT_NOTES_VIRTUAL_FOLDER_ID;
-                        let hasChildren = true;
-                        if (isShortcutsGroup) {
-                            hasChildren = hydratedShortcuts.length > 0;
-                        } else if (isRecentNotesGroup) {
-                            hasChildren = recentNotes.length > 0;
-                        } else if (virtualFolder.id === 'tags-root') {
-                            hasChildren = tagsVirtualFolderHasChildren;
-                        }
+                        // `hasChildren` is computed when building the navigation items so it reflects actual renderable children
+                        // (e.g. recent paths that still resolve to `TFile`).
+                        const hasChildren = item.hasChildren ?? false;
 
                         const isExpanded = isShortcutsGroup
                             ? shortcutsExpanded
@@ -2428,7 +2424,6 @@ export const NavigationPane = React.memo(
                 firstSectionId,
                 firstInlineFolderPath,
                 handleVirtualFolderToggle,
-                recentNotes.length,
                 shortcutsList.length,
                 getAllDescendantFolders,
                 getAllDescendantTags,
@@ -2448,7 +2443,8 @@ export const NavigationPane = React.memo(
                 handleRecentFileContextMenu,
                 handleShortcutContextMenu,
                 buildShortcutExternalHandlers,
-                hydratedShortcuts,
+                shortcutNumberBadgesByKey,
+                shouldShowShortcutCounts,
                 shortcutsExpanded,
                 shouldPinShortcuts,
                 recentNotesExpanded,
@@ -2464,7 +2460,6 @@ export const NavigationPane = React.memo(
                 handleShortcutFolderNoteClick,
                 handleShortcutFolderNoteMouseDown,
                 isMobile,
-                tagsVirtualFolderHasChildren,
                 searchIncludeTokenSet,
                 searchExcludeTokenSet,
                 highlightRequireTagged,
@@ -2497,9 +2492,57 @@ export const NavigationPane = React.memo(
                 },
                 virtualizer: rowVirtualizer,
                 scrollContainerRef: scrollContainerRef.current,
-                requestScroll
+                requestScroll,
+                openShortcutByNumber: async (shortcutNumber: number) => {
+                    if (!Number.isInteger(shortcutNumber) || shortcutNumber < 1) {
+                        return false;
+                    }
+
+                    const entry = hydratedShortcuts[shortcutNumber - 1];
+                    if (!entry || entry.isMissing) {
+                        return false;
+                    }
+
+                    const { key, shortcut, folder, note, search, tagPath } = entry;
+
+                    if (isFolderShortcut(shortcut) && folder) {
+                        handleShortcutFolderActivate(folder, key);
+                        return true;
+                    }
+
+                    if (isNoteShortcut(shortcut) && note) {
+                        handleShortcutNoteActivate(note, key);
+                        return true;
+                    }
+
+                    if (isSearchShortcut(shortcut)) {
+                        handleShortcutSearchActivate(key, search ?? shortcut);
+                        return true;
+                    }
+
+                    if (isTagShortcut(shortcut)) {
+                        const resolvedTagPath = tagPath ?? shortcut.tagPath;
+                        if (!resolvedTagPath) {
+                            return false;
+                        }
+                        handleShortcutTagActivate(resolvedTagPath, key);
+                        return true;
+                    }
+
+                    return false;
+                }
             }),
-            [pathToIndex, rowVirtualizer, requestScroll, scrollContainerRef]
+            [
+                pathToIndex,
+                rowVirtualizer,
+                requestScroll,
+                scrollContainerRef,
+                hydratedShortcuts,
+                handleShortcutFolderActivate,
+                handleShortcutNoteActivate,
+                handleShortcutSearchActivate,
+                handleShortcutTagActivate
+            ]
         );
 
         // Add keyboard navigation

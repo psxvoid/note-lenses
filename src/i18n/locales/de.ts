@@ -178,6 +178,7 @@ export const STRINGS_DE = {
         },
         folder: {
             newNote: 'Neue Notiz',
+            newNoteFromTemplate: 'Neue Notiz aus Vorlage',
             newFolder: 'Neuer Ordner',
             newCanvas: 'Neue Canvas',
             newBase: 'Neue Datenbank',
@@ -249,6 +250,36 @@ export const STRINGS_DE = {
             emojiInstructions: 'Geben Sie ein Emoji ein oder fügen Sie es ein, um es als Symbol zu verwenden',
             removeIcon: 'Icon entfernen',
             allTabLabel: 'Alle'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Regel hinzufügen'
+        },
+        interfaceIcons: {
+            title: 'Oberflächensymbole',
+            items: {
+                'nav-shortcuts': 'Verknüpfungen',
+                'nav-recent-files': 'Zuletzt verwendete Dateien',
+                'nav-expand-all': 'Alle erweitern',
+                'nav-collapse-all': 'Alle einklappen',
+                'nav-tree-expand': 'Baumpfeil: erweitern',
+                'nav-tree-collapse': 'Baumpfeil: einklappen',
+                'nav-hidden-items': 'Ausgeblendete Elemente',
+                'nav-root-reorder': 'Stammordner neu anordnen',
+                'nav-new-folder': 'Neuer Ordner',
+                'nav-show-single-pane': 'Einspaltige Ansicht anzeigen',
+                'nav-show-dual-pane': 'Zweispaltige Ansicht anzeigen',
+                'nav-profile-chevron': 'Profilmenü-Pfeil',
+                'list-search': 'Suche',
+                'list-descendants': 'Notizen aus Unterordnern',
+                'list-sort-ascending': 'Sortierung: aufsteigend',
+                'list-sort-descending': 'Sortierung: absteigend',
+                'list-appearance': 'Darstellung ändern',
+                'list-new-note': 'Neue Notiz',
+                'nav-folder-open': 'Ordner geöffnet',
+                'nav-folder-closed': 'Ordner geschlossen',
+                'nav-tag': 'Tag',
+                'list-pinned': 'Angeheftete Elemente'
+            }
         },
         colorPicker: {
             currentColor: 'Aktuell',
@@ -519,6 +550,7 @@ export const STRINGS_DE = {
         selectVaultProfile3: 'Tresorprofil 3 auswählen', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: 'Dateien löschen', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: 'Neue Notiz erstellen', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'Neue Notiz aus Vorlage', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: 'Dateien verschieben', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: 'Nächste Datei auswählen', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: 'Vorherige Datei auswählen', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -529,6 +561,7 @@ export const STRINGS_DE = {
         navigateToFolder: 'Zu Ordner navigieren', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: 'Zu Tag navigieren', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: 'Zu Shortcuts hinzufügen', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: 'Shortcut {number} öffnen',
         toggleDescendants: 'Nachkommen umschalten', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: 'Versteckte Ordner, Tags und Notizen umschalten', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: 'Tag-Sortierung umschalten', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -585,12 +618,11 @@ export const STRINGS_DE = {
                 filtering: 'Filterung',
                 behavior: 'Verhalten',
                 view: 'Darstellung',
+                icons: 'Symbole',
                 desktopAppearance: 'Desktop-Darstellung',
-                mobileAppearance: 'Mobile Darstellung',
                 formatting: 'Formatierung'
             },
             navigation: {
-                behavior: 'Verhalten',
                 appearance: 'Darstellung',
                 shortcutsAndRecent: 'Verknüpfungen & Letzte Einträge'
             },
@@ -720,8 +752,8 @@ export const STRINGS_DE = {
             fileNameIconMap: {
                 name: 'Dateiname-Symbol-Zuordnung',
                 desc: 'Dateien mit dem Text erhalten das angegebene Symbol. Eine Zuordnung pro Zeile: Text=Symbol',
-                placeholder: '# Text=icon\nbesprechung=calendar\nrechnung=receipt',
-                resetTooltip: 'Standardwerte wiederherstellen'
+                placeholder: '# Text=icon\nbesprechung=LiCalendar\nrechnung=PhReceipt',
+                editTooltip: 'Zuordnungen bearbeiten'
             },
             showCategoryIcons: {
                 name: 'Symbole nach Dateityp',
@@ -730,8 +762,8 @@ export const STRINGS_DE = {
             fileTypeIconMap: {
                 name: 'Dateityp-Symbol-Zuordnung',
                 desc: 'Dateien mit der Erweiterung erhalten das angegebene Symbol. Eine Zuordnung pro Zeile: Erweiterung=Symbol',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Standardwerte wiederherstellen'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Zuordnungen bearbeiten'
             },
             optimizeNoteHeight: {
                 name: 'Notizenhöhe optimieren',
@@ -843,6 +875,15 @@ export const STRINGS_DE = {
                 name: 'Lesezeichen anzeigen',
                 desc: 'Lesezeichen-Bereich im Navigationsbereich anzeigen.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Verknüpfungsabzeichen',
+                desc: "Was neben Verknüpfungen angezeigt wird. Verwenden Sie die Befehle 'Verknüpfung 1-9 öffnen', um Verknüpfungen direkt zu öffnen.",
+                options: {
+                    index: 'Position (1-9)',
+                    count: 'Elementanzahl',
+                    none: 'Keine'
+                }
+            },
             showRecentNotes: {
                 name: 'Neueste Notizen anzeigen',
                 desc: 'Den Bereich für neueste Notizen im Navigationsbereich anzeigen.'
@@ -870,7 +911,7 @@ export const STRINGS_DE = {
                 notice: 'Trennelementposition zurückgesetzt. Starten Sie Obsidian neu oder öffnen Sie Notebook Navigator erneut, um die Änderungen anzuwenden.'
             },
             multiSelectModifier: {
-                name: 'Mehrfachauswahl-Modifikator',
+                name: 'Mehrfachauswahl-Modifikator (nur Desktop)',
                 desc: 'Wählen Sie, welche Modifikatortaste die Mehrfachauswahl umschaltet. Wenn Option/Alt ausgewählt ist, öffnet Cmd/Strg-Klick Notizen in einem neuen Tab.',
                 options: {
                     cmdCtrl: 'Cmd/Strg-Klick',
@@ -1107,6 +1148,11 @@ export const STRINGS_DE = {
             showSectionIcons: {
                 name: 'Icons für Shortcuts und kürzliche Elemente anzeigen',
                 desc: 'Icons für Navigationsbereiche wie Shortcuts und Zuletzt verwendete Dateien anzeigen.'
+            },
+            interfaceIcons: {
+                name: 'Oberflächensymbole',
+                desc: 'Symbole für Symbolleiste, Ordner, Tags, angeheftete Elemente, Suche und Sortierung bearbeiten.',
+                buttonText: 'Symbole bearbeiten'
             },
             showIconsColorOnly: {
                 name: 'Farbe nur auf Symbole anwenden',

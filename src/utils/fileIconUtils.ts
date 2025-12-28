@@ -2,6 +2,7 @@ import { TFile } from 'obsidian';
 import { hasExcalidrawFrontmatterFlag, isExcalidrawFile } from './fileNameUtils';
 import { isImageExtension } from './fileTypeUtils';
 import type { IconId } from '../services/icons/types';
+import { deserializeIconFromFrontmatter } from './iconizeFormat';
 
 export type FileIconFallbackMode = 'none' | 'file';
 
@@ -13,9 +14,9 @@ interface MetadataCacheLike {
 
 export interface FileIconResolutionSettings {
     showFilenameMatchIcons: boolean;
-    fileNameIconMap: Record<string, IconId>;
+    fileNameIconMap: Record<string, string>;
     showCategoryIcons: boolean;
-    fileTypeIconMap: Record<string, IconId>;
+    fileTypeIconMap: Record<string, string>;
 }
 
 export interface FileNameIconNeedle {
@@ -59,16 +60,18 @@ export function resolveFileTypeIconKey(file: TFile, metadataCache?: MetadataCach
     return extension;
 }
 
-export function buildFileNameIconNeedles(iconMap: Record<string, IconId>): FileNameIconNeedle[] {
+export function buildFileNameIconNeedles(iconMap: Record<string, string>): FileNameIconNeedle[] {
     const needles: FileNameIconNeedle[] = [];
     Object.entries(iconMap).forEach(([key, value]) => {
         if (typeof key !== 'string' || typeof value !== 'string') {
             return;
         }
 
-        const needle = key.trim().toLowerCase();
-        const iconId = value.trim();
-        if (!needle || !iconId) {
+        // Preserve whitespace in the key to allow matching patterns like 'ai ' (with trailing space)
+        const needle = key.toLowerCase();
+        const iconId = deserializeIconFromFrontmatter(value.trim()) ?? '';
+        // Reject keys that are empty when trimmed, but allow keys with leading/trailing whitespace
+        if (needle.trim().length === 0 || !iconId) {
             return;
         }
 
@@ -104,19 +107,20 @@ export function resolveFileNameMatchIconIdFromNeedles(basename: string, needles:
     return null;
 }
 
-export function resolveFileNameMatchIconId(basename: string, iconMap: Record<string, IconId>): IconId | null {
+export function resolveFileNameMatchIconId(basename: string, iconMap: Record<string, string>): IconId | null {
     const needles = buildFileNameIconNeedles(iconMap);
     return resolveFileNameMatchIconIdFromNeedles(basename, needles);
 }
 
-export function resolveFileTypeIconId(fileTypeIconKey: string, iconMap: Record<string, IconId>): IconId | null {
+export function resolveFileTypeIconId(fileTypeIconKey: string, iconMap: Record<string, string>): IconId | null {
     if (!fileTypeIconKey) {
         return null;
     }
 
     const resolved = iconMap[fileTypeIconKey] ?? BUILT_IN_FILE_TYPE_ICON_MAP[fileTypeIconKey];
     if (resolved) {
-        return resolved;
+        const deserialized = deserializeIconFromFrontmatter(resolved);
+        return deserialized ?? resolved;
     }
 
     if (isImageExtension(fileTypeIconKey)) {
@@ -168,7 +172,7 @@ export function resolveFileIconId(
 
 export function resolveFileDragIconId(
     file: TFile,
-    fileTypeIconMap: Record<string, IconId>,
+    fileTypeIconMap: Record<string, string>,
     metadataCache?: MetadataCacheLike,
     preferredIconId?: IconId | null
 ): IconId {

@@ -176,6 +176,7 @@ export const STRINGS_ID = {
         },
         folder: {
             newNote: 'Catatan baru',
+            newNoteFromTemplate: 'Catatan baru dari template',
             newFolder: 'Folder baru',
             newCanvas: 'Canvas baru',
             newBase: 'Base baru',
@@ -247,6 +248,36 @@ export const STRINGS_ID = {
             emojiInstructions: 'Ketik atau tempel emoji untuk menggunakannya sebagai ikon',
             removeIcon: 'Hapus ikon',
             allTabLabel: 'Semua'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Tambah aturan'
+        },
+        interfaceIcons: {
+            title: 'Ikon antarmuka',
+            items: {
+                'nav-shortcuts': 'Pintasan',
+                'nav-recent-files': 'File terbaru',
+                'nav-expand-all': 'Perluas semua',
+                'nav-collapse-all': 'Tutup semua',
+                'nav-tree-expand': 'Panah pohon: perluas',
+                'nav-tree-collapse': 'Panah pohon: tutup',
+                'nav-hidden-items': 'Item tersembunyi',
+                'nav-root-reorder': 'Atur ulang folder akar',
+                'nav-new-folder': 'Folder baru',
+                'nav-show-single-pane': 'Tampilkan panel tunggal',
+                'nav-show-dual-pane': 'Tampilkan panel ganda',
+                'nav-profile-chevron': 'Panah menu profil',
+                'list-search': 'Cari',
+                'list-descendants': 'Catatan dari subfolder',
+                'list-sort-ascending': 'Urutan: menaik',
+                'list-sort-descending': 'Urutan: menurun',
+                'list-appearance': 'Ubah tampilan',
+                'list-new-note': 'Catatan baru',
+                'nav-folder-open': 'Folder terbuka',
+                'nav-folder-closed': 'Folder tertutup',
+                'nav-tag': 'Tag',
+                'list-pinned': 'Item tersemat'
+            }
         },
         colorPicker: {
             currentColor: 'Saat ini',
@@ -516,6 +547,7 @@ export const STRINGS_ID = {
         selectVaultProfile3: 'Pilih profil vault 3',
         deleteFile: 'Hapus file',
         createNewNote: 'Buat catatan baru',
+        createNewNoteFromTemplate: 'Catatan baru dari template',
         moveFiles: 'Pindahkan file',
         selectNextFile: 'Pilih file berikutnya',
         selectPreviousFile: 'Pilih file sebelumnya',
@@ -526,6 +558,7 @@ export const STRINGS_ID = {
         navigateToFolder: 'Navigasi ke folder',
         navigateToTag: 'Navigasi ke tag',
         addShortcut: 'Tambahkan ke pintasan',
+        openShortcut: 'Buka pintasan {number}',
         toggleDescendants: 'Alihkan turunan',
         toggleHidden: 'Alihkan folder, tag, dan catatan tersembunyi',
         toggleTagSort: 'Alihkan urutan tag',
@@ -582,12 +615,11 @@ export const STRINGS_ID = {
                 filtering: 'Penyaringan',
                 behavior: 'Perilaku',
                 view: 'Tampilan',
+                icons: 'Ikon',
                 desktopAppearance: 'Tampilan desktop',
-                mobileAppearance: 'Tampilan mobile',
                 formatting: 'Pemformatan'
             },
             navigation: {
-                behavior: 'Perilaku',
                 appearance: 'Tampilan',
                 shortcutsAndRecent: 'Pintasan & item terbaru'
             },
@@ -716,8 +748,8 @@ export const STRINGS_ID = {
             fileNameIconMap: {
                 name: 'Peta ikon nama file',
                 desc: 'File yang berisi teks mendapat ikon yang ditentukan. Satu pemetaan per baris: teks=ikon',
-                placeholder: '# teks=ikon\nrapat=calendar\nfaktur=receipt',
-                resetTooltip: 'Kembalikan ke default'
+                placeholder: '# teks=ikon\nrapat=LiCalendar\nfaktur=PhReceipt',
+                editTooltip: 'Edit pemetaan'
             },
             showCategoryIcons: {
                 name: 'Ikon berdasarkan tipe file',
@@ -726,8 +758,8 @@ export const STRINGS_ID = {
             fileTypeIconMap: {
                 name: 'Peta ikon tipe file',
                 desc: 'File dengan ekstensi mendapat ikon yang ditentukan. Satu pemetaan per baris: ekstensi=ikon',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Kembalikan ke default'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Edit pemetaan'
             },
             optimizeNoteHeight: {
                 name: 'Optimalkan tinggi catatan',
@@ -839,6 +871,15 @@ export const STRINGS_ID = {
                 name: 'Tampilkan pintasan',
                 desc: 'Tampilkan bagian pintasan di panel navigasi.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Lencana pintasan',
+                desc: "Apa yang ditampilkan di samping pintasan. Gunakan perintah 'Buka pintasan 1-9' untuk membuka pintasan secara langsung.",
+                options: {
+                    index: 'Posisi (1-9)',
+                    count: 'Jumlah item',
+                    none: 'Tidak ada'
+                }
+            },
             showRecentNotes: {
                 name: 'Tampilkan catatan terbaru',
                 desc: 'Tampilkan bagian catatan terbaru di panel navigasi.'
@@ -866,7 +907,7 @@ export const STRINGS_ID = {
                 notice: 'Posisi pemisah diatur ulang. Mulai ulang Obsidian atau buka kembali Notebook Navigator untuk menerapkan.'
             },
             multiSelectModifier: {
-                name: 'Modifier multi-pilih',
+                name: 'Modifier multi-pilih (desktop saja)',
                 desc: 'Pilih tombol modifier mana yang mengalihkan multi-pilih. Ketika Option/Alt dipilih, klik Cmd/Ctrl membuka catatan di tab baru.',
                 options: {
                     cmdCtrl: 'Klik Cmd/Ctrl',
@@ -1104,6 +1145,11 @@ export const STRINGS_ID = {
             showSectionIcons: {
                 name: 'Tampilkan ikon untuk pintasan dan item terbaru',
                 desc: 'Tampilkan ikon untuk bagian navigasi seperti Pintasan dan File terbaru.'
+            },
+            interfaceIcons: {
+                name: 'Ikon antarmuka',
+                desc: 'Edit ikon toolbar, folder, tag, item tersemat, pencarian, dan pengurutan.',
+                buttonText: 'Edit ikon'
             },
             showIconsColorOnly: {
                 name: 'Terapkan warna ke ikon saja',

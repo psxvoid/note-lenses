@@ -177,6 +177,7 @@ export const STRINGS_PT_BR = {
         },
         folder: {
             newNote: 'Nova nota',
+            newNoteFromTemplate: 'Nova nota a partir de modelo',
             newFolder: 'Nova pasta',
             newCanvas: 'Nova tela',
             newBase: 'Nova base',
@@ -248,6 +249,36 @@ export const STRINGS_PT_BR = {
             emojiInstructions: 'Digite ou cole qualquer emoji para usá-lo como ícone',
             removeIcon: 'Remover ícone',
             allTabLabel: 'Todos'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Adicionar regra'
+        },
+        interfaceIcons: {
+            title: 'Ícones da interface',
+            items: {
+                'nav-shortcuts': 'Atalhos',
+                'nav-recent-files': 'Arquivos recentes',
+                'nav-expand-all': 'Expandir tudo',
+                'nav-collapse-all': 'Recolher tudo',
+                'nav-tree-expand': 'Seta da árvore: expandir',
+                'nav-tree-collapse': 'Seta da árvore: recolher',
+                'nav-hidden-items': 'Itens ocultos',
+                'nav-root-reorder': 'Reordenar pastas raiz',
+                'nav-new-folder': 'Nova pasta',
+                'nav-show-single-pane': 'Mostrar painel único',
+                'nav-show-dual-pane': 'Mostrar painéis duplos',
+                'nav-profile-chevron': 'Seta do menu de perfil',
+                'list-search': 'Pesquisar',
+                'list-descendants': 'Notas de subpastas',
+                'list-sort-ascending': 'Ordem: crescente',
+                'list-sort-descending': 'Ordem: decrescente',
+                'list-appearance': 'Alterar aparência',
+                'list-new-note': 'Nova nota',
+                'nav-folder-open': 'Pasta aberta',
+                'nav-folder-closed': 'Pasta fechada',
+                'nav-tag': 'Tag',
+                'list-pinned': 'Itens fixados'
+            }
         },
         colorPicker: {
             currentColor: 'Atual',
@@ -517,6 +548,7 @@ export const STRINGS_PT_BR = {
         selectVaultProfile3: 'Alterar para o perfil do cofre 3',
         deleteFile: 'Excluir arquivos',
         createNewNote: 'Criar nova nota',
+        createNewNoteFromTemplate: 'Nova nota a partir de modelo',
         moveFiles: 'Mover arquivos',
         selectNextFile: 'Selecionar próximo arquivo',
         selectPreviousFile: 'Selecionar arquivo anterior',
@@ -527,6 +559,7 @@ export const STRINGS_PT_BR = {
         navigateToFolder: 'Navegar para pasta',
         navigateToTag: 'Navegar para tag',
         addShortcut: 'Adicionar aos atalhos',
+        openShortcut: 'Abrir atalho {number}',
         toggleDescendants: 'Alternar descendentes',
         toggleHidden: 'Alternar pastas, tags e notas ocultas',
         toggleTagSort: 'Alternar ordem de classificação de tags',
@@ -579,12 +612,11 @@ export const STRINGS_PT_BR = {
                 filtering: 'Filtragem',
                 behavior: 'Comportamento',
                 view: 'Aparência',
+                icons: 'Ícones',
                 desktopAppearance: 'Aparência do desktop',
-                mobileAppearance: 'Aparência do celular',
                 formatting: 'Formatação'
             },
             navigation: {
-                behavior: 'Comportamento',
                 appearance: 'Aparência',
                 shortcutsAndRecent: 'Atalhos e itens recentes'
             },
@@ -709,8 +741,8 @@ export const STRINGS_PT_BR = {
             fileNameIconMap: {
                 name: 'Mapa de ícones por nome',
                 desc: 'Os arquivos contendo o texto recebem o ícone especificado. Um mapeamento por linha: texto=ícone',
-                placeholder: '# texto=ícone\nreunião=calendar\nfatura=receipt',
-                resetTooltip: 'Restaurar valores padrão'
+                placeholder: '# texto=ícone\nreunião=LiCalendar\nfatura=PhReceipt',
+                editTooltip: 'Editar mapeamentos'
             },
             showCategoryIcons: {
                 name: 'Ícones por tipo de arquivo',
@@ -719,8 +751,8 @@ export const STRINGS_PT_BR = {
             fileTypeIconMap: {
                 name: 'Mapa de ícones por tipo',
                 desc: 'Os arquivos com a extensão recebem o ícone especificado. Um mapeamento por linha: extensão=ícone',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Restaurar valores padrão'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Editar mapeamentos'
             },
             optimizeNoteHeight: {
                 name: 'Otimizar altura da nota',
@@ -832,6 +864,15 @@ export const STRINGS_PT_BR = {
                 name: 'Mostrar atalhos',
                 desc: 'Exibir a seção de atalhos no painel de navegação.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Distintivo de atalho',
+                desc: "O que exibir ao lado dos atalhos. Use os comandos 'Abrir atalho 1-9' para abrir atalhos diretamente.",
+                options: {
+                    index: 'Posição (1-9)',
+                    count: 'Contagem de itens',
+                    none: 'Nenhum'
+                }
+            },
             showRecentNotes: {
                 name: 'Mostrar notas recentes',
                 desc: 'Exibir a seção de notas recentes no painel de navegação.'
@@ -859,7 +900,7 @@ export const STRINGS_PT_BR = {
                 notice: 'Posição do separador redefinida. Reinicie o Obsidian ou reabra o Notebook Navigator para aplicar.'
             },
             multiSelectModifier: {
-                name: 'Modificador de seleção múltipla',
+                name: 'Modificador de seleção múltipla (apenas desktop)',
                 desc: 'Escolha qual tecla modificadora alterna a seleção múltipla. Quando Opção/Alt está selecionado, Cmd/Ctrl clique abre notas em uma nova aba.',
                 options: {
                     cmdCtrl: 'Cmd/Ctrl clique',
@@ -1073,6 +1114,11 @@ export const STRINGS_PT_BR = {
             showSectionIcons: {
                 name: 'Mostrar ícones para atalhos e itens recentes',
                 desc: 'Exibir ícones para seções de navegação como Atalhos e Arquivos recentes.'
+            },
+            interfaceIcons: {
+                name: 'Ícones da interface',
+                desc: 'Editar ícones da barra de ferramentas, pastas, tags, itens fixados, pesquisa e ordenação.',
+                buttonText: 'Editar ícones'
             },
             showIconsColorOnly: {
                 name: 'Aplicar cor apenas aos ícones',

@@ -28,13 +28,15 @@ import { isFolderInExcludedFolder, shouldExcludeFile } from '../../utils/fileFil
 import { getEffectiveFrontmatterExclusions, isFileHiddenBySettings } from '../../utils/exclusionUtils';
 import { runAsyncAction } from '../../utils/async';
 import { NotebookNavigatorView } from '../../view/NotebookNavigatorView';
-import { getActiveHiddenFolders } from '../../utils/vaultProfiles';
+import { getActiveHiddenFolders, getActiveVaultProfile } from '../../utils/vaultProfiles';
 import { showNotice } from '../../utils/noticeUtils';
 import { SelectVaultProfileModal } from '../../modals/SelectVaultProfileModal';
 import { localStorage } from '../../utils/localStorage';
 import { STORAGE_KEYS, type VisibilityPreferences } from '../../types';
 import { normalizeTagPath } from '../../utils/tagUtils';
 import { getFilesForFolder, getFilesForTag } from '../../utils/fileFinder';
+import { isNoteShortcut, type ShortcutEntry } from '../../types/shortcuts';
+import { getTemplaterCreateNewNoteFromTemplate } from '../../utils/templaterIntegration';
 
 import { CacheRebuildMode } from '../../types';
 
@@ -463,6 +465,31 @@ export default function registerNavigatorCommands(plugin: NotebookNavigatorPlugi
         }
     });
 
+    // Command to create a new note from template in the currently selected folder (requires Templater)
+    plugin.addCommand({
+        id: 'new-note-from-template',
+        name: strings.commands.createNewNoteFromTemplate,
+        checkCallback: (checking: boolean) => {
+            const createNewNoteFromTemplate = getTemplaterCreateNewNoteFromTemplate(plugin.app);
+            if (!createNewNoteFromTemplate) {
+                return false;
+            }
+
+            if (checking) {
+                return true;
+            }
+
+            runAsyncAction(async () => {
+                const view = await ensureNavigatorOpen(plugin);
+                if (view) {
+                    await view.createNoteFromTemplateInSelectedFolder();
+                }
+            });
+
+            return true;
+        }
+    });
+
     // Command to move selected files to a different folder
     plugin.addCommand({
         id: 'move-files',
@@ -832,6 +859,66 @@ export default function registerNavigatorCommands(plugin: NotebookNavigatorPlugi
             });
         }
     });
+
+    Array.from({ length: 9 }, (_unused, index) => index + 1).forEach(shortcutNumber => {
+        const commandName = strings.commands.openShortcut.replace('{number}', shortcutNumber.toString());
+        plugin.addCommand({
+            id: `open-shortcut-${shortcutNumber}`,
+            name: commandName,
+            checkCallback: (checking: boolean) => {
+                try {
+                    const activeProfile = getActiveVaultProfile(plugin.settings);
+                    const shortcuts = activeProfile.shortcuts ?? [];
+                    const shortcut = shortcuts[shortcutNumber - 1];
+                    if (!shortcut) {
+                        return false;
+                    }
+
+                    if (checking) {
+                        return true;
+                    }
+
+                    runAsyncAction(async () => {
+                        const didOpenDirectly = await openNoteShortcutWithoutNavigatorView(plugin, shortcut);
+                        if (didOpenDirectly) {
+                            return;
+                        }
+
+                        const view = await ensureNavigatorOpen(plugin);
+                        if (!view) {
+                            return;
+                        }
+                        await view.openShortcutByNumber(shortcutNumber);
+                    });
+
+                    return true;
+                } catch (error) {
+                    console.error('Failed to open shortcut command:', error);
+                    return false;
+                }
+            }
+        });
+    });
+
+    async function openNoteShortcutWithoutNavigatorView(plugin: NotebookNavigatorPlugin, shortcut: ShortcutEntry): Promise<boolean> {
+        if (!isNoteShortcut(shortcut)) {
+            return false;
+        }
+
+        const { app } = plugin;
+        const target = app.vault.getAbstractFileByPath(shortcut.path);
+        if (!(target instanceof TFile)) {
+            return false;
+        }
+
+        const leaf = app.workspace.getLeaf(false);
+        if (!leaf) {
+            return false;
+        }
+
+        await leaf.openFile(target, { active: true });
+        return true;
+    }
 
     // Command to open or focus the search input
     plugin.addCommand({

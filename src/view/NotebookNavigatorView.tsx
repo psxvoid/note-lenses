@@ -345,6 +345,13 @@ export class NotebookNavigatorView extends ItemView {
     }
 
     /**
+     * Creates a new note from a template in the currently selected folder
+     */
+    async createNoteFromTemplateInSelectedFolder(): Promise<void> {
+        await this.componentRef.current?.createNoteFromTemplateInSelectedFolder();
+    }
+
+    /**
      * Moves selected files to another folder using the folder suggest modal
      */
     async moveSelectedFiles(): Promise<void> {
@@ -370,6 +377,13 @@ export class NotebookNavigatorView extends ItemView {
      */
     async addShortcutForCurrentSelection(): Promise<void> {
         await this.componentRef.current?.addShortcutForCurrentSelection();
+    }
+
+    /**
+     * Opens the shortcut at the given 1-based position in the shortcuts list.
+     */
+    async openShortcutByNumber(shortcutNumber: number): Promise<boolean> {
+        return (await this.componentRef.current?.openShortcutByNumber(shortcutNumber)) ?? false;
     }
 
     /**

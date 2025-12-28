@@ -79,6 +79,7 @@ import {
     buildTagSeparatorKey,
     parseNavigationSeparatorKey
 } from '../utils/navigationSeparators';
+import { resolveUXIcon } from '../utils/uxIcons';
 import type { MetadataService } from '../services/MetadataService';
 import { useSettingsDerived, type ActiveProfileState } from '../context/SettingsContext';
 
@@ -560,7 +561,7 @@ export function useNavigationPaneData({
             id: string,
             name: string,
             icon?: string,
-            options?: { tagCollectionId?: string; showFileCount?: boolean; noteCount?: NoteCountInfo }
+            options?: { tagCollectionId?: string; showFileCount?: boolean; noteCount?: NoteCountInfo; hasChildren?: boolean }
         ) => {
             const folder: VirtualFolder = { id, name, icon };
             items.push({
@@ -570,6 +571,7 @@ export function useNavigationPaneData({
                 key: id,
                 isSelectable: Boolean(options?.tagCollectionId),
                 tagCollectionId: options?.tagCollectionId,
+                hasChildren: options?.hasChildren,
                 showFileCount: options?.showFileCount,
                 noteCount: options?.noteCount
             });
@@ -580,6 +582,7 @@ export function useNavigationPaneData({
                 const folderId = 'tags-root';
                 addVirtualFolder(folderId, strings.tagList.tags, 'lucide-tags', {
                     tagCollectionId: TAGGED_TAG_ID,
+                    hasChildren: shouldIncludeUntagged,
                     showFileCount: settings.showNoteCount,
                     noteCount: taggedCollectionCount
                 });
@@ -675,6 +678,7 @@ export function useNavigationPaneData({
                 const folderId = 'tags-root';
                 addVirtualFolder(folderId, strings.tagList.tags, 'lucide-tags', {
                     tagCollectionId: TAGGED_TAG_ID,
+                    hasChildren: tagsVirtualFolderHasChildren,
                     showFileCount: settings.showNoteCount,
                     noteCount: taggedCollectionCount
                 });
@@ -756,8 +760,9 @@ export function useNavigationPaneData({
                 data: {
                     id: SHORTCUTS_VIRTUAL_FOLDER_ID,
                     name: strings.navigationPane.shortcutsHeader,
-                    icon: 'lucide-bookmark'
-                }
+                    icon: resolveUXIcon(settings.interfaceIcons, 'nav-shortcuts')
+                },
+                hasChildren: hydratedShortcuts.length > 0
             }
         ];
 
@@ -872,9 +877,17 @@ export function useNavigationPaneData({
         });
 
         return items;
-    }, [hydratedShortcuts, tagTree, hiddenFolders, showHiddenItems, settings.showShortcuts, shortcutsExpanded]);
+    }, [hydratedShortcuts, tagTree, hiddenFolders, showHiddenItems, settings.showShortcuts, settings.interfaceIcons, shortcutsExpanded]);
 
-    // Build list of recent notes items with proper hierarchy
+    // Build list of recent notes items with proper hierarchy.
+    //
+    // `recentNotes` is persisted as an array of paths, and the vault can change independently (files moved/deleted).
+    // The navigation UI uses `hasChildren` to decide whether to render an expander chevron on the recent section header.
+    //
+    // Design:
+    // - Collapsed: return only the header and compute `hasChildren` via a short scan over the configured limit, stopping at the
+    //   first path that resolves to a `TFile`. This keeps the chevron accurate without building child items.
+    // - Expanded: build the child item list, filtering out paths that do not resolve to a `TFile`.
     const recentNotesItems = useMemo(() => {
         if (!settings.showRecentNotes) {
             return [] as CombinedNavigationItem[];
@@ -883,39 +896,46 @@ export function useNavigationPaneData({
         const headerLevel = 0;
         const itemLevel = headerLevel + 1;
 
+        const limit = Math.max(1, settings.recentNotesCount ?? 1);
+        const recentPaths = recentNotes.slice(0, limit);
+
         // Use appropriate header based on file visibility setting
         const recentHeaderName =
             fileVisibility === FILE_VISIBILITY.DOCUMENTS
                 ? strings.navigationPane.recentNotesHeader
                 : strings.navigationPane.recentFilesHeader;
 
-        // Start with the recent notes header/virtual folder
-        const items: CombinedNavigationItem[] = [
-            {
-                type: NavigationPaneItemType.VIRTUAL_FOLDER,
-                key: RECENT_NOTES_VIRTUAL_FOLDER_ID,
-                level: headerLevel,
-                data: {
-                    id: RECENT_NOTES_VIRTUAL_FOLDER_ID,
-                    name: recentHeaderName,
-                    icon: 'lucide-history'
+        // Collapsed: return only the header (no child items), with `hasChildren` reflecting whether expansion would render any notes.
+        if (!recentNotesExpanded) {
+            let hasChildren = false;
+            for (const path of recentPaths) {
+                const file = app.vault.getAbstractFileByPath(path);
+                if (file instanceof TFile) {
+                    hasChildren = true;
+                    break;
                 }
             }
-        ];
-
-        // Return only header if recent notes folder is collapsed
-        if (!recentNotesExpanded) {
-            return items;
+            return [
+                {
+                    type: NavigationPaneItemType.VIRTUAL_FOLDER,
+                    key: RECENT_NOTES_VIRTUAL_FOLDER_ID,
+                    level: headerLevel,
+                    data: {
+                        id: RECENT_NOTES_VIRTUAL_FOLDER_ID,
+                        name: recentHeaderName,
+                        icon: resolveUXIcon(settings.interfaceIcons, 'nav-recent-files')
+                    },
+                    hasChildren
+                }
+            ];
         }
 
-        // Add recent note items up to the configured limit
-        const limit = Math.max(1, settings.recentNotesCount ?? 1);
-        const recentPaths = recentNotes.slice(0, limit);
-
+        // Expanded: build child items and keep `hasChildren` aligned with the filtered child list.
+        const childItems: CombinedNavigationItem[] = [];
         recentPaths.forEach(path => {
             const file = app.vault.getAbstractFileByPath(path);
             if (file instanceof TFile) {
-                items.push({
+                childItems.push({
                     type: NavigationPaneItemType.RECENT_NOTE,
                     key: `recent-${path}`,
                     level: itemLevel,
@@ -924,8 +944,36 @@ export function useNavigationPaneData({
             }
         });
 
+        const items: CombinedNavigationItem[] = [
+            {
+                type: NavigationPaneItemType.VIRTUAL_FOLDER,
+                key: RECENT_NOTES_VIRTUAL_FOLDER_ID,
+                level: headerLevel,
+                data: {
+                    id: RECENT_NOTES_VIRTUAL_FOLDER_ID,
+                    name: recentHeaderName,
+                    icon: resolveUXIcon(settings.interfaceIcons, 'nav-recent-files')
+                },
+                hasChildren: childItems.length > 0
+            }
+        ];
+
+        if (childItems.length === 0) {
+            return items;
+        }
+
+        items.push(...childItems);
+
         return items;
-    }, [app, settings.recentNotesCount, settings.showRecentNotes, recentNotes, fileVisibility, recentNotesExpanded]);
+    }, [
+        app,
+        settings.recentNotesCount,
+        settings.showRecentNotes,
+        settings.interfaceIcons,
+        recentNotes,
+        fileVisibility,
+        recentNotesExpanded
+    ]);
 
     const shouldPinRecentNotes = pinShortcuts && settings.pinRecentNotesWithShortcuts && settings.showRecentNotes;
 

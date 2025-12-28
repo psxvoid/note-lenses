@@ -25,7 +25,7 @@ import type { FileVisibility } from '../utils/fileTypeUtils';
 import type { ShortcutEntry } from '../types/shortcuts';
 import { isFolderShortcut, isNoteShortcut, isSearchShortcut, isTagShortcut } from '../types/shortcuts';
 import { cloneShortcuts, getActiveVaultProfile } from '../utils/vaultProfiles';
-import { sanitizeRecord } from '../utils/recordUtils';
+import { isStringRecordValue, sanitizeRecord } from '../utils/recordUtils';
 import { areStringArraysEqual } from '../utils/arrayUtils';
 import type { FolderAppearance } from '../hooks/useListPaneAppearance';
 import { buildFileNameIconNeedles, type FileNameIconNeedle } from '../utils/fileIconUtils';
@@ -138,6 +138,10 @@ export function SettingsProvider({ children, plugin }: SettingsProviderProps) {
     // Use a version counter to force re-renders when settings change
     const [version, setVersion] = useState(0);
     const previousActiveProfileRef = useRef<ActiveProfileState | null>(null);
+    const previousInterfaceIconsRef = useRef<{
+        raw: NotebookNavigatorSettings['interfaceIcons'] | undefined;
+        sanitized: Record<string, string>;
+    } | null>(null);
 
     const updateSettings = useCallback(
         async (updater: (settings: NotebookNavigatorSettings) => void) => {
@@ -160,11 +164,21 @@ export function SettingsProvider({ children, plugin }: SettingsProviderProps) {
         // Clone tag color records so settings updates change object identity and trigger consumers
         const tagColors = sanitizeRecord(plugin.settings.tagColors);
         const tagBackgroundColors = sanitizeRecord(plugin.settings.tagBackgroundColors);
+        const rawInterfaceIcons = plugin.settings.interfaceIcons;
+        const interfaceIconsCache = previousInterfaceIconsRef.current;
+        const interfaceIcons =
+            interfaceIconsCache && interfaceIconsCache.raw === rawInterfaceIcons
+                ? interfaceIconsCache.sanitized
+                : sanitizeRecord(rawInterfaceIcons, isStringRecordValue);
+        if (!interfaceIconsCache || interfaceIconsCache.raw !== rawInterfaceIcons) {
+            previousInterfaceIconsRef.current = { raw: rawInterfaceIcons, sanitized: interfaceIcons };
+        }
         const nextSettings: SettingsStateValue = {
             ...plugin.settings,
             dualPaneOrientation: plugin.getDualPaneOrientation(),
             tagColors,
             tagBackgroundColors,
+            interfaceIcons,
             folderAppearances: cloneAppearanceMap(plugin.settings.folderAppearances),
             tagAppearances: cloneAppearanceMap(plugin.settings.tagAppearances),
             pinnedNotes: clonePinnedNotes(plugin.settings.pinnedNotes)

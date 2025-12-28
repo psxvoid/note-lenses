@@ -1669,6 +1669,7 @@ export class FileSystemOperations {
 
             const leaf = this.app.workspace.getLeaf(false);
             await leaf.openFile(file);
+
             await this.trySwitchToDrawingView(leaf, file, type);
 
             return file;

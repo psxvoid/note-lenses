@@ -176,6 +176,7 @@ export const STRINGS_ES = {
         },
         folder: {
             newNote: 'Nueva nota',
+            newNoteFromTemplate: 'Nueva nota desde plantilla',
             newFolder: 'Nueva carpeta',
             newCanvas: 'Nuevo lienzo',
             newBase: 'Nueva base de datos',
@@ -247,6 +248,36 @@ export const STRINGS_ES = {
             emojiInstructions: 'Escribe o pega cualquier emoji para usarlo como icono',
             removeIcon: 'Quitar icono',
             allTabLabel: 'Todos'
+        },
+        fileIconRuleEditor: {
+            addRuleAria: 'Añadir regla'
+        },
+        interfaceIcons: {
+            title: 'Iconos de interfaz',
+            items: {
+                'nav-shortcuts': 'Atajos',
+                'nav-recent-files': 'Archivos recientes',
+                'nav-expand-all': 'Expandir todo',
+                'nav-collapse-all': 'Contraer todo',
+                'nav-tree-expand': 'Flecha de árbol: expandir',
+                'nav-tree-collapse': 'Flecha de árbol: contraer',
+                'nav-hidden-items': 'Elementos ocultos',
+                'nav-root-reorder': 'Reordenar carpetas raíz',
+                'nav-new-folder': 'Nueva carpeta',
+                'nav-show-single-pane': 'Mostrar panel único',
+                'nav-show-dual-pane': 'Mostrar paneles dobles',
+                'nav-profile-chevron': 'Flecha del menú de perfil',
+                'list-search': 'Buscar',
+                'list-descendants': 'Notas de subcarpetas',
+                'list-sort-ascending': 'Orden: ascendente',
+                'list-sort-descending': 'Orden: descendente',
+                'list-appearance': 'Cambiar apariencia',
+                'list-new-note': 'Nueva nota',
+                'nav-folder-open': 'Carpeta abierta',
+                'nav-folder-closed': 'Carpeta cerrada',
+                'nav-tag': 'Etiqueta',
+                'list-pinned': 'Elementos fijados'
+            }
         },
         colorPicker: {
             currentColor: 'Actual',
@@ -517,6 +548,7 @@ export const STRINGS_ES = {
         selectVaultProfile3: 'Cambiar al perfil de bóveda 3', // Command palette: Activates the third vault profile without opening the modal (English: Select vault profile 3)
         deleteFile: 'Eliminar archivos', // Command palette: Deletes the currently active file (English: Delete file)
         createNewNote: 'Crear nueva nota', // Command palette: Creates a new note in the currently selected folder (English: Create new note)
+        createNewNoteFromTemplate: 'Nueva nota desde plantilla', // Command palette: Creates a new note from a template in the currently selected folder (English: Create new note from template)
         moveFiles: 'Mover archivos', // Command palette: Move selected files to another folder (English: Move files)
         selectNextFile: 'Seleccionar siguiente archivo', // Command palette: Selects the next file in the current view (English: Select next file)
         selectPreviousFile: 'Seleccionar archivo anterior', // Command palette: Selects the previous file in the current view (English: Select previous file)
@@ -527,6 +559,7 @@ export const STRINGS_ES = {
         navigateToFolder: 'Navegar a carpeta', // Command palette: Navigate to a folder using fuzzy search (English: Navigate to folder)
         navigateToTag: 'Navegar a etiqueta', // Command palette: Navigate to a tag using fuzzy search (English: Navigate to tag)
         addShortcut: 'Agregar a accesos directos', // Command palette: Adds the current file, folder, or tag to shortcuts (English: Add to shortcuts)
+        openShortcut: 'Abrir acceso directo {number}',
         toggleDescendants: 'Alternar descendientes', // Command palette: Toggles showing notes from descendants (English: Toggle descendants)
         toggleHidden: 'Alternar carpetas, etiquetas y notas ocultas', // Command palette: Toggles showing hidden items (English: Toggle hidden items)
         toggleTagSort: 'Alternar orden de etiquetas', // Command palette: Toggles between alphabetical and frequency tag sorting (English: Toggle tag sort order)
@@ -583,12 +616,11 @@ export const STRINGS_ES = {
                 filtering: 'Filtrado',
                 behavior: 'Comportamiento',
                 view: 'Apariencia',
+                icons: 'Iconos',
                 desktopAppearance: 'Apariencia de escritorio',
-                mobileAppearance: 'Apariencia móvil',
                 formatting: 'Formato'
             },
             navigation: {
-                behavior: 'Comportamiento',
                 appearance: 'Apariencia',
                 shortcutsAndRecent: 'Atajos y elementos recientes'
             },
@@ -717,8 +749,8 @@ export const STRINGS_ES = {
             fileNameIconMap: {
                 name: 'Mapa de iconos por nombre',
                 desc: 'Los archivos que contienen el texto obtienen el icono especificado. Una asignación por línea: texto=icono',
-                placeholder: '# texto=icono\nreunión=calendar\nfactura=receipt',
-                resetTooltip: 'Restaurar valores predeterminados'
+                placeholder: '# texto=icono\nreunión=LiCalendar\nfactura=PhReceipt',
+                editTooltip: 'Editar asignaciones'
             },
             showCategoryIcons: {
                 name: 'Iconos por tipo de archivo',
@@ -727,8 +759,8 @@ export const STRINGS_ES = {
             fileTypeIconMap: {
                 name: 'Mapa de iconos por tipo',
                 desc: 'Los archivos con la extensión obtienen el icono especificado. Una asignación por línea: extensión=icono',
-                placeholder: '# Extension=icon\ncpp=file-code\npdf=book-open',
-                resetTooltip: 'Restaurar valores predeterminados'
+                placeholder: '# Extension=icon\ncpp=LiFileCode\npdf=RaBook',
+                editTooltip: 'Editar asignaciones'
             },
             optimizeNoteHeight: {
                 name: 'Optimizar altura de notas',
@@ -840,6 +872,15 @@ export const STRINGS_ES = {
                 name: 'Mostrar accesos directos',
                 desc: 'Mostrar la sección de accesos directos en el panel de navegación.'
             },
+            shortcutBadgeDisplay: {
+                name: 'Insignia de acceso directo',
+                desc: "Qué mostrar junto a los accesos directos. Usa los comandos 'Abrir acceso directo 1-9' para abrir los accesos directos directamente.",
+                options: {
+                    index: 'Posición (1-9)',
+                    count: 'Cantidad de elementos',
+                    none: 'Ninguno'
+                }
+            },
             showRecentNotes: {
                 name: 'Mostrar notas recientes',
                 desc: 'Mostrar la sección de notas recientes en el panel de navegación.'
@@ -867,7 +908,7 @@ export const STRINGS_ES = {
                 notice: 'Posición del separador restablecida. Reinicia Obsidian o vuelve a abrir Notebook Navigator para aplicar.'
             },
             multiSelectModifier: {
-                name: 'Modificador de selección múltiple',
+                name: 'Modificador de selección múltiple (solo escritorio)',
                 desc: 'Elige qué tecla modificadora activa la selección múltiple. Cuando se selecciona Option/Alt, Cmd/Ctrl clic abre notas en una nueva pestaña.',
                 options: {
                     cmdCtrl: 'Cmd/Ctrl clic',
@@ -1105,6 +1146,11 @@ export const STRINGS_ES = {
             showSectionIcons: {
                 name: 'Mostrar iconos para atajos y elementos recientes',
                 desc: 'Muestra iconos para secciones de navegación como Atajos y Archivos recientes.'
+            },
+            interfaceIcons: {
+                name: 'Iconos de interfaz',
+                desc: 'Editar iconos de barra de herramientas, carpetas, etiquetas, elementos fijados, búsqueda y ordenación.',
+                buttonText: 'Editar iconos'
             },
             showIconsColorOnly: {
                 name: 'Aplicar color solo a los iconos',

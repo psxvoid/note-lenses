@@ -56,6 +56,7 @@ import {
     normalizeFileTypeIconMapKey,
     normalizeIconMapRecord
 } from './utils/iconizeFormat';
+import { normalizeUXIconMapRecord } from './utils/uxIcons';
 import { isBooleanRecordValue, isPlainObjectRecordValue, isStringRecordValue, sanitizeRecord } from './utils/recordUtils';
 import { isRecord } from './utils/typeGuards';
 import { runAsyncAction } from './utils/async';
@@ -215,6 +216,7 @@ export default class NotebookNavigatorPlugin extends Plugin implements ISettings
         delete mutableSettings.hiddenTags;
         delete mutableSettings.fileVisibility;
         delete mutableSettings.preventInvalidCharacters;
+        delete mutableSettings.mobileBackground;
 
         const storedNoteGrouping = storedData ? storedData['noteGrouping'] : undefined;
 
@@ -260,6 +262,15 @@ export default class NotebookNavigatorPlugin extends Plugin implements ISettings
         // Validate noteGrouping value and reset to default if invalid
         if (this.settings.noteGrouping !== 'none' && this.settings.noteGrouping !== 'date' && this.settings.noteGrouping !== 'folder') {
             this.settings.noteGrouping = DEFAULT_SETTINGS.noteGrouping;
+        }
+
+        // Validate shortcutBadgeDisplay value and reset to default if invalid
+        if (
+            this.settings.shortcutBadgeDisplay !== 'index' &&
+            this.settings.shortcutBadgeDisplay !== 'count' &&
+            this.settings.shortcutBadgeDisplay !== 'none'
+        ) {
+            this.settings.shortcutBadgeDisplay = DEFAULT_SETTINGS.shortcutBadgeDisplay;
         }
 
         type LegacyAppearance = FolderAppearance & {
@@ -412,6 +423,7 @@ export default class NotebookNavigatorPlugin extends Plugin implements ISettings
         this.applyLegacyShortcutsMigration(legacyShortcuts);
         this.normalizeIconSettings(this.settings);
         this.normalizeFileIconMapSettings(this.settings);
+        this.normalizeInterfaceIconsSettings(this.settings);
         this.settings.vaultProfile = this.resolveActiveVaultProfileId();
         localStorage.set(STORAGE_KEYS.vaultProfileKey, this.settings.vaultProfile);
         this.refreshMatcherCachesIfNeeded();
@@ -1582,6 +1594,31 @@ export default class NotebookNavigatorPlugin extends Plugin implements ISettings
             normalizeFileNameIconMapKey,
             DEFAULT_SETTINGS.fileNameIconMap
         );
+    }
+
+    private normalizeInterfaceIconsSettings(settings: NotebookNavigatorSettings): void {
+        const raw = settings.interfaceIcons;
+        if (!isPlainObjectRecordValue(raw)) {
+            settings.interfaceIcons = sanitizeRecord(DEFAULT_SETTINGS.interfaceIcons, isStringRecordValue);
+            return;
+        }
+
+        const source = sanitizeRecord<string>(undefined);
+        Object.entries(raw).forEach(([key, value]) => {
+            if (typeof value !== 'string') {
+                return;
+            }
+            source[key] = value;
+        });
+
+        const legacySortIcon = source['list-sort'];
+        if (legacySortIcon && typeof legacySortIcon === 'string') {
+            source['list-sort-ascending'] = source['list-sort-ascending'] ?? legacySortIcon;
+            source['list-sort-descending'] = source['list-sort-descending'] ?? legacySortIcon;
+            delete source['list-sort'];
+        }
+
+        settings.interfaceIcons = sanitizeRecord(normalizeUXIconMapRecord(source), isStringRecordValue);
     }
 
     // Extracts legacy exclusion settings from old format and prepares them for migration to vault profiles

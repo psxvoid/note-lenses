@@ -81,7 +81,7 @@ interface ExcalidrawPluginApi extends Plugin {
  * - viewType: "tldraw-view", "tldraw-read-only", or "markdown"
  */
 interface TldrawPluginApi extends Plugin {
-    createDefaultFilename: () => string;
+    createDefaultFilename?: (options: { currentFile?: Pick<TFile, 'basename'> }) => string;
     createTldrFile: (filename: string, options: { foldername: string; inMarkdown: boolean; tlStore?: unknown }) => Promise<TFile>;
     openTldrFile?: (file: TFile, location: string, viewType?: string, openState?: unknown) => Promise<void>;
     settings?: Record<string, unknown>;
@@ -349,10 +349,9 @@ function isTldrawPlugin(plugin: Plugin | null): plugin is TldrawPluginApi {
         return false;
     }
 
-    const createDefaultFilename: unknown = Reflect.get(plugin, 'createDefaultFilename');
     const createTldrFile: unknown = Reflect.get(plugin, 'createTldrFile');
 
-    return typeof createDefaultFilename === 'function' && typeof createTldrFile === 'function';
+    return typeof createTldrFile === 'function';
 }
 
 /**
@@ -406,7 +405,21 @@ async function createDrawingWithTldrawPlugin(app: App, parent: TFolder): Promise
         return null;
     }
 
-    const rawFileName = plugin.createDefaultFilename();
+    const rawFileName = (() => {
+        const fileNameFromSettings = getTldrawFileNameFromPlugin(app);
+
+        if (typeof plugin.createDefaultFilename === 'function') {
+            const activeFile = app.workspace.getActiveFile();
+            const currentFile = activeFile ?? undefined;
+            try {
+                return plugin.createDefaultFilename({ currentFile });
+            } catch (error) {
+                console.error('Failed to generate default Tldraw filename via plugin API', error);
+            }
+        }
+
+        return fileNameFromSettings ?? getFallbackDrawingFileName('tldraw');
+    })();
     const safeFileName = normalizeAndSanitizeDrawingFileName(rawFileName, 'tldraw');
     const uniquePath = getUniqueDrawingFilePath(app, parent, safeFileName);
     const uniqueFileName = getFileNameFromPath(uniquePath);

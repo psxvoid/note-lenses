@@ -24,11 +24,12 @@ import { useSettingsState } from '../context/SettingsContext';
 import { useUXPreferences } from '../context/UXPreferencesContext';
 import { useUIState } from '../context/UIStateContext';
 import { strings } from '../i18n';
-import { ObsidianIcon } from './ObsidianIcon';
+import { ServiceIcon } from './ServiceIcon';
 import { useNavigationActions } from '../hooks/useNavigationActions';
 import { hasHiddenItemSources } from '../utils/exclusionUtils';
 import { runAsyncAction } from '../utils/async';
 import { getLocalizedDefaultVaultProfileName } from '../utils/vaultProfiles';
+import { resolveUXIcon } from '../utils/uxIcons';
 
 interface NavigationPaneHeaderProps {
     onTreeUpdateComplete?: () => void;
@@ -140,7 +141,11 @@ export function NavigationPaneHeader({
             onKeyDown={handleProfileTriggerKeyDown}
         >
             <span className="nn-pane-header-text">{activeProfileName}</span>
-            <ObsidianIcon className="nn-pane-header-profile-chevron" name="lucide-chevron-down" aria-hidden={true} />
+            <ServiceIcon
+                className="nn-pane-header-profile-chevron"
+                iconId={resolveUXIcon(settings.interfaceIcons, 'nav-profile-chevron')}
+                aria-hidden={true}
+            />
         </div>
     ) : null;
 
@@ -164,7 +169,12 @@ export function NavigationPaneHeader({
                         tabIndex={-1}
                         type="button"
                     >
-                        <ObsidianIcon name={uiState.dualPane ? 'lucide-panel-left-dashed' : 'lucide-panel-left'} />
+                        <ServiceIcon
+                            iconId={resolveUXIcon(
+                                settings.interfaceIcons,
+                                uiState.dualPane ? 'nav-show-single-pane' : 'nav-show-dual-pane'
+                            )}
+                        />
                     </button>
                     {profileTrigger}
                 </div>
@@ -183,7 +193,7 @@ export function NavigationPaneHeader({
                             }}
                             tabIndex={-1}
                         >
-                            <ObsidianIcon name="lucide-bookmark" />
+                            <ServiceIcon iconId={resolveUXIcon(settings.interfaceIcons, 'nav-shortcuts')} />
                         </button>
                     ) : null}
                     {showExpandCollapseButton ? (
@@ -201,7 +211,12 @@ export function NavigationPaneHeader({
                             }}
                             tabIndex={-1}
                         >
-                            <ObsidianIcon name={shouldCollapseItems() ? 'lucide-chevrons-down-up' : 'lucide-chevrons-up-down'} />
+                            <ServiceIcon
+                                iconId={resolveUXIcon(
+                                    settings.interfaceIcons,
+                                    shouldCollapseItems() ? 'nav-collapse-all' : 'nav-expand-all'
+                                )}
+                            />
                         </button>
                     ) : null}
                     {showHiddenItemsButton ? (
@@ -220,7 +235,7 @@ export function NavigationPaneHeader({
                             disabled={!hasHiddenItems}
                             tabIndex={-1}
                         >
-                            <ObsidianIcon name="lucide-eye" />
+                            <ServiceIcon iconId={resolveUXIcon(settings.interfaceIcons, 'nav-hidden-items')} />
                         </button>
                     ) : null}
                     {showRootReorderButton ? (
@@ -233,7 +248,7 @@ export function NavigationPaneHeader({
                             disabled={rootReorderDisabled}
                             tabIndex={-1}
                         >
-                            <ObsidianIcon name="lucide-list-tree" />
+                            <ServiceIcon iconId={resolveUXIcon(settings.interfaceIcons, 'nav-root-reorder')} />
                         </button>
                     ) : null}
                     {showNewFolderButton ? (
@@ -246,7 +261,7 @@ export function NavigationPaneHeader({
                             disabled={!selectionState.selectedFolder}
                             tabIndex={-1}
                         >
-                            <ObsidianIcon name="lucide-folder-plus" />
+                            <ServiceIcon iconId={resolveUXIcon(settings.interfaceIcons, 'nav-new-folder')} />
                         </button>
                     ) : null}
                 </div>

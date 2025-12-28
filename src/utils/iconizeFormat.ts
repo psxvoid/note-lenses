@@ -404,11 +404,39 @@ export function normalizeCanonicalIconId(iconId: string): string {
     return `${providerId}:${normalized}`;
 }
 
+/** Normalizes a file type icon map key, removing quotes, leading dots, and converting to lowercase */
 export function normalizeFileTypeIconMapKey(input: string): string {
-    return input.trim().replace(/^\./, '').toLowerCase();
+    const trimmed = input.trim();
+    const unquoted = tryUnquoteSingleQuotedText(trimmed);
+    const value = unquoted ?? trimmed;
+    return value.trim().replace(/^\./, '').toLowerCase();
 }
 
+/**
+ * Normalizes a file name icon map key, preserving intentional whitespace.
+ * Supports single-quoted values (e.g., 'ai ') to allow keys with leading/trailing spaces.
+ */
 export function normalizeFileNameIconMapKey(input: string): string {
+    if (!input || input.trim().length === 0) {
+        return '';
+    }
+
+    // Check if the input is a single-quoted string and extract its content
+    const trimmedForQuote = input.trim();
+    const unquoted = tryUnquoteSingleQuotedText(trimmedForQuote);
+    if (unquoted !== null) {
+        if (unquoted.trim().length === 0) {
+            return '';
+        }
+        // Return the unquoted value as-is, preserving internal whitespace
+        return unquoted.toLowerCase();
+    }
+
+    // Preserve whitespace if the raw input has leading or trailing spaces
+    if (/^\s|\s$/.test(input)) {
+        return input.toLowerCase();
+    }
+
     return input.trim().toLowerCase();
 }
 
@@ -428,12 +456,44 @@ export function normalizeIconMapEntry(key: string, iconId: string, normalizeKey:
         return null;
     }
 
-    const canonicalIconId = normalizeCanonicalIconId(iconId);
-    if (!canonicalIconId) {
+    const normalizedIconValue = normalizeIconMapIconValue(iconId);
+    if (!normalizedIconValue) {
         return null;
     }
 
-    return { key: normalizedKey, iconId: canonicalIconId };
+    return { key: normalizedKey, iconId: normalizedIconValue };
+}
+
+/**
+ * Normalizes an icon value from icon map input to match the value stored in frontmatter.
+ * Returns null for invalid or unrecognized identifiers.
+ */
+function normalizeIconMapIconValue(iconId: string): string | null {
+    const trimmed = iconId.trim();
+    if (!trimmed) {
+        return null;
+    }
+
+    // Preserve plain emoji values as-is (matches frontmatter storage).
+    const emojiOnly = extractFirstEmoji(trimmed);
+    if (emojiOnly && emojiOnly === trimmed) {
+        return emojiOnly;
+    }
+
+    // Heuristic: treat unknown Iconize-style identifiers as invalid rather than lucide names.
+    // Example: "Si" should not be interpreted as a lucide icon.
+    const converted = convertIconizeToIconId(trimmed);
+    if (!converted && !trimmed.includes(':') && /[A-Z]/.test(trimmed) && !/[-_]/.test(trimmed)) {
+        return null;
+    }
+
+    const canonical = deserializeIconFromFrontmatter(trimmed);
+    if (!canonical) {
+        return null;
+    }
+
+    const serialized = serializeIconForFrontmatter(canonical);
+    return serialized && serialized.length > 0 ? serialized : null;
 }
 
 export function normalizeIconMapRecord(record: Record<string, string>, normalizeKey: (input: string) => string): Record<string, string> {
@@ -460,7 +520,13 @@ export function serializeIconMapRecord(map: Record<string, string>): string {
         .filter(([key, iconId]) => Boolean(key) && Boolean(iconId))
         .sort(([a], [b]) => a.localeCompare(b));
 
-    return entries.map(([key, iconId]) => `${key}=${iconId}`).join('\n');
+    return entries
+        .map(([key, iconId]) => {
+            // Wrap keys containing whitespace or starting with '#' in single quotes
+            const serializedKey = shouldQuoteIconMapKey(key) ? `'${escapeSingleQuotedText(key)}'` : key;
+            return `${serializedKey}=${iconId}`;
+        })
+        .join('\n');
 }
 
 export function parseIconMapText(value: string, normalizeKey: (input: string) => string): IconMapParseResult {
@@ -500,6 +566,44 @@ export function parseIconMapText(value: string, normalizeKey: (input: string) =>
     }
 
     return { map, invalidLines };
+}
+
+/** Returns true if the key needs to be wrapped in single quotes for serialization */
+function shouldQuoteIconMapKey(key: string): boolean {
+    return /\s/.test(key) || key.startsWith('#');
+}
+
+/** Escapes backslashes and single quotes for embedding in a single-quoted string */
+function escapeSingleQuotedText(value: string): string {
+    return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+
+/** Extracts the content from a single-quoted string, or returns null if not quoted */
+function tryUnquoteSingleQuotedText(value: string): string | null {
+    if (value.length < 2 || !value.startsWith("'") || !value.endsWith("'")) {
+        return null;
+    }
+
+    return unescapeSingleQuotedText(value.slice(1, -1));
+}
+
+/** Unescapes backslashes and single quotes in a single-quoted string's content */
+function unescapeSingleQuotedText(value: string): string {
+    let result = '';
+    for (let i = 0; i < value.length; i++) {
+        const ch = value[i];
+        // Handle escape sequences: \' and \\
+        if (ch === '\\' && i + 1 < value.length) {
+            const next = value[i + 1];
+            if (next === "'" || next === '\\') {
+                result += next;
+                i += 1;
+                continue;
+            }
+        }
+        result += ch;
+    }
+    return result;
 }
 
 /**

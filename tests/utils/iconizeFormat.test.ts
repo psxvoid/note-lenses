@@ -3,6 +3,10 @@ import {
     convertIconizeToIconId,
     convertIconIdToIconize,
     normalizeCanonicalIconId,
+    normalizeFileNameIconMapKey,
+    normalizeFileTypeIconMapKey,
+    parseIconMapText,
+    serializeIconMapRecord,
     serializeIconForFrontmatter,
     deserializeIconFromFrontmatter
 } from '../../src/utils/iconizeFormat';
@@ -127,5 +131,45 @@ describe('frontmatter icon helpers', () => {
 
     it('deserializes legacy lucide identifiers', () => {
         expect(deserializeIconFromFrontmatter('lucide-sun')).toBe('sun');
+    });
+});
+
+describe('parseIconMapText', () => {
+    it('normalizes mapping values to frontmatter icon values', () => {
+        const parsed = parseIconMapText('pdf=SiGithub', normalizeFileTypeIconMapKey);
+        expect(parsed.invalidLines).toEqual([]);
+        expect(parsed.map.pdf).toBe('SiGithub');
+    });
+
+    it('preserves plain emoji mapping values', () => {
+        const parsed = parseIconMapText('pdf=📁', normalizeFileTypeIconMapKey);
+        expect(parsed.invalidLines).toEqual([]);
+        expect(parsed.map.pdf).toBe('📁');
+    });
+
+    it('marks unknown Iconize-style identifiers as invalid', () => {
+        const parsed = parseIconMapText('pdf=Si', normalizeFileTypeIconMapKey);
+        expect(parsed.map.pdf).toBeUndefined();
+        expect(parsed.invalidLines).toEqual(['pdf=Si']);
+    });
+
+    it('supports single-quoted file name keys with spaces', () => {
+        const parsed = parseIconMapText("'AI '=brain", normalizeFileNameIconMapKey);
+        expect(parsed.invalidLines).toEqual([]);
+        expect(parsed.map['ai ']).toBe('LiBrain');
+    });
+});
+
+describe('serializeIconMapRecord', () => {
+    it('wraps keys containing whitespace in single quotes', () => {
+        const text = serializeIconMapRecord({ 'ai ': 'LiBrain', meeting: 'LiCalendar' });
+        expect(text).toBe("'ai '=LiBrain\nmeeting=LiCalendar");
+        expect(parseIconMapText(text, normalizeFileNameIconMapKey).map['ai ']).toBe('LiBrain');
+    });
+
+    it("wraps keys starting with '#'", () => {
+        const text = serializeIconMapRecord({ '#inbox': 'LiCalendar' });
+        expect(text).toBe("'#inbox'=LiCalendar");
+        expect(parseIconMapText(text, normalizeFileNameIconMapKey).map['#inbox']).toBe('LiCalendar');
     });
 });

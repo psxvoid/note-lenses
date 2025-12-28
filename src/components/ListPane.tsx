@@ -77,10 +77,11 @@ import { normalizeTagPath } from '../utils/tagUtils';
 import { parseFilterSearchTokens, updateFilterQueryWithTag, type InclusionOperator } from '../utils/filterSearch';
 import { useSurfaceColorVariables } from '../hooks/useSurfaceColorVariables';
 import { LIST_PANE_SURFACE_COLOR_MAPPINGS } from '../constants/surfaceColorMappings';
-import { ObsidianIcon } from './ObsidianIcon';
 import { runAsyncAction } from '../utils/async';
 import { openFileInContext } from '../utils/openFileInContext';
 import { getListPaneMeasurements } from '../utils/listPaneMeasurements';
+import { ServiceIcon } from './ServiceIcon';
+import { resolveUXIcon } from '../utils/uxIcons';
 
 import { findNextSelectableIndex, findPreviousSelectableIndex } from 'src/hooks/useKeyboardNavigation';
 import { useSelectItemAtIndex } from 'src/hooks/list-pane/useSelectItemAtIndex';
@@ -134,38 +135,6 @@ interface ListPaneProps {
     onSearchTokensChange?: (state: SearchTagFilterState) => void;
 }
 
-const PINNED_SECTION_ICON_VARIABLE = '--nn-style-pinned-section-icon';
-const DEFAULT_PINNED_SECTION_ICON = 'lucide-pin';
-
-function sanitizePinnedSectionIcon(value: string): string {
-    const trimmed = value.trim();
-    if (trimmed.length === 0) {
-        return '';
-    }
-    const withoutLeadingQuotes = trimmed.replace(/^['"]+/, '');
-    const withoutTrailingQuotes = withoutLeadingQuotes.replace(/['"]+$/, '');
-    const sanitized = withoutTrailingQuotes.trim();
-    if (sanitized === '#' || sanitized.length === 0) {
-        return '';
-    }
-    return sanitized;
-}
-
-function resolvePinnedSectionIcon(): string {
-    if (typeof window === 'undefined' || !window.document?.body) {
-        return DEFAULT_PINNED_SECTION_ICON;
-    }
-
-    try {
-        const computed = window.getComputedStyle(window.document.body);
-        const rawValue = computed.getPropertyValue(PINNED_SECTION_ICON_VARIABLE);
-        const iconName = sanitizePinnedSectionIcon(rawValue);
-        return iconName.length > 0 ? iconName : DEFAULT_PINNED_SECTION_ICON;
-    } catch {
-        return DEFAULT_PINNED_SECTION_ICON;
-    }
-}
-
 export const ListPane = React.memo(
     forwardRef<ListPaneHandle, ListPaneProps>(function ListPane(props, ref) {
         const { app, commandQueue, isMobile, plugin } = useServices();
@@ -195,7 +164,7 @@ export const ListPane = React.memo(
         const listPaneTitle = settings.listPaneTitle ?? 'header';
         const shouldShowDesktopTitleArea = !isMobile && listPaneTitle === 'list';
         const listMeasurements = getListPaneMeasurements(isMobile);
-        const [pinnedSectionIcon, setPinnedSectionIcon] = useState(DEFAULT_PINNED_SECTION_ICON);
+        const pinnedSectionIcon = useMemo(() => resolveUXIcon(settings.interfaceIcons, 'list-pinned'), [settings.interfaceIcons]);
         const topSpacerHeight = shouldShowDesktopTitleArea ? 0 : listMeasurements.topSpacer;
         const iconColumnStyle = useMemo(() => {
             if (settings.showFileIcons) {
@@ -334,37 +303,6 @@ export const ListPane = React.memo(
                 requireTagged: tokens.requireTagged
             });
         }, [searchQuery, onSearchTokensChange]);
-
-        useEffect(() => {
-            if (typeof window === 'undefined') {
-                return;
-            }
-
-            const updatePinnedIcon = () => {
-                const resolvedIcon = resolvePinnedSectionIcon();
-                setPinnedSectionIcon(current => (current === resolvedIcon ? current : resolvedIcon));
-            };
-
-            updatePinnedIcon();
-
-            const target = window.document?.body;
-            if (!target || typeof MutationObserver === 'undefined') {
-                return;
-            }
-
-            const observer = new MutationObserver(mutations => {
-                for (const mutation of mutations) {
-                    if (mutation.type === 'attributes') {
-                        updatePinnedIcon();
-                        break;
-                    }
-                }
-            });
-
-            observer.observe(target, { attributes: true, attributeFilter: ['style', 'class'] });
-
-            return () => observer.disconnect();
-        }, []);
 
         // Helper to toggle search state using UX preferences action
         const setIsSearchActive = useCallback(
@@ -982,6 +920,23 @@ export const ListPane = React.memo(
                         }
                     }}
                 />
+                {/* Android - toolbar at top */}
+                {isMobile && isAndroid && (
+                    <ListToolbar
+                        isSearchActive={isSearchActive}
+                        onSearchToggle={() => {
+                            if (!isSearchActive) {
+                                // Opening search - activate with focus
+                                setShouldFocusSearch(true);
+                                setIsSearchActive(true);
+                                uiDispatch({ type: 'SET_FOCUSED_PANE', pane: 'search' });
+                            } else {
+                                setIsSearchActive(false);
+                                uiDispatch({ type: 'SET_FOCUSED_PANE', pane: 'files' });
+                            }
+                        }}
+                    />
+                )}
                 {/* Search bar - collapsible */}
                 <div className={`nn-search-bar-container ${isSearchActive ? 'nn-search-bar-visible' : ''}`}>
                     {isSearchActive && (
@@ -1006,23 +961,6 @@ export const ListPane = React.memo(
                         />
                     )}
                 </div>
-                {/* Android - toolbar at top */}
-                {isMobile && isAndroid && (
-                    <ListToolbar
-                        isSearchActive={isSearchActive}
-                        onSearchToggle={() => {
-                            if (!isSearchActive) {
-                                // Opening search - activate with focus
-                                setShouldFocusSearch(true);
-                                setIsSearchActive(true);
-                                uiDispatch({ type: 'SET_FOCUSED_PANE', pane: 'search' });
-                            } else {
-                                setIsSearchActive(false);
-                                uiDispatch({ type: 'SET_FOCUSED_PANE', pane: 'files' });
-                            }
-                        }}
-                    />
-                )}
 
                 {/* Conditional content rendering */}
                 {isEmptySelection ? (
@@ -1177,8 +1115,8 @@ export const ListPane = React.memo(
                                                         {isPinnedHeader ? (
                                                             <>
                                                                 {settings.showPinnedIcon ? (
-                                                                    <ObsidianIcon
-                                                                        name={pinnedSectionIcon}
+                                                                    <ServiceIcon
+                                                                        iconId={pinnedSectionIcon}
                                                                         className="nn-date-group-header-icon"
                                                                         aria-hidden={true}
                                                                     />

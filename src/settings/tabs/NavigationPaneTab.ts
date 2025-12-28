@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ButtonComponent, Setting, SliderComponent } from 'obsidian';
+import { ButtonComponent, DropdownComponent, Setting, SliderComponent } from 'obsidian';
 import { strings } from '../../i18n';
 import { NavigationBannerModal } from '../../modals/NavigationBannerModal';
 import { DEFAULT_SETTINGS } from '../defaultSettings';
-import type { ItemScope } from '../types';
+import type { ItemScope, ShortcutBadgeDisplayMode } from '../types';
 import type { SettingsTabContext } from './SettingsTabContext';
 import { runAsyncAction } from '../../utils/async';
 import { getActiveVaultProfile } from '../../utils/vaultProfiles';
@@ -33,17 +33,7 @@ export function renderNavigationPaneTab(context: SettingsTabContext): void {
     const getActiveProfile = () => getActiveVaultProfile(plugin.settings);
 
     const createGroup = createSettingGroupFactory(containerEl);
-    const behaviorGroup = createGroup(strings.settings.groups.navigation.behavior);
-
-    addToggleSetting(
-        behaviorGroup.addSetting,
-        strings.settings.items.pinRecentNotesWithShortcuts.name,
-        strings.settings.items.pinRecentNotesWithShortcuts.desc,
-        () => plugin.settings.pinRecentNotesWithShortcuts,
-        value => {
-            plugin.settings.pinRecentNotesWithShortcuts = value;
-        }
-    );
+    const behaviorGroup = createGroup(undefined);
 
     behaviorGroup.addSetting(setting => {
         setting
@@ -98,6 +88,21 @@ export function renderNavigationPaneTab(context: SettingsTabContext): void {
     );
 
     new Setting(shortcutsSubSettings)
+        .setName(strings.settings.items.shortcutBadgeDisplay.name)
+        .setDesc(strings.settings.items.shortcutBadgeDisplay.desc)
+        .addDropdown((dropdown: DropdownComponent) =>
+            dropdown
+                .addOption('index', strings.settings.items.shortcutBadgeDisplay.options.index)
+                .addOption('count', strings.settings.items.shortcutBadgeDisplay.options.count)
+                .addOption('none', strings.settings.items.shortcutBadgeDisplay.options.none)
+                .setValue(plugin.settings.shortcutBadgeDisplay)
+                .onChange(async (value: ShortcutBadgeDisplayMode) => {
+                    plugin.settings.shortcutBadgeDisplay = value;
+                    await plugin.saveSettingsAndUpdate();
+                })
+        );
+
+    new Setting(shortcutsSubSettings)
         .setName(strings.settings.items.skipAutoScroll.name)
         .setDesc(strings.settings.items.skipAutoScroll.desc)
         .addToggle(toggle =>
@@ -119,6 +124,16 @@ export function renderNavigationPaneTab(context: SettingsTabContext): void {
             await plugin.saveSettingsAndUpdate();
         }
     );
+
+    new Setting(recentNotesSubSettings)
+        .setName(strings.settings.items.pinRecentNotesWithShortcuts.name)
+        .setDesc(strings.settings.items.pinRecentNotesWithShortcuts.desc)
+        .addToggle(toggle =>
+            toggle.setValue(plugin.settings.pinRecentNotesWithShortcuts).onChange(async value => {
+                plugin.settings.pinRecentNotesWithShortcuts = value;
+                await plugin.saveSettingsAndUpdate();
+            })
+        );
 
     new Setting(recentNotesSubSettings)
         .setName(strings.settings.items.recentNotesCount.name)

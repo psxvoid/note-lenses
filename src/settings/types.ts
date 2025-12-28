@@ -23,7 +23,6 @@ import type { FolderNoteCreationPreference } from '../types/folderNote';
 import type { KeyboardShortcutConfig } from '../utils/keyboardShortcuts';
 import type { ShortcutEntry } from '../types/shortcuts';
 import type { SearchProvider } from '../types/search';
-import type { IconId } from '../services/icons/types';
 
 import type { PatternReplaceSource } from 'src/services/content/common/TextReplacerTransform';
 
@@ -54,6 +53,9 @@ export type MultiSelectModifier = 'cmdCtrl' | 'optionAlt';
 
 /** Display options for list pane title */
 export type ListPaneTitleOption = 'header' | 'list' | 'hidden';
+
+/** Display options for shortcut row badges in the navigation pane */
+export type ShortcutBadgeDisplayMode = 'index' | 'count' | 'none';
 
 /** Default display modes for list items */
 export type ListDisplayMode = 'standard' | 'compact';
@@ -108,6 +110,7 @@ export interface NotebookNavigatorSettings {
 
     // General tab - View
     startView: 'navigation' | 'files';
+    interfaceIcons: Record<string, string>;
 
     // General tab - Homepage
     homepage: string | null;
@@ -119,9 +122,6 @@ export interface NotebookNavigatorSettings {
     showTooltipPath: boolean;
     desktopBackground: BackgroundMode;
     desktopScale: number;
-
-    // General tab - Mobile appearance
-    mobileBackground: BackgroundMode;
     mobileScale: number;
 
     // General tab - Formatting
@@ -136,6 +136,7 @@ export interface NotebookNavigatorSettings {
     // Navigation pane tab - Shortcuts & recent items
     showSectionIcons: boolean;
     showShortcuts: boolean;
+    shortcutBadgeDisplay: ShortcutBadgeDisplayMode;
     skipAutoScroll: boolean;
     showRecentNotes: boolean;
     recentNotesCount: number;
@@ -203,9 +204,9 @@ export interface NotebookNavigatorSettings {
     saveMetadataToFrontmatter: boolean;
     showFileIcons: boolean;
     showFilenameMatchIcons: boolean;
-    fileNameIconMap: Record<string, IconId>;
+    fileNameIconMap: Record<string, string>;
     showCategoryIcons: boolean;
-    fileTypeIconMap: Record<string, IconId>;
+    fileTypeIconMap: Record<string, string>;
     fileNameRows: number;
     showFilePreview: boolean;
     skipHeadingsInPreview: boolean;

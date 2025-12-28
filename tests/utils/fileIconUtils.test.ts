@@ -11,15 +11,15 @@ import { createTestTFile } from './createTestTFile';
 
 describe('resolveFileNameMatchIconId', () => {
     it('returns null for empty basenames', () => {
-        const needles = buildFileNameIconNeedles({ meeting: 'calendar' });
+        const needles = buildFileNameIconNeedles({ meeting: 'LiCalendar' });
         expect(resolveFileNameMatchIconIdFromNeedles('', needles)).toBe(null);
     });
 
     it('matches case-insensitively and prefers longer needles', () => {
         const iconMap = {
-            meet: 'check-circle',
-            meeting: 'calendar',
-            invoice: 'receipt'
+            meet: 'LiCheckCircle',
+            meeting: 'LiCalendar',
+            invoice: 'LiReceipt'
         };
 
         const needles = buildFileNameIconNeedles(iconMap);
@@ -30,17 +30,17 @@ describe('resolveFileNameMatchIconId', () => {
 
     it('breaks ties by needle sort order', () => {
         const iconMap = {
-            ab: 'icon-ab',
-            aa: 'icon-aa'
+            ab: 'custom-pack:icon-ab',
+            aa: 'custom-pack:icon-aa'
         };
 
         const needles = buildFileNameIconNeedles(iconMap);
-        expect(resolveFileNameMatchIconIdFromNeedles('aab', needles)).toBe('icon-aa');
+        expect(resolveFileNameMatchIconIdFromNeedles('aab', needles)).toBe('custom-pack:icon-aa');
     });
 
     it('ignores empty needles and empty icon IDs', () => {
         const iconMap = {
-            meeting: 'calendar',
+            meeting: 'LiCalendar',
             '': 'invalid',
             invoice: ''
         };
@@ -53,13 +53,19 @@ describe('resolveFileNameMatchIconId', () => {
         const file = createTestTFile('Plain name.md');
         const settings = {
             showFilenameMatchIcons: true,
-            fileNameIconMap: { meeting: 'calendar' },
+            fileNameIconMap: { meeting: 'LiCalendar' },
             showCategoryIcons: false,
             fileTypeIconMap: {}
         };
 
         expect(resolveFileIconId(file, settings)).toBe(null);
         expect(resolveFileIconId(file, settings, { fileNameForMatch: 'Meeting notes' })).toBe('calendar');
+    });
+
+    it('supports needles with trailing spaces', () => {
+        const needles = buildFileNameIconNeedles({ 'ai ': 'LiBrain' });
+        expect(resolveFileNameMatchIconIdFromNeedles('AI notes', needles)).toBe('brain');
+        expect(resolveFileNameMatchIconIdFromNeedles('AInotes', needles)).toBe(null);
     });
 });
 
@@ -71,11 +77,11 @@ describe('resolveFileTypeIconKey', () => {
 
     describe('resolveFileTypeIconId', () => {
         it('returns null for empty keys', () => {
-            expect(resolveFileTypeIconId('', { md: 'file-text' })).toBe(null);
+            expect(resolveFileTypeIconId('', { md: 'LiFileText' })).toBe(null);
         });
 
         it('uses explicit overrides before built-in mappings', () => {
-            expect(resolveFileTypeIconId('md', { md: 'book-open' })).toBe('book-open');
+            expect(resolveFileTypeIconId('md', { md: 'LiBookOpen' })).toBe('book-open');
         });
 
         it('falls back to built-in mappings when no override exists', () => {

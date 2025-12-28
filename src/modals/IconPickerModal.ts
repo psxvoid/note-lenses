@@ -38,6 +38,18 @@ interface IconSelectionHandlerResult {
     handled: boolean;
 }
 
+/** Configuration options for the icon picker modal */
+interface IconPickerModalOptions {
+    /** Custom title to display in the modal header */
+    titleOverride?: string;
+    /** Pre-selected icon identifier to highlight */
+    currentIconId?: string | null;
+    /** Whether to display the remove icon button (defaults to true) */
+    showRemoveButton?: boolean;
+    /** When true, icon selection does not persist to metadata service */
+    disableMetadataUpdates?: boolean;
+}
+
 // Type guard to validate emoji keywords from emojilib are strings
 function isStringArray(value: unknown): value is string[] {
     return Array.isArray(value) && value.every(item => typeof item === 'string');
@@ -55,6 +67,9 @@ export class IconPickerModal extends Modal {
     private itemType: typeof ItemType.FOLDER | typeof ItemType.TAG | typeof ItemType.FILE;
     private metadataService: MetadataService;
     private settingsProvider: ISettingsProvider;
+    private titleOverride?: string;
+    private showRemoveButton: boolean;
+    private disableMetadataUpdates: boolean;
     /** Callback function invoked when an icon is selected */
     public onChooseIcon?: (iconId: string | null) => IconSelectionHandlerResult | Promise<IconSelectionHandlerResult>;
     private resultsContainer: HTMLDivElement;
@@ -81,14 +96,21 @@ export class IconPickerModal extends Modal {
         app: App,
         metadataService: MetadataService,
         itemPath: string,
-        itemType: typeof ItemType.FOLDER | typeof ItemType.TAG | typeof ItemType.FILE = ItemType.FOLDER
+        itemType: typeof ItemType.FOLDER | typeof ItemType.TAG | typeof ItemType.FILE = ItemType.FOLDER,
+        options: IconPickerModalOptions = {}
     ) {
         super(app);
         this.metadataService = metadataService;
         this.settingsProvider = metadataService.getSettingsProvider();
         this.itemPath = itemPath;
         this.itemType = itemType;
-        this.currentIcon = this.getCurrentIconForItem();
+        this.titleOverride = options.titleOverride;
+        this.showRemoveButton = options.showRemoveButton !== false;
+        this.disableMetadataUpdates = options.disableMetadataUpdates === true;
+        this.currentIcon =
+            options.currentIconId === undefined && !this.disableMetadataUpdates
+                ? this.getCurrentIconForItem()
+                : (options.currentIconId ?? undefined);
     }
 
     onOpen() {
@@ -98,7 +120,8 @@ export class IconPickerModal extends Modal {
 
         // Header showing the folder/tag name
         const header = contentEl.createDiv('nn-icon-picker-header');
-        const headerText = this.itemType === ItemType.TAG ? `#${this.itemPath}` : this.itemPath.split('/').pop() || this.itemPath;
+        const headerText =
+            this.titleOverride ?? (this.itemType === ItemType.TAG ? `#${this.itemPath}` : this.itemPath.split('/').pop() || this.itemPath);
         header.createEl('h3', { text: headerText });
 
         // Create tabs for providers
@@ -120,17 +143,19 @@ export class IconPickerModal extends Modal {
         this.createProviderLinkRow();
         this.updateProviderLink(this.currentProvider);
 
-        const buttonContainer = contentEl.createDiv('nn-icon-button-container');
-        const removeButton = buttonContainer.createEl('button');
-        const removeButtonLabel = strings.modals.iconPicker.removeIcon;
-        removeButton.setText(removeButtonLabel);
-        if (removeButton instanceof HTMLButtonElement) {
-            this.removeButton = removeButton;
-            if (!this.currentIcon) {
-                removeButton.disabled = true;
+        if (this.showRemoveButton) {
+            const buttonContainer = contentEl.createDiv('nn-icon-button-container');
+            const removeButton = buttonContainer.createEl('button');
+            const removeButtonLabel = strings.modals.iconPicker.removeIcon;
+            removeButton.setText(removeButtonLabel);
+            if (removeButton instanceof HTMLButtonElement) {
+                this.removeButton = removeButton;
+                if (!this.currentIcon) {
+                    removeButton.disabled = true;
+                }
             }
+            this.domDisposers.push(addAsyncEventListener(removeButton, 'click', () => this.removeIcon()));
         }
-        this.domDisposers.push(addAsyncEventListener(removeButton, 'click', () => this.removeIcon()));
 
         // Search input with debouncing
         this.domDisposers.push(
@@ -491,6 +516,13 @@ export class IconPickerModal extends Modal {
             return;
         }
 
+        // Skip metadata persistence when modal is in standalone mode
+        if (this.disableMetadataUpdates) {
+            this.currentIcon = iconId;
+            this.close();
+            return;
+        }
+
         // Set the icon based on item type
         if (this.itemType === ItemType.TAG) {
             await this.metadataService.setTagIcon(this.itemPath, iconId);
@@ -514,7 +546,7 @@ export class IconPickerModal extends Modal {
     }
 
     private async removeIcon(): Promise<void> {
-        const existingIcon = this.getCurrentIconForItem();
+        const existingIcon = this.disableMetadataUpdates ? this.currentIcon : this.getCurrentIconForItem();
         if (!existingIcon) {
             this.close();
             return;
@@ -523,6 +555,16 @@ export class IconPickerModal extends Modal {
         // Delegate removal when a handler is provided to support multi-selection updates
         const handled = await this.wasHandledBySelection(null);
         if (!handled) {
+            // Clear icon state without metadata persistence in standalone mode
+            if (this.disableMetadataUpdates) {
+                this.currentIcon = undefined;
+                if (this.removeButton) {
+                    this.removeButton.disabled = true;
+                }
+                this.close();
+                return;
+            }
+
             if (this.itemType === ItemType.TAG) {
                 await this.metadataService.removeTagIcon(this.itemPath);
             } else if (this.itemType === ItemType.FILE) {

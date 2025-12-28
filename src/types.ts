@@ -309,7 +309,7 @@ export type VisibilityPreferences = Pick<UXPreferences, 'includeDescendantNotes'
 /** Orientation options for dual-pane layout */
 export type DualPaneOrientation = 'horizontal' | 'vertical';
 
-/** Background color mode for navigation/list panes on desktop and mobile */
+/** Background color mode for navigation/list panes on desktop */
 export type BackgroundMode = 'separate' | 'primary' | 'secondary';
 
 /**
