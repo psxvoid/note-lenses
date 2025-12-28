@@ -27,9 +27,6 @@ For the full changelog (including available features in the fork), see [releases
 ![Excalidraw File Preview Sample](./images/nn-fork-excalidraw-preview.png)
 
 > [!NOTE]
-> Why to fork the original project? See: [Issue: [FR] Add Excalidraw Featured Image Support (closed as not-planned)](https://github.com/johansan/notebook-navigator/issues/384)<br>
-
-> [!NOTE]
 > "Featured image" refers to an embed image/PDF/Excalidraw preview in the note list of this plugin (see the screenshot).
 
 ## Installation (The Forked Version)
@@ -56,6 +53,19 @@ For the full changelog (including available features in the fork), see [releases
 > To migrate settings from the original plugin, go to your vault, then into
 > `.obsidian/plugins` folder, then find `notebook-navigator`. Inside that folder
 > find and copy `data.json` into `.obsidian/plugins/note-lenses`.
+
+## Why Fork
+
+Why fork the original project? See: [Issue: [FR] Add Excalidraw Featured Image Support (closed as not-planned)](https://github.com/johansan/notebook-navigator/issues/384)<br>
+
+### Important update
+
+Since commit [5bd67f0](https://github.com/johansan/notebook-navigator/commit/5bd67f04b5c742696c37999bf68a5923c6dede36), the upstream repository switched its license from GPL-3.0 to a proprietary one. The new upstream license prohibits publishing any modifications without the author's explicit consent.
+
+It means several important differences:
+
+1. Note Lenses will not receive any updates from the upstream repository.
+2. Note Lenses will remain under GPL-3.0 and will allow publishing any modifications of your work.
 
 ## License
 
