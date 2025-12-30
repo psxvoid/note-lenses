@@ -1,3 +1,7 @@
+> ⚠️ **ARCHIVED PROJECT**
+>
+> This repository will no longer be maintained, because Obsidian's developer policy and publishing rules do not adhere to an open-source licensing model. In short, even if a license of a repository allows making a public release of a fork, the Obsidian team won't accept such a plugin as a new community plugin until several conditions are met, including an explicit permission from an author if the upstream repository is still in active development. You can read more about it in Obsidian's [Developer Policies](https://docs.obsidian.md/Developer+policies).
+
 # Note Lenses
 
 Important: "Note Lenses" is an independent fork of the original "Notebook Navigator" project and not affiliated with or endorsed by it.
